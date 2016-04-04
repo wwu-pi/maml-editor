@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+  <extension point="org.eclipse.sirius.componentization">
+    <component class="de.wwu.md2dot0.design.Activator"
+               id="de.wwu.md20.design"
+	       name="md20">
+    </component>
+  </extension>
+</plugin>
