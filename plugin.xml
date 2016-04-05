@@ -3,8 +3,23 @@
 <plugin>
   <extension point="org.eclipse.sirius.componentization">
     <component class="de.wwu.md2dot0.design.Activator"
-               id="de.wwu.md20.design"
-	       name="md20">
+               id="de.wwu.md2dot0.design"
+	       name="md2dot0">
     </component>
+  </extension>
+  <extension
+        point="org.eclipse.sirius.diagram.ui.styleConfigurationProvider">
+     <styleConfigurationProvider
+           providerClass="de.wwu.md2dot0.diagram.StyleConfigurationProvider">
+     </styleConfigurationProvider>
+  </extension>
+  <extension
+        point="org.eclipse.gmf.runtime.diagram.ui.editpartProviders">
+     <editpartProvider
+           class="de.wwu.md2dot0.diagram.ProcessElementEditPartProvider">
+        <Priority
+              name="Lowest">
+        </Priority>
+     </editpartProvider>
   </extension>
 </plugin>

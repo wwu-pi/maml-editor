@@ -3,14 +3,27 @@
   <ownedViewpoints name="processEditor" modelFileExtension="md2dot0">
     <ownedRepresentations xsi:type="description_1:DiagramDescription" name="Process editor" initialisation="true" domainClass="md2dot0.UseCase" enablePopupBars="true">
       <defaultLayer name="ProcessLayer" label="Process Layer">
-        <nodeMappings name="ShowEntity" semanticCandidatesExpression="aql:self.processFlowElements" domainClass="md2dot0.ShowEntity">
-          <style xsi:type="style:SquareDescription" labelExpression="feature:description" sizeComputationExpression="" labelPosition="node" resizeKind="NSEW" width="10" height="3">
+        <nodeMappings name="ShowEntityTest" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::SelectEntity)" domainClass="md2dot0.SelectEntity">
+          <style xsi:type="style:SquareDescription" labelExpression="service:getProcessElementType()" sizeComputationExpression="" labelPosition="node" resizeKind="NSEW" width="10" height="3">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='dark_blue']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_blue']"/>
           </style>
         </nodeMappings>
-        <edgeMappings name="ProcessElementConnector" sourceMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ShowEntity']" targetMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ShowEntity']" targetFinderExpression="feature:targetProcessFlowElement" sourceFinderExpression="feature:sourceProcessFlowElement" domainClass="md2dot0.ProcessConnector" useDomainElement="true">
+        <nodeMappings name="ShowEntityWrapper" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::ShowEntity)" domainClass="md2dot0.ShowEntity">
+          <borderedNodeMappings name="ShowEntity" semanticCandidatesExpression="aql:self.roles" domainClass="md2dot0.Role">
+            <style xsi:type="style:DotDescription" labelExpression="aql:'Test'" labelPosition="node" resizeKind="NSEW">
+              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='dark_orange']"/>
+            </style>
+          </borderedNodeMappings>
+          <style xsi:type="style:CustomStyleDescription" labelExpression="feature:description" labelPosition="node" resizeKind="NSEW" id="de.wwu.md2dot0.diagram.StyleConfigurationProvider">
+            <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+          </style>
+        </nodeMappings>
+        <edgeMappings name="ProcessElementConnector" sourceMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ShowEntityTest']" targetMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ShowEntityTest']" targetFinderExpression="feature:targetProcessFlowElement" sourceFinderExpression="feature:sourceProcessFlowElement" domainClass="md2dot0.ProcessConnector" useDomainElement="true">
           <style sizeComputationExpression="2">
             <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='gray']"/>
             <centerLabelStyleDescription>
@@ -18,8 +31,53 @@
             </centerLabelStyleDescription>
           </style>
         </edgeMappings>
+        <containerMappings name="ProcessElementContainer" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::ProcessElement)" domainClass="md2dot0.ProcessElement" childrenPresentation="VerticalStack">
+          <subContainerMappings name="SubContainer" semanticCandidatesExpression="var:self" domainClass="md2dot0.ProcessElement" childrenPresentation="VerticalStack">
+            <subContainerMappings name="RoleContainer" semanticCandidatesExpression="var:self" domainClass="md2dot0.ProcessElement">
+              <subNodeMappings name="RoleElement" semanticCandidatesExpression="feature:roles" synchronizationLock="true" domainClass="md2dot0.Role">
+                <style xsi:type="style:SquareDescription" labelExpression="lala" labelAlignment="LEFT" hideLabelByDefault="true" resizeKind="NSEW" width="4" height="4">
+                  <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                  <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                  <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='dark_orange']"/>
+                </style>
+              </subNodeMappings>
+              <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelExpression="feature:description">
+                <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+                <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+              </style>
+            </subContainerMappings>
+            <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" showIcon="false" labelExpression="feature:description" heightComputationExpression="10">
+              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+              <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_green']"/>
+            </style>
+          </subContainerMappings>
+          <subContainerMappings name="Test42" semanticCandidatesExpression="var:self" domainClass="md2dot0.ProcessElement">
+            <subNodeMappings semanticCandidatesExpression="feature:eAllContents">
+              <style xsi:type="style:BundledImageDescription" labelPosition="node" resizeKind="NSEW" shape="triangle">
+                <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+                <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              </style>
+            </subNodeMappings>
+            <style xsi:type="style:ShapeContainerStyleDescription" borderSizeComputationExpression="1" labelExpression="feature:description">
+              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+            </style>
+          </subContainerMappings>
+          <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" showIcon="false" labelExpression="aql:self.eClass().name">
+            <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+            <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+          </style>
+        </containerMappings>
         <toolSections name="ProcessElementSection">
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="createShowEntityProcessElement" label="Show entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ShowEntity']">
+          <ownedTools xsi:type="tool:NodeCreationDescription" name="createShowEntityProcessElement" label="Show entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ShowEntityTest']">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -49,5 +107,6 @@
         </toolSections>
       </defaultLayer>
     </ownedRepresentations>
+    <ownedJavaExtensions qualifiedClassName="de.wwu.md2dot0.design.TestService"/>
   </ownedViewpoints>
 </description:Group>
