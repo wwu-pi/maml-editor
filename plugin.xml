@@ -9,16 +9,13 @@
   </extension>
   <extension
         point="org.eclipse.sirius.diagram.ui.styleConfigurationProvider">
-     <styleConfigurationProvider
-           providerClass="de.wwu.md2dot0.diagram.StyleConfigurationProvider">
-     </styleConfigurationProvider>
   </extension>
   <extension
         point="org.eclipse.gmf.runtime.diagram.ui.editpartProviders">
      <editpartProvider
            class="de.wwu.md2dot0.diagram.ProcessElementEditPartProvider">
         <Priority
-              name="Lowest">
+              name="Highest">
         </Priority>
      </editpartProvider>
   </extension>

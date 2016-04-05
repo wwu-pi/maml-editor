@@ -2,9 +2,11 @@ package de.wwu.md2dot0.diagram;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ImageFigure;
+import org.eclipse.draw2d.Triangle;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.Request;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
@@ -15,8 +17,11 @@ import org.eclipse.sirius.diagram.ui.edit.api.part.IStyleEditPart;
 import org.eclipse.sirius.diagram.ui.tools.api.figure.AirStyleDefaultSizeNodeFigure;
 import org.eclipse.sirius.viewpoint.SiriusPlugin;
 import org.eclipse.sirius.viewpoint.provider.SiriusEditPlugin;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Device;
+import org.eclipse.swt.widgets.Display;
 
-public class ProcessElementStyleEditPart extends AbstractNotSelectableShapeNodeEditPart implements IStyleEditPart {
+public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPart implements IStyleEditPart  {
 
 	    /**
 	     * the content pane.
@@ -26,7 +31,7 @@ public class ProcessElementStyleEditPart extends AbstractNotSelectableShapeNodeE
 	    /**
 	     * the primary shape.
 	     */
-	    protected ImageFigure primaryShape;
+	    protected Triangle primaryShape;
 
 	    /**
 	     * Create a new {@link ChangingImageEditPart}.
@@ -34,7 +39,7 @@ public class ProcessElementStyleEditPart extends AbstractNotSelectableShapeNodeE
 	     * @param view
 	     *            the view.
 	     */
-	    public ProcessElementStyleEditPart(View view) {
+	    public ProcessElementEditPart(View view) {
 	        super(view);
 	    }
 
@@ -61,9 +66,9 @@ public class ProcessElementStyleEditPart extends AbstractNotSelectableShapeNodeE
 	     *
 	     * @return the created figure.
 	     */
-	    protected ImageFigure createNodeShape() {
+	    protected Triangle createNodeShape() {
 	        if (primaryShape == null) {
-	            primaryShape = new ImageFigure();
+	            primaryShape = new Triangle(); //  new ImageFigure();
 	        }
 	        return primaryShape;
 	    }
@@ -73,7 +78,7 @@ public class ProcessElementStyleEditPart extends AbstractNotSelectableShapeNodeE
 	     *
 	     * @return the instance role figure.
 	     */
-	    public ImageFigure getPrimaryShape() {
+	    public Triangle getPrimaryShape() {
 	        return primaryShape;
 	    }
 
@@ -99,7 +104,7 @@ public class ProcessElementStyleEditPart extends AbstractNotSelectableShapeNodeE
 	    protected void refreshVisuals() {
 	        CustomStyle customStyle = (CustomStyle) this.resolveSemanticElement();
 	        if (customStyle.eContainer() instanceof DNode) {
-	            this.getPrimaryShape().setImage(SiriusEditPlugin.getPlugin().getBundledImage(((DNode) customStyle.eContainer()).getName()));
+	            this.getPrimaryShape().setBackgroundColor(new Color (Display.getCurrent(), 255, 0, 0)); //setImage(SiriusEditPlugin.getPlugin().getBundledImage(((DNode) customStyle.eContainer()).getName()));
 	        }
 	    }
 
