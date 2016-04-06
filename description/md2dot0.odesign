@@ -10,7 +10,7 @@
             <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_blue']"/>
           </style>
         </nodeMappings>
-        <nodeMappings name="ShowEntityWrapper" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::ShowEntity)" domainClass="md2dot0.ShowEntity">
+        <nodeMappings name="ShowEntityWrapper" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.0/@ownedTools[name='editShowEntityProcessElement']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::ShowEntity)" domainClass="md2dot0.ShowEntity">
           <borderedNodeMappings name="ShowEntity" semanticCandidatesExpression="aql:self.roles" domainClass="md2dot0.Role">
             <style xsi:type="style:DotDescription" labelExpression="aql:'Test'" labelPosition="node" resizeKind="NSEW">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
@@ -18,7 +18,7 @@
               <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='dark_orange']"/>
             </style>
           </borderedNodeMappings>
-          <style xsi:type="style:CustomStyleDescription" labelExpression="feature:description" labelPosition="node" resizeKind="NSEW" id="de.wwu.md2dot0.diagram.ProcessElement">
+          <style xsi:type="style:CustomStyleDescription" labelExpression="feature:description" sizeComputationExpression="15" labelPosition="node" resizeKind="NSEW" id="de.wwu.md2dot0.diagram.ProcessElement">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           </style>
@@ -31,7 +31,7 @@
             </centerLabelStyleDescription>
           </style>
         </edgeMappings>
-        <containerMappings name="ProcessElementContainer" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::ProcessElement)" domainClass="md2dot0.ProcessElement" childrenPresentation="VerticalStack">
+        <containerMappings name="ProcessElementContainer" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::UpdateEntity)" domainClass="md2dot0.ProcessElement" childrenPresentation="VerticalStack">
           <subContainerMappings name="SubContainer" semanticCandidatesExpression="var:self" domainClass="md2dot0.ProcessElement" childrenPresentation="VerticalStack">
             <subContainerMappings name="RoleContainer" semanticCandidatesExpression="var:self" domainClass="md2dot0.ProcessElement">
               <subNodeMappings name="RoleElement" semanticCandidatesExpression="feature:roles" synchronizationLock="true" domainClass="md2dot0.Role">
@@ -87,6 +87,10 @@
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:DirectEditLabel" name="editShowEntityProcessElement" label="Edit Process Element">
+            <mask mask="{0}"/>
+            <initialOperation/>
           </ownedTools>
         </toolSections>
         <toolSections name="ConnectorSection">

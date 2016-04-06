@@ -12,7 +12,6 @@ public class ProcessElementEditPartProvider extends AbstractEditPartProvider {
 
 	@Override
 	protected Class<?> getNodeEditPartClass(View view) {
-		System.out.println("Hier");
 		if (view.getElement() instanceof CustomStyle) {
 			CustomStyle customStyle = (CustomStyle) view.getElement();
 			if (customStyle.getId().equals("de.wwu.md2dot0.diagram.ProcessElement")) {
