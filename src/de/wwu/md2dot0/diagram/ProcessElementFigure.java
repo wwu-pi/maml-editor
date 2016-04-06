@@ -3,7 +3,6 @@ package de.wwu.md2dot0.diagram;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.Polygon;
 import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.XYLayout;
@@ -15,7 +14,7 @@ import org.eclipse.swt.widgets.Display;
 
 public class ProcessElementFigure extends Figure {
 
-	protected final Color processElementBackgroundColor = new Color(Display.getCurrent(), 107, 218, 247);
+	protected Color processElementBackgroundColor = new Color(Display.getCurrent(), 107, 218, 247);
 	protected Color processElementBorderColor = new Color(Display.getCurrent(), 0, 0, 0);
 	protected Color processElementLabelColor = new Color(Display.getCurrent(), 0, 0, 1);
 
@@ -29,6 +28,7 @@ public class ProcessElementFigure extends Figure {
 	public ProcessElementFigure(CustomStyle style) {
 		setLayoutManager(new XYLayout());
 		
+		// Use provided styling if exists
 		if(style != null){
 			processElementBorderColor = new Color(Display.getCurrent(), style.getBorderColor().getRed(), style.getBorderColor().getGreen(), style.getBorderColor().getBlue());
 			processElementLabelColor = new Color(Display.getCurrent(), style.getLabelColor().getRed(), style.getLabelColor().getGreen(), style.getLabelColor().getBlue());
@@ -52,17 +52,12 @@ public class ProcessElementFigure extends Figure {
 		add(lineLower);
 		
 		labelUpper = new Label("Test");
-		//
-		//labelLower.setForegroundColor(processElementForegroundColor);
 		add(labelUpper);
 
 		labelLower = new Label("TestDown");
-		
-	//	labelLower.setForegroundColor(processElementForegroundColor);
 		add(labelLower);
 		
 		labelMain= new Label("TestMain");
-	//	labelMain.setForegroundColor(processElementForegroundColor);
 		add(labelMain);
 	}
 	
@@ -81,12 +76,10 @@ public class ProcessElementFigure extends Figure {
 	@Override
 	protected void paintFigure(Graphics graphics) {
 		Rectangle bounds = getBounds().getCopy();
-		//System.out.println("repaint");
-		//System.out.println(bounds);
 		int width = bounds.width;// <= 100 ? 100 : bounds.width;
 		int height = bounds.height;// <= 50 ? 50 : bounds.height;
 
-		// Arrow shape
+		// Calculate new dimensions
 		int[] coordsArrow = { bounds.x + 0, bounds.y + 0, 
 				bounds.x + (int) (width * 0.8), bounds.y + 0, 
 				bounds.x + width - 1, bounds.y + (int) (height / 2),
@@ -103,7 +96,7 @@ public class ProcessElementFigure extends Figure {
 				bounds.x + (int) (width * 0.9), bounds.y + (int) (height * 0.75) };
 		lineLower.setPoints(new PointList(coordsLineLower));
 		
-		// Styling (colors)
+		// Use current colors
 		labelUpper.setForegroundColor(processElementLabelColor);
 		labelMain.setForegroundColor(processElementLabelColor);
 		labelLower.setForegroundColor(processElementLabelColor);
@@ -114,5 +107,4 @@ public class ProcessElementFigure extends Figure {
 		setConstraint(labelMain, new Rectangle(0, (int) (height * 0.25), (int) (width * 0.85), (int) (height * 0.5)));
 		setConstraint(labelLower, new Rectangle(0, (int) (height * 0.75), (int) (width * 0.85), (int) (height * 0.25)));
 	}
-
 }

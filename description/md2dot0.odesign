@@ -3,19 +3,18 @@
   <ownedViewpoints name="processEditor" modelFileExtension="md2dot0">
     <ownedRepresentations xsi:type="description_1:DiagramDescription" name="Process editor" initialisation="true" domainClass="md2dot0.UseCase" enablePopupBars="true">
       <defaultLayer name="ProcessLayer" label="Process Layer">
-        <nodeMappings name="ShowEntityTest" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::SelectEntity)" domainClass="md2dot0.SelectEntity">
+        <nodeMappings name="ShowEntityTest" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.2/@ownedTools[name='editShowEntityProcessElement']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::SelectEntity)" domainClass="md2dot0.ShowEntity">
           <style xsi:type="style:SquareDescription" labelExpression="service:getProcessElementType()" sizeComputationExpression="" labelPosition="node" resizeKind="NSEW" width="10" height="3">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='dark_blue']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_blue']"/>
           </style>
         </nodeMappings>
-        <nodeMappings name="ShowEntityWrapper" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.0/@ownedTools[name='editShowEntityProcessElement']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::ShowEntity)" domainClass="md2dot0.ShowEntity">
+        <nodeMappings name="ShowEntityWrapper" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.2/@ownedTools[name='editShowEntityProcessElement']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::ShowEntity)" domainClass="md2dot0.ShowEntity">
           <borderedNodeMappings name="ShowEntity" semanticCandidatesExpression="aql:self.roles" domainClass="md2dot0.Role">
-            <style xsi:type="style:DotDescription" labelExpression="aql:'Test'" labelPosition="node" resizeKind="NSEW">
+            <style xsi:type="style:WorkspaceImageDescription" showIcon="false" labelExpression="" hideLabelByDefault="true" sizeComputationExpression="2" workspacePath="/de.wwu.md2dot0.design/icons/man.svg">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
               <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
-              <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='dark_orange']"/>
             </style>
           </borderedNodeMappings>
           <style xsi:type="style:CustomStyleDescription" labelExpression="feature:description" sizeComputationExpression="15" labelPosition="node" resizeKind="NSEW" id="de.wwu.md2dot0.diagram.ProcessElement">
@@ -88,8 +87,9 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:DirectEditLabel" name="editShowEntityProcessElement" label="Edit Process Element">
-            <mask mask="{0}"/>
+          <ownedTools xsi:type="tool:NodeCreationDescription" name="createSelectEntityProcessElement" label="Select entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ShowEntityTest']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
             <initialOperation/>
           </ownedTools>
         </toolSections>
@@ -109,6 +109,19 @@
             </initialOperation>
           </ownedTools>
         </toolSections>
+        <toolSections name="EditSection" label="Edit elements">
+          <ownedTools xsi:type="tool:DirectEditLabel" name="editShowEntityProcessElement" label="Edit Process Element">
+            <mask mask="{0}"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="var:0"/>
+            </initialOperation>
+          </ownedTools>
+        </toolSections>
+        <customization>
+          <vsmElementCustomizations xsi:type="description:VSMElementCustomization" predicateExpression="aql:view.eAllContents()->filter(md2dot0::Role)">
+            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ShowEntityWrapper']/@borderedNodeMappings[name='ShowEntity']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/woman.svg'"/>
+          </vsmElementCustomizations>
+        </customization>
       </defaultLayer>
     </ownedRepresentations>
     <ownedJavaExtensions qualifiedClassName="de.wwu.md2dot0.design.TestService"/>
