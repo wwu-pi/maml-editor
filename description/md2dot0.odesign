@@ -17,7 +17,7 @@
               <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             </style>
           </borderedNodeMappings>
-          <style xsi:type="style:CustomStyleDescription" labelExpression="feature:description" sizeComputationExpression="15" labelPosition="node" resizeKind="NSEW" id="de.wwu.md2dot0.diagram.ProcessElement">
+          <style xsi:type="style:CustomStyleDescription" showIcon="false" labelExpression="feature:description" sizeComputationExpression="15" labelPosition="node" resizeKind="NSEW" id="de.wwu.md2dot0.diagram.ProcessElement">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           </style>
