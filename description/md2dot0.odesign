@@ -92,7 +92,7 @@
             <viewVariable name="containerView"/>
             <initialOperation/>
           </ownedTools>
-          <ownedTools xsi:type="tool:DirectEditLabel" name="ProcessElementDirectEdit" inputLabelExpression="aql:'TRRR'">
+          <ownedTools xsi:type="tool:DirectEditLabel" name="ProcessElementDirectEdit" inputLabelExpression="feature:description">
             <mask mask="{0}"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="var:0"/>
@@ -100,7 +100,7 @@
           </ownedTools>
         </toolSections>
         <toolSections name="ConnectorSection">
-          <ownedTools xsi:type="tool:EdgeCreationDescription" name="createProcessConnector" label="Connect process steps" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@edgeMappings[name='ProcessElementConnector']">
+          <ownedTools xsi:type="tool:EdgeCreationDescription" name="createProcessConnector" label="Connect process steps" precondition="aql:  preSource &lt;> preTarget and (preTarget.oclIsKindOf(md2dot0::Xor) or preTarget.oclAsType(md2dot0::ProcessFlowElement).previousElements->size() &lt; 1)" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@edgeMappings[name='ProcessElementConnector']" connectionStartPrecondition="aql:  (preSource.oclIsKindOf(md2dot0::Xor) or preSource.oclAsType(md2dot0::ProcessFlowElement).nextElements->size() &lt; 1)">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>

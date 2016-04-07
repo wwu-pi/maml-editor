@@ -1,49 +1,26 @@
 package de.wwu.md2dot0.diagram;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.XYLayout;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.transaction.RunnableWithResult;
 import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
-import org.eclipse.gef.requests.DirectEditRequest;
-import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.sirius.diagram.CustomStyle;
 import org.eclipse.sirius.diagram.DNode;
 import org.eclipse.sirius.diagram.Square;
 import org.eclipse.sirius.diagram.ui.edit.api.part.AbstractNotSelectableShapeNodeEditPart;
-import org.eclipse.sirius.diagram.ui.edit.api.part.IDiagramBorderNodeEditPart;
 import org.eclipse.sirius.diagram.ui.edit.api.part.IStyleEditPart;
-import org.eclipse.sirius.diagram.ui.edit.internal.part.DiagramBorderNodeEditPartOperation;
-import org.eclipse.sirius.diagram.ui.edit.internal.part.DiagramElementEditPartOperation;
-import org.eclipse.sirius.diagram.ui.edit.internal.part.DiagramNodeEditPartOperation;
 import org.eclipse.sirius.diagram.ui.internal.edit.policies.FixedLayoutEditPolicy;
-import org.eclipse.sirius.diagram.ui.tools.api.figure.AbstractTransparentRectangle;
 import org.eclipse.sirius.diagram.ui.tools.api.figure.AirStyleDefaultSizeNodeFigure;
 import org.eclipse.sirius.diagram.ui.tools.api.policies.LayoutEditPolicy;
 import org.eclipse.sirius.ui.tools.api.color.VisualBindingManager;
-import org.eclipse.gmf.runtime.common.core.util.Log;
-import org.eclipse.gmf.runtime.common.core.util.Trace;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
-import org.eclipse.gmf.runtime.diagram.ui.internal.DiagramUIDebugOptions;
-import org.eclipse.gmf.runtime.diagram.ui.internal.DiagramUIPlugin;
-import org.eclipse.gmf.runtime.diagram.ui.internal.DiagramUIStatusCodes;
-import org.eclipse.gmf.runtime.diagram.ui.requests.RequestConstants;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart;
-
 import md2dot0.ProcessElement;
 
+@SuppressWarnings("restriction")
 public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPart implements IStyleEditPart {
 
 	@Override
@@ -58,6 +35,7 @@ public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPa
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
+		
 		CustomStyle customStyle = (CustomStyle) this.resolveSemanticElement();
 		if (getPrimaryShape() != null && customStyle.eContainer() instanceof DNode) {
 			DNode node = (DNode) customStyle.eContainer();

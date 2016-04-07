@@ -7,8 +7,10 @@ import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.sirius.diagram.CustomStyle;
 import org.eclipse.sirius.diagram.ui.tools.api.figure.AbstractTransparentRectangle;
+import org.eclipse.sirius.diagram.ui.tools.api.figure.SiriusWrapLabel;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
@@ -23,7 +25,7 @@ public class ProcessElementFigure extends AbstractTransparentRectangle {
 	protected Polyline lineLower;
 	protected Label labelUpper;
 	protected Label labelLower;
-	// protected Label labelMain;
+	protected SiriusWrapLabel labelMain;
 
 	public ProcessElementFigure(CustomStyle style) {
 		setLayoutManager(new XYLayout());
@@ -85,6 +87,18 @@ public class ProcessElementFigure extends AbstractTransparentRectangle {
 		setConstraint(arrowShape, new Rectangle(0, 0, width, height));
 		setConstraint(labelUpper, new Rectangle(0, 0, (int) (width * 0.85), (int) (height * 0.25)));
 		setConstraint(labelLower, new Rectangle(0, (int) (height * 0.75), (int) (width * 0.85), (int) (height * 0.25)));
+		
+		// Find automatically inserted Label
+		if(labelMain == null){
+			for(Object child : this.getChildren()){
+				if(child instanceof SiriusWrapLabel){
+					labelMain = (SiriusWrapLabel) child;
+				}
+			}
+		}
+		if(labelMain != null){
+			setConstraint(labelMain, new Rectangle(0, (int) (height * 0.25), (int) (width * 0.85), (int) (height * 0.5)));
+		}
 	}
 
 	public void setProcessElementDataType(String type) {
@@ -110,10 +124,4 @@ public class ProcessElementFigure extends AbstractTransparentRectangle {
 	// style.getLabelColor().getRed(), style.getLabelColor().getGreen(),
 	// style.getLabelColor().getBlue());
 	// }
-	//
-	// public void setProcessElementDescription(String type){
-	// if(type == null) type = "";
-	// labelMain.setText(type);
-	// }
-	//
 }
