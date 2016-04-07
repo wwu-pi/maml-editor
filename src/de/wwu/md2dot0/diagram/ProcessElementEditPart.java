@@ -3,6 +3,7 @@ package de.wwu.md2dot0.diagram;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.gef.DragTracker;
+import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
@@ -12,6 +13,8 @@ import org.eclipse.sirius.diagram.DNode;
 import org.eclipse.sirius.diagram.ui.edit.api.part.AbstractNotSelectableShapeNodeEditPart;
 import org.eclipse.sirius.diagram.ui.edit.api.part.IStyleEditPart;
 import org.eclipse.sirius.diagram.ui.tools.api.figure.AirStyleDefaultSizeNodeFigure;
+
+import md2dot0.ProcessElement;
 
 public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPart implements IStyleEditPart {
 
@@ -92,8 +95,26 @@ public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPa
 		CustomStyle customStyle = (CustomStyle) this.resolveSemanticElement();
 		if (arrowShape != null && customStyle.eContainer() instanceof DNode) {
 			DNode node = (DNode) customStyle.eContainer();
-
+			
+			// Update description
 			arrowShape.setProcessElementDescription(node.getName());
+			
+			if(node.getTarget() instanceof ProcessElement && node.getTarget() != null){
+				ProcessElement modelElement = (ProcessElement) node.getTarget();
+				
+				// Update process element subtype
+				arrowShape.setProcessElementType(modelElement.getClass().getSimpleName());
+				
+				// Update data type
+				String dataTypeName = modelElement.getDataType() != null ? modelElement.getDataType().toString() : "X";
+				arrowShape.setProcessElementDataType(dataTypeName); // Todo infer from service class?
+			}
 		}
 	}
+	
+	@Override
+	protected void createDefaultEditPolicies() {
+		// empty
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new ProcessElementEditPolicy());
+    }
 }

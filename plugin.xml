@@ -19,4 +19,13 @@
         </Priority>
      </editpartProvider>
   </extension>
+  <extension
+        point="org.eclipse.gmf.runtime.diagram.ui.editpolicyProviders">
+     <editpolicyProvider
+           class="de.wwu.md2dot0.diagram.ProcessElementEditPartProvider">
+        <Priority
+              name="Highest">
+        </Priority>
+     </editpolicyProvider>
+  </extension>
 </plugin>

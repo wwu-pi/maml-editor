@@ -61,15 +61,18 @@ public class ProcessElementFigure extends Figure {
 		add(labelMain);
 	}
 	
-	public void setObjectType(String type){
+	public void setProcessElementDataType(String type){
+		if(type == null) type = "";
 		labelLower.setText(type);
 	}
 	
 	public void setProcessElementType(String type){
-		labelUpper.setText(type);
+		if(type == null) type = "";
+		labelUpper.setText(type); 
 	}
 	
 	public void setProcessElementDescription(String type){
+		if(type == null) type = "";
 		labelMain.setText(type);
 	}
 
