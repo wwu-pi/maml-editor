@@ -10,7 +10,7 @@
             <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_blue']"/>
           </style>
         </nodeMappings>
-        <nodeMappings name="ShowEntityWrapper" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::ShowEntity)" domainClass="md2dot0.ShowEntity">
+        <nodeMappings name="ShowEntityWrapper" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.0/@ownedTools[name='ProcessElementDirectEdit']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::ShowEntity)" domainClass="md2dot0.ShowEntity">
           <borderedNodeMappings name="ShowEntity" semanticCandidatesExpression="aql:self.roles" domainClass="md2dot0.Role">
             <style xsi:type="style:WorkspaceImageDescription" showIcon="false" labelExpression="" hideLabelByDefault="true" sizeComputationExpression="2" workspacePath="/de.wwu.md2dot0.design/icons/man.svg">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
@@ -22,7 +22,7 @@
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           </style>
         </nodeMappings>
-        <edgeMappings name="ProcessElementConnector" sourceMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ShowEntityTest']" targetMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ShowEntityTest']" targetFinderExpression="feature:targetProcessFlowElement" sourceFinderExpression="feature:sourceProcessFlowElement" domainClass="md2dot0.ProcessConnector" useDomainElement="true">
+        <edgeMappings name="ProcessElementConnector" sourceMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ShowEntityTest'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ShowEntityWrapper']" targetMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ShowEntityTest'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ShowEntityWrapper']" targetFinderExpression="feature:targetProcessFlowElement" sourceFinderExpression="feature:sourceProcessFlowElement" domainClass="md2dot0.ProcessConnector" useDomainElement="true">
           <style sizeComputationExpression="2">
             <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='gray']"/>
             <centerLabelStyleDescription>
@@ -94,11 +94,13 @@
           </ownedTools>
           <ownedTools xsi:type="tool:DirectEditLabel" name="ProcessElementDirectEdit" inputLabelExpression="aql:'TRRR'">
             <mask mask="{0}"/>
-            <initialOperation/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="var:0"/>
+            </initialOperation>
           </ownedTools>
         </toolSections>
         <toolSections name="ConnectorSection">
-          <ownedTools xsi:type="tool:EdgeCreationDescription" name="createProcessConnector" label="Connect process steps" precondition="aql:  (preTarget.oclIsKindOf(md2dot0::Xor) or preTarget.oclAsType(md2dot0::ProcessFlowElement).previousElements->size() &lt; 1)" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@edgeMappings[name='ProcessElementConnector']" connectionStartPrecondition="aql:  (preSource.oclIsKindOf(md2dot0::Xor) or preSource.oclAsType(md2dot0::ProcessFlowElement).nextElements->size() &lt; 1)">
+          <ownedTools xsi:type="tool:EdgeCreationDescription" name="createProcessConnector" label="Connect process steps" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@edgeMappings[name='ProcessElementConnector']">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
