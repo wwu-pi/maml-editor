@@ -7,7 +7,6 @@ import org.eclipse.draw2d.Polyline;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.sirius.diagram.CustomStyle;
 import org.eclipse.sirius.diagram.ui.tools.api.figure.AbstractTransparentRectangle;
 import org.eclipse.sirius.diagram.ui.tools.api.figure.SiriusWrapLabel;
