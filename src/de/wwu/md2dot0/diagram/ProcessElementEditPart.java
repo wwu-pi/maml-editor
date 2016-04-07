@@ -44,8 +44,22 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart;
 
 import md2dot0.ProcessElement;
 
-public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPart implements IStyleEditPart {
+public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPart implements IStyleEditPart { //AbstractNotSelectableShapeNodeEditPart
+
+	/*******************************************************************************
+	 * Copyright (c) 2007, 2008 THALES GLOBAL SERVICES.
+	 * All rights reserved. This program and the accompanying materials
+	 * are made available under the terms of the Eclipse Public License v1.0
+	 * which accompanies this distribution, and is available at
+	 * http://www.eclipse.org/legal/epl-v10.html
+	 *
+	 * Contributors:
+	 *    Obeo - initial API and implementation
+	 *******************************************************************************/
 	
+	    /**
+	     * @not-generated : prevent drag of elements
+	     */
 	    @Override
 	    public DragTracker getDragTracker(Request request) {
 	        return getParent().getDragTracker(request);
@@ -58,36 +72,21 @@ public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPa
 	    @Override
 	    protected void refreshVisuals() {
 	        super.refreshVisuals();
-//	        GraphicalEditPart part = ((GraphicalEditPart) getParent());
+	        GraphicalEditPart part = ((GraphicalEditPart) getParent());
 	        
-//	        EObject dde = this.resolveSemanticElement();
-//	        if (dde instanceof Square) {
-//	            Square square = (Square) dde;
-//	            int borderSize = 0;
-//	            if (square.getBorderSize() != null) {
-//	                borderSize = square.getBorderSize().intValue();
-//	            }
-////	            this.getPrimaryShape().setLineWidth(borderSize);
-//	            DiagramNodeEditPartOperation.refreshFigure(this);
-//	            DiagramElementEditPartOperation.refreshLabelAlignment(((GraphicalEditPart) getParent()).getContentPane(), square);
-//	        }
-	        
-	        CustomStyle customStyle = (CustomStyle) this.resolveSemanticElement();
-	        if (this.getPrimaryShape() != null && customStyle.eContainer() instanceof DNode) {
-				DNode node = (DNode) customStyle.eContainer();
-		        if(node.getTarget() instanceof ProcessElement && node.getTarget() != null){
-					ProcessElement modelElement = (ProcessElement) node.getTarget();
-					
-					// Update process element subtype
-					this.getPrimaryShape().setProcessElementType(modelElement.getClass().getSimpleName());
-					
-					// Update data type
-					String dataTypeName = modelElement.getDataType() != null ? modelElement.getDataType().toString() : "X";
-					this.getPrimaryShape().setProcessElementDataType(dataTypeName); // Todo infer from service class?
-				}
-		    }
+	        EObject dde = this.resolveSemanticElement();
+	        if (dde instanceof Square) {
+	            Square square = (Square) dde;
+	            int borderSize = 0;
+	            if (square.getBorderSize() != null) {
+	                borderSize = square.getBorderSize().intValue();
+	            }
+//	            this.getPrimaryShape().setLineWidth(borderSize);
+	            DiagramNodeEditPartOperation.refreshFigure(this);
+	            DiagramElementEditPartOperation.refreshLabelAlignment(((GraphicalEditPart) getParent()).getContentPane(), square);
+	        }
 	    }
-	        
+
 	    /**
 	     * @not-generated
 	     * @see org.eclipse.gmf.runtime.diagram.ui.editparts.GraphicalEditPart#refreshBackgroundColor()
@@ -235,11 +234,48 @@ public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPa
 	        return super.getContentPane();
 	    }
 
+	    /**
+	     * @not-generated
+	     */
+//	    public static class SquareFigure extends AbstractTransparentRectangle {
+//
+//	        /**
+//	         * @was-generated
+//	         */
+//	        public SquareFigure() {
+//	            this.setLineWidth(3);
+//	        }
+//	    }
+
 	    protected Class<?> getMetamodelType() {
-	        return ProcessElement.class;
+	        return Square.class;
 	    }
+
 	}
 
+//	/**
+//	 * the content pane.
+//	 */
+//	protected IFigure contentPane;
+//
+//	/**
+//	 * the primary shape.
+//	 */
+//	protected ProcessElementFigure arrowShape;
+//
+//	/**
+//	 * Create a new {@link ChangingImageEditPart}.
+//	 *
+//	 * @param view
+//	 *            the view.
+//	 */
+//	public ProcessElementEditPart(View view) {
+//		super(view);
+//	}
+//
+//	public DragTracker getDragTracker(Request request) {
+//		return getParent().getDragTracker(request);
+//	}
 //
 //	protected NodeFigure createNodeFigure() {
 //		NodeFigure figure = createNodePlate();
@@ -310,3 +346,69 @@ public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPa
 //			}
 //		}
 //	}
+//	
+//	
+//		
+//	
+//	
+////	@Override
+////	protected void createDefaultEditPolicies() {
+////		// empty
+////		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new ProcessElementEditPolicy());
+////    }
+//	
+////	protected void createDefaultEditPolicies(){
+////		//super.createEditPolicies();
+//////		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new ProcessElementEditPolicy());
+////	}
+//	
+////	public void performRequest(Request request){
+////	if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) {
+////	if(manager == null)
+////	manager = new LogicLabelEditManager(this,
+////	TextCellEditor.class, new
+////	LabelCellEditorLocator((Label)getFigure()));
+////	manager.show();
+////	}
+////	}
+//	
+////	@Override
+////	protected void performDirectEditRequest(Request request) {
+////		EditPart editPart = this;
+////		if (request instanceof DirectEditRequest){
+////			Point p = new Point(((DirectEditRequest)request).getLocation());
+////			getFigure().translateToRelative(p);
+////			IFigure fig = getFigure().findFigureAt(p);
+////			editPart =(EditPart) getViewer().getVisualPartMap().get(fig);
+////		}
+////		if (editPart == this) {
+////			try {
+////				editPart = (EditPart) getEditingDomain().runExclusive(
+////					new RunnableWithResult.Impl() {
+////
+////						public void run() {
+////							setResult(getPrimaryChildEditPart());
+////						}
+////					});
+////			} catch (InterruptedException e) {
+////				Trace.catching(DiagramUIPlugin.getInstance(),
+////					DiagramUIDebugOptions.EXCEPTIONS_CATCHING, getClass(),
+////					"performDirectEditRequest", e); //$NON-NLS-1$
+////				Log.error(DiagramUIPlugin.getInstance(),
+////					DiagramUIStatusCodes.IGNORED_EXCEPTION_WARNING,
+////					"performDirectEditRequest", e); //$NON-NLS-1$
+////			}
+////			if (editPart != null){
+////				editPart.performRequest(request);
+////			}
+////		}
+////	}
+////	
+////	public EditPart getTargetEditPart(Request request) {
+////
+////        if (RequestConstants.REQ_DIRECT_EDIT == request.getType()){
+////        	 return super.getTargetEditPart(request);
+////        }
+////        return super.getTargetEditPart(request);
+////	}
+//}

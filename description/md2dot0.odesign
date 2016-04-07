@@ -3,7 +3,7 @@
   <ownedViewpoints name="processEditor" modelFileExtension="md2dot0">
     <ownedRepresentations xsi:type="description_1:DiagramDescription" name="Process editor" initialisation="true" domainClass="md2dot0.UseCase" enablePopupBars="true">
       <defaultLayer name="ProcessLayer" label="Process Layer">
-        <nodeMappings name="ShowEntityTest" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.0/@ownedTools[name='ProcessElementDirectEdit']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::ShowEntity)" domainClass="md2dot0.ShowEntity">
+        <nodeMappings name="ShowEntityTest" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.0/@ownedTools[name='ProcessElementDirectEdit']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::SelectEntity)" domainClass="md2dot0.ShowEntity">
           <style xsi:type="style:SquareDescription" labelExpression="service:getProcessElementType()" sizeComputationExpression="" labelPosition="node" resizeKind="NSEW" width="10" height="3">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='dark_blue']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
