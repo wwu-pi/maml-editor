@@ -1,22 +1,36 @@
 package de.wwu.md2dot0.diagram;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.XYLayout;
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.emf.transaction.RunnableWithResult;
 import org.eclipse.gef.DragTracker;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.sirius.diagram.CustomStyle;
 import org.eclipse.sirius.diagram.DNode;
 import org.eclipse.sirius.diagram.ui.edit.api.part.AbstractNotSelectableShapeNodeEditPart;
 import org.eclipse.sirius.diagram.ui.edit.api.part.IStyleEditPart;
 import org.eclipse.sirius.diagram.ui.tools.api.figure.AirStyleDefaultSizeNodeFigure;
+import org.eclipse.gmf.runtime.common.core.util.Log;
+import org.eclipse.gmf.runtime.common.core.util.Trace;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeEditPart;
+import org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart;
+import org.eclipse.gmf.runtime.diagram.ui.internal.DiagramUIDebugOptions;
+import org.eclipse.gmf.runtime.diagram.ui.internal.DiagramUIPlugin;
+import org.eclipse.gmf.runtime.diagram.ui.internal.DiagramUIStatusCodes;
+import org.eclipse.gmf.runtime.diagram.ui.requests.RequestConstants;
 
 import md2dot0.ProcessElement;
 
-public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPart implements IStyleEditPart {
+public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPart implements IStyleEditPart { //AbstractNotSelectableShapeNodeEditPart
 
 	/**
 	 * the content pane.
@@ -112,9 +126,64 @@ public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPa
 		}
 	}
 	
-	@Override
-	protected void createDefaultEditPolicies() {
-		// empty
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new ProcessElementEditPolicy());
-    }
+//	@Override
+//	protected void createDefaultEditPolicies() {
+//		// empty
+//		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new ProcessElementEditPolicy());
+//    }
+	
+//	protected void createDefaultEditPolicies(){
+//		//super.createEditPolicies();
+////		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new ProcessElementEditPolicy());
+//	}
+	
+//	public void performRequest(Request request){
+//	if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) {
+//	if(manager == null)
+//	manager = new LogicLabelEditManager(this,
+//	TextCellEditor.class, new
+//	LabelCellEditorLocator((Label)getFigure()));
+//	manager.show();
+//	}
+//	}
+	
+//	@Override
+//	protected void performDirectEditRequest(Request request) {
+//		EditPart editPart = this;
+//		if (request instanceof DirectEditRequest){
+//			Point p = new Point(((DirectEditRequest)request).getLocation());
+//			getFigure().translateToRelative(p);
+//			IFigure fig = getFigure().findFigureAt(p);
+//			editPart =(EditPart) getViewer().getVisualPartMap().get(fig);
+//		}
+//		if (editPart == this) {
+//			try {
+//				editPart = (EditPart) getEditingDomain().runExclusive(
+//					new RunnableWithResult.Impl() {
+//
+//						public void run() {
+//							setResult(getPrimaryChildEditPart());
+//						}
+//					});
+//			} catch (InterruptedException e) {
+//				Trace.catching(DiagramUIPlugin.getInstance(),
+//					DiagramUIDebugOptions.EXCEPTIONS_CATCHING, getClass(),
+//					"performDirectEditRequest", e); //$NON-NLS-1$
+//				Log.error(DiagramUIPlugin.getInstance(),
+//					DiagramUIStatusCodes.IGNORED_EXCEPTION_WARNING,
+//					"performDirectEditRequest", e); //$NON-NLS-1$
+//			}
+//			if (editPart != null){
+//				editPart.performRequest(request);
+//			}
+//		}
+//	}
+//	
+//	public EditPart getTargetEditPart(Request request) {
+//
+//        if (RequestConstants.REQ_DIRECT_EDIT == request.getType()){
+//        	 return super.getTargetEditPart(request);
+//        }
+//        return super.getTargetEditPart(request);
+//	}
 }
