@@ -78,7 +78,7 @@
       <additionalLayers name="RoleLayer" label="Role Layer" activeByDefault="true">
         <containerMappings name="RoleContainer" label="RoleContainer" semanticCandidatesExpression="aql:self" domainClass="md2dot0.UseCase" childrenPresentation="List">
           <subNodeMappings name="RoleElement" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@toolSections.0/@ownedTools[name='directEditRoleName']" semanticCandidatesExpression="aql:self.roles" domainClass="md2dot0.Role">
-            <style xsi:type="style:SquareDescription" iconPath="/de.wwu.md2dot0.design/icons/man.png" labelPosition="node" resizeKind="NSEW">
+            <style xsi:type="style:SquareDescription" iconPath="/de.wwu.md2dot0.design/icons/man.png" labelAlignment="LEFT" sizeComputationExpression="-1" labelPosition="node" resizeKind="NSEW" width="15">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
               <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
               <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='gray']"/>
@@ -129,23 +129,23 @@
       </additionalLayers>
       <additionalLayers name="AttributeLayer" label="Attribute Layer" activeByDefault="true">
         <nodeMappings name="Attribute" domainClass="md2dot0gui.Attribute">
-          <borderedNodeMappings name="AttributeMultiplicity" domainClass="md2dot0gui.Attribute">
+          <borderedNodeMappings name="AttributeMultiplicity" semanticCandidatesExpression="var:self" domainClass="md2dot0gui.Attribute">
             <style xsi:type="style:LozengeNodeDescription" showIcon="false" labelExpression="[if(self.multiplicity.toString()='MANY') then '*' else '1' endif/]" labelPosition="node" resizeKind="NSEW">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
               <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
               <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_orange']"/>
             </style>
           </borderedNodeMappings>
-          <style xsi:type="style:SquareDescription" showIcon="false" labelExpression="feature:description" labelAlignment="LEFT" labelPosition="node" resizeKind="NSEW">
+          <style xsi:type="style:SquareDescription" showIcon="false" labelExpression="feature:description" sizeComputationExpression="-1" labelPosition="node" resizeKind="NSEW" width="15" height="3">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_orange']"/>
           </style>
         </nodeMappings>
         <edgeMappings name="ProcessParameterConnectorRead" preconditionExpression="aql:self.accessType.toString() = 'READ'" sourceMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']" targetMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']" targetFinderExpression="feature:targetElement" sourceFinderExpression="feature:sourceElement" domainClass="md2dot0.ParameterConnector" useDomainElement="true">
-          <style lineStyle="dash" sizeComputationExpression="2">
+          <style lineStyle="dash" sizeComputationExpression="2" endsCentering="Both">
             <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='gray']"/>
-            <centerLabelStyleDescription>
+            <centerLabelStyleDescription showIcon="false" labelExpression="service:getParameterConnectorLabelText()">
               <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             </centerLabelStyleDescription>
           </style>
@@ -159,6 +159,18 @@
           </style>
         </edgeMappings>
         <toolSections name="ParameterConnectorSection" label="Attribute Connections">
+          <ownedTools xsi:type="tool:NodeCreationDescription" name="createAttribute" label="Create attribute" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0gui.Attribute" referenceName="attributes">
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="aql:'Attribute'+container.attributes->size()"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
           <ownedTools xsi:type="tool:EdgeCreationDescription" name="createParameterConnectorRead" label="Read attribute" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@edgeMappings[name='ProcessParameterConnectorRead']">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
@@ -171,6 +183,7 @@
                   <subModelOperations xsi:type="tool_1:SetValue" featureName="accessType" valueExpression="aql:md2dot0gui::AccessType::READ"/>
                   <subModelOperations xsi:type="tool_1:SetValue" featureName="sourceElement" valueExpression="var:source"/>
                   <subModelOperations xsi:type="tool_1:SetValue" featureName="targetElement" valueExpression="var:target"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="order" valueExpression="aql:source.parameters->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
@@ -187,6 +200,7 @@
                   <subModelOperations xsi:type="tool_1:SetValue" featureName="accessType" valueExpression="aql:md2dot0gui::AccessType::WRITE"/>
                   <subModelOperations xsi:type="tool_1:SetValue" featureName="sourceElement" valueExpression="var:source"/>
                   <subModelOperations xsi:type="tool_1:SetValue" featureName="targetElement" valueExpression="var:target"/>
+                  <subModelOperations xsi:type="tool_1:SetValue" featureName="order" valueExpression="aql:source.parameters->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
