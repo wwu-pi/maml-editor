@@ -10,7 +10,7 @@
               <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             </style>
           </borderedNodeMappings>
-          <style xsi:type="style:CustomStyleDescription" showIcon="false" labelExpression="feature:description" sizeComputationExpression="15" labelPosition="node" resizeKind="NSEW" id="de.wwu.md2dot0.diagram.ProcessElement">
+          <style xsi:type="style:CustomStyleDescription" showIcon="false" labelExpression="feature:description" sizeComputationExpression="12" labelPosition="node" resizeKind="NSEW" id="de.wwu.md2dot0.diagram.ProcessElement">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           </style>
@@ -21,10 +21,10 @@
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           </style>
         </nodeMappings>
-        <edgeMappings name="ProcessElementConnector" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.1/@ownedTools[name='directEditProcessElementConnector']" sourceMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']" targetMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']" targetFinderExpression="feature:targetProcessFlowElement" sourceFinderExpression="feature:sourceProcessFlowElement" domainClass="md2dot0.ProcessConnector" useDomainElement="true">
+        <edgeMappings name="ProcessElementConnector" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.1/@ownedTools[name='directEditProcessElementConnector']" sourceMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']" targetMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']" targetFinderExpression="feature:targetProcessFlowElement" sourceFinderExpression="feature:sourceProcessFlowElement" domainClass="md2dot0.ProcessConnector" useDomainElement="true">
           <style targetArrow="InputFillClosedArrow" sizeComputationExpression="2" endsCentering="Both">
             <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='dark_gray']"/>
-            <centerLabelStyleDescription showIcon="false" labelExpression="aql:'&quot;'+self.description+'&quot;'">
+            <centerLabelStyleDescription showIcon="false" labelExpression="service:getProcessConnectorLabelText()">
               <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             </centerLabelStyleDescription>
           </style>
@@ -124,9 +124,36 @@
               <firstModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="var:0"/>
             </initialOperation>
           </ownedTools>
+          <ownedTools xsi:type="tool:NodeCreationDescription" name="createProcessStartEvent" label="Start event" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.ProcessStartEvent" referenceName="processFlowElements"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:NodeCreationDescription" name="createProcessEndEvent" label="End event" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.ProcessEndEvent" referenceName="processFlowElements"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:NodeCreationDescription" name="createProcessErrorEvent" label="Error event" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.ErrorEvent" referenceName="processFlowElements"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
         </toolSections>
         <toolSections name="ConnectorSection" label="Process Connections">
-          <ownedTools xsi:type="tool:EdgeCreationDescription" name="createProcessConnector" label="Connect process steps" precondition="aql:  preSource &lt;> preTarget and (preTarget.oclIsKindOf(md2dot0::Xor) or preTarget.oclAsType(md2dot0::ProcessFlowElement).previousElements->size() &lt; 1)" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@edgeMappings[name='ProcessElementConnector']" connectionStartPrecondition="aql:  (preSource.oclIsKindOf(md2dot0::Xor) or preSource.oclAsType(md2dot0::ProcessFlowElement).nextElements->size() &lt; 1)">
+          <ownedTools xsi:type="tool:EdgeCreationDescription" name="createProcessConnector" label="Connect process steps" precondition="service:isConnectionEndAllowed(preSource, preTarget)" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@edgeMappings[name='ProcessElementConnector']" connectionStartPrecondition="service: isConnectionStartAllowed(preSource)">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
@@ -150,6 +177,12 @@
         <customization>
           <vsmElementCustomizations xsi:type="description:VSMElementCustomization" predicateExpression="aql:view.eAllContents()->filter(md2dot0::Role)">
             <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']/@borderedNodeMappings[name='ProcessElementRole']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/woman.svg'"/>
+          </vsmElementCustomizations>
+          <vsmElementCustomizations xsi:type="description:VSMElementCustomization" predicateExpression="aql:self.oclIsTypeOf(md2dot0::ProcessEndEvent)">
+            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/event_end.png'"/>
+          </vsmElementCustomizations>
+          <vsmElementCustomizations xsi:type="description:VSMElementCustomization" predicateExpression="aql:self.oclIsTypeOf(md2dot0::ErrorEvent)">
+            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/event_error.png'"/>
           </vsmElementCustomizations>
         </customization>
       </defaultLayer>
