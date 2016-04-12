@@ -49,21 +49,21 @@ public class TestService {
 	// Process element type representation
 	public static String getProcessElementType(ProcessElement obj){
 		if(obj instanceof ShowEntity){
-			return ShowEntity.class.getSimpleName();
+			return "Show entity";
 		} else if(obj instanceof SelectEntity){
-			return SelectEntity.class.getSimpleName();
+			return "Select entity";
 		} else if(obj instanceof CreateEntity){
-			return CreateEntity.class.getSimpleName();
+			return "Create entity";
 		} else if(obj instanceof UpdateEntity){
-			return UpdateEntity.class.getSimpleName();
+			return "Update entity";
 		} else if(obj instanceof DeleteEntity){
-			return DeleteEntity.class.getSimpleName();
+			return "Delete entity";
 		} else if(obj instanceof DisplayMessage){
-			return DisplayMessage.class.getSimpleName();
+			return "Display message";
 		} else if(obj instanceof Call){
-			return Call.class.getSimpleName();
+			return "Call";
 		} else if(obj instanceof Camera){
-			return Camera.class.getSimpleName();
+			return "Camera";
 		}
 		return obj.getClass().getSimpleName();
 	}
