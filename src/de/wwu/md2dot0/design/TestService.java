@@ -2,14 +2,18 @@ package de.wwu.md2dot0.design;
 
 import org.eclipse.emf.ecore.EObject;
 
+import md2dot0.Call;
+import md2dot0.Camera;
+import md2dot0.CreateEntity;
+import md2dot0.DeleteEntity;
+import md2dot0.DisplayMessage;
 import md2dot0.ParameterConnector;
 import md2dot0.ProcessElement;
+import md2dot0.SelectEntity;
+import md2dot0.ShowEntity;
+import md2dot0.UpdateEntity;
 
 public class TestService {
-
-	public String getProcessElementType(ProcessElement ePackage) {
-		return "hallo";
-	}
 
 	public boolean debugTrue(EObject elem) {
 		System.out.println(elem);
@@ -26,6 +30,7 @@ public class TestService {
 		return "Test";
 	}
 	
+	// Label representation for Parameter Connectors
 	public String getParameterConnectorLabelText(EObject obj){
 		if(obj != null && obj instanceof ParameterConnector){
 			ParameterConnector connector = (ParameterConnector) obj;
@@ -39,5 +44,27 @@ public class TestService {
 			return labelText + "\"";
 		}
 		return "error";
+	}
+	
+	// Process element type representation
+	public static String getProcessElementType(ProcessElement obj){
+		if(obj instanceof ShowEntity){
+			return ShowEntity.class.getSimpleName();
+		} else if(obj instanceof SelectEntity){
+			return SelectEntity.class.getSimpleName();
+		} else if(obj instanceof CreateEntity){
+			return CreateEntity.class.getSimpleName();
+		} else if(obj instanceof UpdateEntity){
+			return UpdateEntity.class.getSimpleName();
+		} else if(obj instanceof DeleteEntity){
+			return DeleteEntity.class.getSimpleName();
+		} else if(obj instanceof DisplayMessage){
+			return DisplayMessage.class.getSimpleName();
+		} else if(obj instanceof Call){
+			return Call.class.getSimpleName();
+		} else if(obj instanceof Camera){
+			return Camera.class.getSimpleName();
+		}
+		return obj.getClass().getSimpleName();
 	}
 }

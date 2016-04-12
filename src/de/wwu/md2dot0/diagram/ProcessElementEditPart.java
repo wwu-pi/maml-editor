@@ -18,6 +18,8 @@ import org.eclipse.sirius.diagram.ui.internal.edit.policies.FixedLayoutEditPolic
 import org.eclipse.sirius.diagram.ui.tools.api.figure.AirStyleDefaultSizeNodeFigure;
 import org.eclipse.sirius.diagram.ui.tools.api.policies.LayoutEditPolicy;
 import org.eclipse.sirius.ui.tools.api.color.VisualBindingManager;
+
+import de.wwu.md2dot0.design.TestService;
 import md2dot0.ProcessElement;
 
 @SuppressWarnings("restriction")
@@ -44,7 +46,7 @@ public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPa
 				ProcessElement modelElement = (ProcessElement) node.getTarget();
 
 				// Update process element subtype
-				getPrimaryShape().setProcessElementType(modelElement.getClass().getSimpleName());
+				getPrimaryShape().setProcessElementType(TestService.getProcessElementType(modelElement));
 
 				// Update data type
 				String dataTypeName = modelElement.getDataType() != null ? modelElement.getDataType().toString() : "X";
