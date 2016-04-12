@@ -30,13 +30,13 @@ public class TestService {
 		if(obj != null && obj instanceof ParameterConnector){
 			ParameterConnector connector = (ParameterConnector) obj;
 			
-			String labelText = connector.getOrder() + ": ";
+			String labelText = connector.getOrder() + ": \"";
 			if(connector.getDescription() != null && connector.getDescription().length() > 0) {
 				labelText += connector.getDescription();
 			} else if(connector.getTargetElement() != null && connector.getTargetElement().getDescription() != null){
 				labelText += connector.getTargetElement().getDescription();
 			}
-			return labelText;
+			return labelText + "\"";
 		}
 		return "error";
 	}
