@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:tool="http://www.eclipse.org/sirius/diagram/description/tool/1.1.0" xmlns:tool_1="http://www.eclipse.org/sirius/description/tool/1.1.0" name="md2dot0" version="10.1.0.201507271600">
+<description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:tool="http://www.eclipse.org/sirius/description/tool/1.1.0" xmlns:tool_1="http://www.eclipse.org/sirius/diagram/description/tool/1.1.0" xmlns:validation="http://www.eclipse.org/sirius/description/validation/1.1.0" name="md2dot0" version="10.1.0.201507271600">
   <ownedViewpoints name="processEditor" modelFileExtension="md2dot0">
     <ownedRepresentations xsi:type="description_1:DiagramDescription" name="Process editor" initialisation="true" domainClass="md2dot0.UseCase" enablePopupBars="true">
+      <validationSet name="Validate Model">
+        <ownedRules xsi:type="validation:SemanticValidationRule" name="validateStart" level="ERROR" message="The use case has no start event and cannot start!" targetClass="md2dot0.UseCase">
+          <audits auditExpression="aql:not self.processFlowElements->any(pe | pe.oclIsTypeOf(md2dot0::ProcessStartEvent))->isEmpty()"/>
+          <fixes name="Add a start element">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:self">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ProcessStartEvent" referenceName="processFlowElements"/>
+              </firstModelOperations>
+            </initialOperation>
+          </fixes>
+        </ownedRules>
+        <ownedRules xsi:type="validation:SemanticValidationRule" name="validateEnd" level="ERROR" message="The use case has no end event and cannot end!" targetClass="md2dot0.UseCase">
+          <audits auditExpression="aql:not self.processFlowElements->any(pe | pe.oclIsTypeOf(md2dot0::ProcessEndEvent))->isEmpty()"/>
+          <fixes name="Add an end element">
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:self">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ProcessEndEvent" referenceName="processFlowElements"/>
+              </firstModelOperations>
+            </initialOperation>
+          </fixes>
+        </ownedRules>
+        <ownedRules xsi:type="validation:SemanticValidationRule" name="validateMinimumOneIncomingEdge" level="WARNING" message="The element has no incoming edge and is thus not included in the process!" targetClass="md2dot0.ProcessFlowElement">
+          <audits auditExpression="aql:not self.previousElements->isEmpty() or (self.oclIsKindOf(md2dot0::Event) and not self.oclIsKindOf(md2dot0::ProcessEndEvent))"/>
+        </ownedRules>
+        <ownedRules xsi:type="validation:SemanticValidationRule" name="validateRoleAssignment" level="WARNING" message="The element has no role assigned!" targetClass="md2dot0.ProcessElement">
+          <audits auditExpression="aql:self.roles->size() > 0"/>
+        </ownedRules>
+      </validationSet>
       <defaultLayer name="ProcessLayer" label="Process Layer">
         <nodeMappings name="ProcessElement" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.0/@ownedTools[name='directEditProcessElement']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::InteractionProcessElement)" domainClass="md2dot0.InteractionProcessElement" dropDescriptions="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@toolSections.0/@ownedTools[name='ApplyRole']">
           <borderedNodeMappings name="ProcessElementRole" semanticCandidatesExpression="aql:self.roles" domainClass="md2dot0.Role">
@@ -30,147 +58,147 @@
           </style>
         </edgeMappings>
         <toolSections name="ProcessElementSection" label="Process Elements">
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="createShowEntityProcessElement" label="Show entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createShowEntityProcessElement" label="Show entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.ShowEntity" referenceName="processFlowElements">
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="aql:'Show element'+container.processFlowElements->size()"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ShowEntity" referenceName="processFlowElements">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'Show element'+container.processFlowElements->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="createSelectEntityProcessElement" label="Select entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createSelectEntityProcessElement" label="Select entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.SelectEntity" referenceName="processFlowElements">
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="aql:'Select element'+container.processFlowElements->size()"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.SelectEntity" referenceName="processFlowElements">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'Select element'+container.processFlowElements->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="createUpdateEntityProcessElement" label="Update entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createUpdateEntityProcessElement" label="Update entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.UpdateEntity" referenceName="processFlowElements">
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="aql:'Select element'+container.processFlowElements->size()"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.UpdateEntity" referenceName="processFlowElements">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'Select element'+container.processFlowElements->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="createDeleteEntityProcessElement" label="Delete entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createDeleteEntityProcessElement" label="Delete entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.DeleteEntity" referenceName="processFlowElements">
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="aql:'Select element'+container.processFlowElements->size()"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.DeleteEntity" referenceName="processFlowElements">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'Select element'+container.processFlowElements->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="createCreateEntityProcessElement" label="Create entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createCreateEntityProcessElement" label="Create entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.CreateEntity" referenceName="processFlowElements">
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="aql:'Select element'+container.processFlowElements->size()"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.CreateEntity" referenceName="processFlowElements">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'Select element'+container.processFlowElements->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="createDisplayMessageProcessElement" label="Display message" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createDisplayMessageProcessElement" label="Display message" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.DisplayMessage" referenceName="processFlowElements">
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="aql:'Select element'+container.processFlowElements->size()"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.DisplayMessage" referenceName="processFlowElements">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'Select element'+container.processFlowElements->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="createCallProcessElement" label="Call" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createCallProcessElement" label="Call" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.Call" referenceName="processFlowElements">
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="aql:'Select element'+container.processFlowElements->size()"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.Call" referenceName="processFlowElements">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'Select element'+container.processFlowElements->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="createCameraProcessElement" label="Camera" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createCameraProcessElement" label="Camera" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.Camera" referenceName="processFlowElements">
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="aql:'Select element'+container.processFlowElements->size()"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.Camera" referenceName="processFlowElements">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'Select element'+container.processFlowElements->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:DirectEditLabel" name="directEditProcessElement" inputLabelExpression="feature:description">
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditProcessElement" inputLabelExpression="feature:description">
             <mask mask="{0}"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="var:0"/>
+              <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0"/>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="createProcessStartEvent" label="Start event" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createProcessStartEvent" label="Start event" precondition="aql:container.eAllContents()->filter(md2dot0::ProcessStartEvent)->size() &lt; 1" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.ProcessStartEvent" referenceName="processFlowElements"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ProcessStartEvent" referenceName="processFlowElements"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="createProcessEndEvent" label="End event" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createProcessEndEvent" label="End event" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.ProcessEndEvent" referenceName="processFlowElements"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ProcessEndEvent" referenceName="processFlowElements"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="createProcessErrorEvent" label="Error event" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createProcessErrorEvent" label="Error event" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.ErrorEvent" referenceName="processFlowElements"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ErrorEvent" referenceName="processFlowElements"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
         </toolSections>
         <toolSections name="ConnectorSection" label="Process Connections">
-          <ownedTools xsi:type="tool:EdgeCreationDescription" name="createProcessConnector" label="Connect process steps" precondition="service:isConnectionEndAllowed(preSource, preTarget)" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@edgeMappings[name='ProcessElementConnector']" connectionStartPrecondition="service: isConnectionStartAllowed(preSource)">
+          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createProcessConnector" label="Connect process steps" precondition="service:isConnectionEndAllowed(preSource, preTarget)" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@edgeMappings[name='ProcessElementConnector']" connectionStartPrecondition="service: isConnectionStartAllowed(preSource)">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
             <targetViewVariable name="targetView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="[self.eContainer()/]">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.ProcessConnector" referenceName="processFlowConnections">
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="sourceProcessFlowElement" valueExpression="var:source"/>
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="targetProcessFlowElement" valueExpression="var:target"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="[self.eContainer()/]">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ProcessConnector" referenceName="processFlowConnections">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="sourceProcessFlowElement" valueExpression="var:source"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="targetProcessFlowElement" valueExpression="var:target"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:DirectEditLabel" name="directEditProcessElementConnector">
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditProcessElementConnector">
             <mask mask="{0}"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="var:0"/>
+              <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0"/>
             </initialOperation>
           </ownedTools>
         </toolSections>
@@ -203,32 +231,32 @@
           </style>
         </containerMappings>
         <toolSections name="RoleSection" label="Roles">
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="createRoleElement" label="Create role" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@containerMappings[name='RoleContainer']/@subNodeMappings[name='RoleElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createRoleElement" label="Create role" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@containerMappings[name='RoleContainer']/@subNodeMappings[name='RoleElement']">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="aql:container">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.Role" referenceName="roles">
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="aql:'Role'+container.roles->size()"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.Role" referenceName="roles">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="name" valueExpression="aql:'Role'+container.roles->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:ContainerDropDescription" name="ApplyRole" forceRefresh="true" mappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@containerMappings[name='RoleContainer']/@subNodeMappings[name='RoleElement'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']">
+          <ownedTools xsi:type="tool_1:ContainerDropDescription" name="ApplyRole" forceRefresh="true" mappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@containerMappings[name='RoleContainer']/@subNodeMappings[name='RoleElement'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']">
             <oldContainer name="oldSemanticContainer"/>
             <newContainer name="newSemanticContainer"/>
             <element name="element"/>
             <newViewContainer name="newContainerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="service:debugTrue()">
-                <subModelOperations xsi:type="tool_1:SetValue" featureName="roles" valueExpression="var:element"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="service:debugTrue()">
+                <subModelOperations xsi:type="tool:SetValue" featureName="roles" valueExpression="var:element"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:DirectEditLabel" name="directEditRoleName">
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditRoleName">
             <mask mask="{0}"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:SetValue" featureName="name" valueExpression="var:0"/>
+              <firstModelOperations xsi:type="tool:SetValue" featureName="name" valueExpression="var:0"/>
             </initialOperation>
           </ownedTools>
         </toolSections>
@@ -270,101 +298,120 @@
           </style>
         </edgeMappings>
         <toolSections name="ParameterConnectorSection" label="Attribute Connections">
-          <ownedTools xsi:type="tool:NodeCreationDescription" name="createAttribute" label="Create attribute" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createAttribute" label="Create attribute" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:container">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0gui.Attribute" referenceName="attributes">
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="aql:'Attribute'+container.attributes->size()"/>
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0gui.Attribute" referenceName="attributes">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'Attribute'+container.attributes->size()"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="XX"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:EdgeCreationDescription" name="createParameterConnectorRead" label="Read attribute" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@edgeMappings[name='ProcessParameterConnectorRead']">
+          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createParameterConnectorRead" label="Read attribute" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@edgeMappings[name='ProcessParameterConnectorRead']">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
             <targetViewVariable name="targetView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="aql:source.eContainer()">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.ParameterConnector" referenceName="processFlowConnections">
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="accessType" valueExpression="aql:md2dot0gui::AccessType::READ"/>
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="sourceElement" valueExpression="var:source"/>
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="targetElement" valueExpression="var:target"/>
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="order" valueExpression="aql:source.parameters->size()"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:source.eContainer()">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ParameterConnector" referenceName="processFlowConnections">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="accessType" valueExpression="aql:md2dot0gui::AccessType::READ"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="sourceElement" valueExpression="var:source"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="targetElement" valueExpression="var:target"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="order" valueExpression="aql:source.parameters->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:EdgeCreationDescription" name="createParameterConnectorWrite" label="Write attribute" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@edgeMappings[name='ProcessParameterConnectorWrite']">
+          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createParameterConnectorWrite" label="Write attribute" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@edgeMappings[name='ProcessParameterConnectorWrite']">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
             <targetViewVariable name="targetView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="aql:source.eContainer()">
-                <subModelOperations xsi:type="tool_1:CreateInstance" typeName="md2dot0.ParameterConnector" referenceName="processFlowConnections">
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="accessType" valueExpression="aql:md2dot0gui::AccessType::WRITE"/>
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="sourceElement" valueExpression="var:source"/>
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="targetElement" valueExpression="var:target"/>
-                  <subModelOperations xsi:type="tool_1:SetValue" featureName="order" valueExpression="aql:source.parameters->size()"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:source.eContainer()">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ParameterConnector" referenceName="processFlowConnections">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="accessType" valueExpression="aql:md2dot0gui::AccessType::WRITE"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="sourceElement" valueExpression="var:source"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="targetElement" valueExpression="var:target"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="order" valueExpression="aql:source.parameters->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:DirectEditLabel" name="directEditAttribute">
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttribute">
             <mask mask="{0}"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:SetValue" featureName="description" valueExpression="var:0"/>
+              <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0"/>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:DoubleClickDescription" name="toggleAttributeMultiplicity" forceRefresh="true" mappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']/@borderedNodeMappings[name='AttributeMultiplicity']">
+          <ownedTools xsi:type="tool_1:DoubleClickDescription" name="toggleAttributeMultiplicity" forceRefresh="true" mappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']/@borderedNodeMappings[name='AttributeMultiplicity']">
             <element name="element"/>
             <elementView name="elementView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:element">
-                <subModelOperations xsi:type="tool_1:Switch">
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
+                <subModelOperations xsi:type="tool:Switch">
                   <cases conditionExpression="aql:self.oclAsType(md2dot0gui::Attribute).multiplicity = md2dot0gui::Multiplicity::ONE">
-                    <subModelOperations xsi:type="tool_1:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::MANY"/>
+                    <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::MANY"/>
                   </cases>
                   <cases conditionExpression="aql:self.oclAsType(md2dot0gui::Attribute).multiplicity = md2dot0gui::Multiplicity::MANY">
-                    <subModelOperations xsi:type="tool_1:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
+                    <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
                   </cases>
                   <default/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool:ReconnectEdgeDescription" name="reconnectParameterConnectorSource" reconnectionKind="RECONNECT_SOURCE">
+          <ownedTools xsi:type="tool_1:ReconnectEdgeDescription" name="reconnectParameterConnectorSource" reconnectionKind="RECONNECT_SOURCE">
             <source name="source"/>
             <target name="target"/>
             <sourceView name="sourceView"/>
             <targetView name="targetView"/>
             <element name="element"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:element">
-                <subModelOperations xsi:type="tool_1:SetValue" featureName="sourceElement" valueExpression="var:target"/>
-                <subModelOperations xsi:type="tool_1:SetValue" featureName="order" valueExpression="aql:target.parameters->size()"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
+                <subModelOperations xsi:type="tool:SetValue" featureName="sourceElement" valueExpression="var:target"/>
+                <subModelOperations xsi:type="tool:SetValue" featureName="order" valueExpression="aql:target.parameters->size()"/>
               </firstModelOperations>
             </initialOperation>
             <edgeView name="edgeView"/>
           </ownedTools>
-          <ownedTools xsi:type="tool:ReconnectEdgeDescription" name="reconnectParameterConnectorTarget">
+          <ownedTools xsi:type="tool_1:ReconnectEdgeDescription" name="reconnectParameterConnectorTarget">
             <source name="source"/>
             <target name="target"/>
             <sourceView name="sourceView"/>
             <targetView name="targetView"/>
             <element name="element"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool_1:ChangeContext" browseExpression="var:element">
-                <subModelOperations xsi:type="tool_1:SetValue" featureName="targetElement" valueExpression="var:target"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
+                <subModelOperations xsi:type="tool:SetValue" featureName="targetElement" valueExpression="var:target"/>
               </firstModelOperations>
             </initialOperation>
             <edgeView name="edgeView"/>
+          </ownedTools>
+        </toolSections>
+      </additionalLayers>
+      <additionalLayers name="UseCaseLayer" activeByDefault="true">
+        <nodeMappings name="UseCase" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='UseCaseLayer']/@toolSections.0/@ownedTools[name='directEditUseCase']" semanticCandidatesExpression="aql:self" domainClass="md2dot0.UseCase">
+          <style xsi:type="style:SquareDescription" showIcon="false" labelExpression="aql:'   Use case: '+self.title" labelAlignment="LEFT" sizeComputationExpression="-1" labelPosition="node" resizeKind="EAST_WEST" width="15" height="3">
+            <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <labelFormat>bold</labelFormat>
+            <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_green']"/>
+          </style>
+        </nodeMappings>
+        <toolSections name="UseCaseSection" label="Use Case">
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditUseCase">
+            <mask mask="{0}"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:SetValue" featureName="title" valueExpression="var:0"/>
+            </initialOperation>
           </ownedTools>
         </toolSections>
       </additionalLayers>
