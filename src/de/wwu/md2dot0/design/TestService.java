@@ -15,6 +15,11 @@ public class TestService {
 		System.out.println(elem);
 		return true;
 	}
+	
+	public boolean debugTwo(EObject elem1, EObject elem2) {
+		System.out.println(elem1 + "..." + elem2);
+		return true;
+	}
 
 	public String debugString(EObject elem) {
 		System.out.println(elem);
@@ -22,9 +27,16 @@ public class TestService {
 	}
 	
 	public String getParameterConnectorLabelText(EObject obj){
-		if(obj instanceof ParameterConnector){
+		if(obj != null && obj instanceof ParameterConnector){
 			ParameterConnector connector = (ParameterConnector) obj;
-			return connector.getOrder() + ": " + (connector.getDescription().length() > 0 ? connector.getDescription() : connector.getTargetElement().getDescription());
+			
+			String labelText = connector.getOrder() + ": ";
+			if(connector.getDescription() != null && connector.getDescription().length() > 0) {
+				labelText += connector.getDescription();
+			} else if(connector.getTargetElement() != null && connector.getTargetElement().getDescription() != null){
+				labelText += connector.getTargetElement().getDescription();
+			}
+			return labelText;
 		}
 		return "error";
 	}
