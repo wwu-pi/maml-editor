@@ -24,6 +24,11 @@ public class TestService {
 		return true;
 	}
 	
+	public EObject debugObject(EObject elem) {
+		System.out.println(elem);
+		return elem;
+	}
+	
 	public boolean debugTwo(EObject elem1, EObject elem2) {
 		System.out.println(elem1 + "..." + elem2);
 		return true;
