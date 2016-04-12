@@ -8,9 +8,6 @@
     </component>
   </extension>
   <extension
-        point="org.eclipse.sirius.diagram.ui.styleConfigurationProvider">
-  </extension>
-  <extension
         point="org.eclipse.gmf.runtime.diagram.ui.editpartProviders">
      <editpartProvider
            class="de.wwu.md2dot0.diagram.ProcessElementEditPartProvider">
