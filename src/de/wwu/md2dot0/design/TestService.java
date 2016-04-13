@@ -15,6 +15,7 @@ import md2dot0.ParameterConnector;
 import md2dot0.ProcessConnector;
 import md2dot0.ProcessElement;
 import md2dot0.ProcessEndEvent;
+import md2dot0.ProcessFlowElement;
 import md2dot0.RemoteDataSource;
 import md2dot0.SelectEntity;
 import md2dot0.ShowEntity;
@@ -130,18 +131,25 @@ public class TestService {
 	
 	// Check is setting process edge is allowed
 	public boolean isConnectionStartAllowed(EObject elem, EObject preSource){
+		// For certain elements there is only one connection allowed. For reconnection we need to 
+		// allow a second temporary connection. The old connector is passed as elem in this case.
+		int maxConnections = 1;
+		if(elem instanceof ProcessConnector){
+			maxConnections++;
+		}
+		
 		if(preSource instanceof Event){
 			// Events hav max 1 outgoing edge
-			return ((Event) preSource).getNextElements().size() < 1;
+			return ((Event) preSource).getNextElements().size() < maxConnections;
 		} else if (preSource instanceof ControlFlowElement){
 			// Control flow elements can have multiple outgoing edges
 			return true;
 		} else if (preSource instanceof ProcessElement){
 			// Process elements can have max 1 outgoing edge
-			return ((ProcessElement) preSource).getNextElements().size() < 1;
+			return ((ProcessElement) preSource).getNextElements().size() < maxConnections;
 		} else if (preSource instanceof DataSource){
 			// Data source elements can have max 1 outgoing edge
-			return ((DataSource) preSource).getNextElements().size() < 1;
+			return ((DataSource) preSource).getNextElements().size() < maxConnections;
 		} 
 		return false;
 	}
@@ -150,9 +158,17 @@ public class TestService {
 		// Check preconditions on source side
 		if(!isConnectionStartAllowed(elem, preSource)) return false;
 		
+		// For certain elements there is only one connection allowed. For reconnection we need to check 
+		// if the connector is already part of the previous elements (and allow a second temporary connection)
+		// The old connector is passed as elem in this case.
+		int maxConnections = 1;
+		if(preTarget instanceof ProcessFlowElement && ((ProcessFlowElement) preTarget).getPreviousElements().contains(elem)){
+			maxConnections++;
+		}
+		
 		if(preTarget instanceof ProcessEndEvent){
 			// Only end event have an incoming edge
-			return ((ProcessEndEvent) preTarget).getPreviousElements().size() < 1;
+			return ((ProcessEndEvent) preTarget).getPreviousElements().size() < maxConnections;
 		} else if(preTarget instanceof Event){
 			// Other events have no incoming edge
 			return false;
@@ -165,12 +181,38 @@ public class TestService {
 				return false;
 			} else {
 				// Process elements can have max 1 incoming edge
-				return ((ProcessElement) preTarget).getPreviousElements().size() < 1;
+				return ((ProcessElement) preTarget).getPreviousElements().size() < maxConnections;
 			}
 		} else if (preTarget instanceof DataSource){
-			// Data source elements can have max 1 incoming edge
-			return ((DataSource) preTarget).getPreviousElements().size() < 1;
+			// Data source elements may not link on themselves
+			if(preSource instanceof DataSource && ((DataSource) preTarget).equals((DataSource) preSource)){
+				return false;
+			} else {
+				// Data source elements can have max 1 incoming edge
+				
+				return ((DataSource) preTarget).getPreviousElements().size() < maxConnections;
+			}
 		}
 		return false;
+	}
+	
+	public boolean isProcessSourceReconnectionAllowed(EObject elem, EObject preSource){
+		if(!(elem instanceof ProcessConnector)){
+			return false;
+		}
+		
+		ProcessConnector edge = (ProcessConnector) elem;
+		
+		return isConnectionEndAllowed(elem, preSource, edge.getTargetProcessFlowElement());
+	}
+	
+	public boolean isProcessTargetReconnectionAllowed(EObject elem, EObject preTarget){
+		if(!(elem instanceof ProcessConnector)){
+			return false;
+		}
+		
+		ProcessConnector edge = (ProcessConnector) elem;
+		
+		return isConnectionEndAllowed(elem, edge.getSourceProcessFlowElement(), preTarget);
 	}
 }
