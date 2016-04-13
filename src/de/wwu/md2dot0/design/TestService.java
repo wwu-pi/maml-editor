@@ -21,6 +21,14 @@ import md2dot0.SelectEntity;
 import md2dot0.ShowEntity;
 import md2dot0.SingletonDataSource;
 import md2dot0.UpdateEntity;
+import md2dot0gui.AvgFunc;
+import md2dot0gui.MaxFunc;
+import md2dot0gui.MinFunc;
+import md2dot0gui.MinusOperator;
+import md2dot0gui.PlusOperator;
+import md2dot0gui.MultiplicationOperator;
+import md2dot0gui.DivisionOperator;
+import md2dot0gui.SumFunc;
 
 public class TestService {
 
@@ -125,6 +133,28 @@ public class TestService {
 			return "Call";
 		} else if(obj instanceof Camera){
 			return "Camera";
+		}
+		return obj.getClass().getSimpleName();
+	}
+	
+	// Process element type representation
+	public static String getComputationOperatorType(EObject obj){
+		if(obj instanceof SumFunc){
+			return "Sum";
+		} else if(obj instanceof MinFunc){
+			return "Min";
+		} else if(obj instanceof MaxFunc){
+			return "Max";
+		} else if(obj instanceof AvgFunc){
+			return "Avg";
+		} else if(obj instanceof PlusOperator){
+			return "+";
+		} else if(obj instanceof MinusOperator){
+			return "-";
+		} else if(obj instanceof DivisionOperator){
+			return "/";
+		} else if(obj instanceof MultiplicationOperator){
+			return "*";
 		}
 		return obj.getClass().getSimpleName();
 	}

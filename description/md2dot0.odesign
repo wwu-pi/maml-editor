@@ -416,7 +416,14 @@
             <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_orange']"/>
           </style>
         </nodeMappings>
-        <edgeMappings name="ProcessParameterConnectorRead" preconditionExpression="aql:self.accessType.toString() = 'READ'" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='directEditAttribute']" sourceMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ControlFlowElement']" targetMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']" targetFinderExpression="feature:targetElement" sourceFinderExpression="feature:sourceElement" domainClass="md2dot0.ParameterConnector" useDomainElement="true" reconnections="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='reconnectParameterConnectorSource'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='reconnectParameterConnectorTarget']">
+        <nodeMappings name="ComputedAttribute" domainClass="md2dot0gui.ComputedAttribute">
+          <style xsi:type="style:EllipseNodeDescription" showIcon="false" labelExpression="service:getComputationOperatorType()" labelPosition="node" resizeKind="NSEW" horizontalDiameterComputationExpression="3" verticalDiameterComputationExpression="3">
+            <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
+          </style>
+        </nodeMappings>
+        <edgeMappings name="ProcessParameterConnectorRead" preconditionExpression="aql:self.accessType.toString() = 'READ'" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='directEditAttribute']" sourceMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ControlFlowElement'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputedAttribute']" targetMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']" targetFinderExpression="feature:targetElement" sourceFinderExpression="feature:source" domainClass="md2dot0.ParameterConnector" useDomainElement="true" reconnections="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='reconnectParameterConnectorSource'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='reconnectParameterConnectorTarget']">
           <style lineStyle="dash" sizeComputationExpression="2" endsCentering="Both">
             <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='gray']"/>
             <centerLabelStyleDescription showIcon="false" labelExpression="service:getParameterConnectorLabelText()">
@@ -424,7 +431,7 @@
             </centerLabelStyleDescription>
           </style>
         </edgeMappings>
-        <edgeMappings name="ProcessParameterConnectorWrite" preconditionExpression="aql:self.accessType.toString() = 'WRITE'" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='directEditAttribute']" sourceMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']" targetMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']" targetFinderExpression="feature:targetElement" sourceFinderExpression="feature:sourceElement" domainClass="md2dot0.ParameterConnector" useDomainElement="true" reconnections="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='reconnectParameterConnectorSource'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='reconnectParameterConnectorTarget']">
+        <edgeMappings name="ProcessParameterConnectorWrite" preconditionExpression="aql:self.accessType.toString() = 'WRITE'" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='directEditAttribute']" sourceMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']" targetMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']" targetFinderExpression="feature:targetElement" sourceFinderExpression="feature:source" domainClass="md2dot0.ParameterConnector" useDomainElement="true" reconnections="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='reconnectParameterConnectorSource'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='reconnectParameterConnectorTarget']">
           <style sizeComputationExpression="2">
             <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='gray']"/>
             <centerLabelStyleDescription showIcon="false" labelExpression="service:getParameterConnectorLabelText()">
@@ -439,7 +446,7 @@
             <initialOperation>
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0gui.Attribute" referenceName="attributes">
-                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'Attribute'+container.attributes->size()"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'Attribute'+container.attributes->filter(md2dot0gui::Attribute)->size()"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
                 </subModelOperations>
               </firstModelOperations>
@@ -455,9 +462,9 @@
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ParameterConnector" referenceName="processFlowConnections">
                   <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="accessType" valueExpression="aql:md2dot0gui::AccessType::READ"/>
-                  <subModelOperations xsi:type="tool:SetValue" featureName="sourceElement" valueExpression="var:source"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="targetElement" valueExpression="var:target"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="order" valueExpression="aql:source.parameters->size()"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="source" valueExpression="var:source"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
@@ -472,7 +479,7 @@
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ParameterConnector" referenceName="processFlowConnections">
                   <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="accessType" valueExpression="aql:md2dot0gui::AccessType::WRITE"/>
-                  <subModelOperations xsi:type="tool:SetValue" featureName="sourceElement" valueExpression="var:source"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="source" valueExpression="var:source"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="targetElement" valueExpression="var:target"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="order" valueExpression="aql:source.parameters->size()"/>
                 </subModelOperations>
@@ -528,6 +535,42 @@
               </firstModelOperations>
             </initialOperation>
             <edgeView name="edgeView"/>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createSumFunc" label="Add Sum function" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputedAttribute']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0gui.SumFunc" referenceName="attributes"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createAvgFunc" label="Add Average function" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputedAttribute']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0gui.AvgFunc" referenceName="attributes"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createMinFunc" label="Add Minimum function" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputedAttribute']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0gui.MinFunc" referenceName="attributes"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createMaxFunc" label="Add Maximum function" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputedAttribute']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0gui.MaxFunc" referenceName="attributes"/>
+              </firstModelOperations>
+            </initialOperation>
           </ownedTools>
         </toolSections>
       </additionalLayers>
