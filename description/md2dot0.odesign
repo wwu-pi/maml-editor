@@ -29,6 +29,9 @@
         <ownedRules xsi:type="validation:SemanticValidationRule" name="validateRoleAssignment" level="WARNING" message="The element has no role assigned!" targetClass="md2dot0.ProcessElement">
           <audits auditExpression="aql:self.roles->size() > 0"/>
         </ownedRules>
+        <ownedRules xsi:type="validation:SemanticValidationRule" name="validateStartConnection" level="WARNING" message="The start event has no outgoing edge to proceed!" targetClass="md2dot0.ProcessStartEvent">
+          <audits auditExpression="aql:not self.nextElements->isEmpty()"/>
+        </ownedRules>
       </validationSet>
       <defaultLayer name="ProcessLayer" label="Process Layer">
         <nodeMappings name="ProcessElement" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.0/@ownedTools[name='directEditProcessElement']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::InteractionProcessElement)" domainClass="md2dot0.InteractionProcessElement">
@@ -55,7 +58,14 @@
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           </style>
         </nodeMappings>
-        <edgeMappings name="ProcessElementConnector" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.1/@ownedTools[name='directEditProcessElementConnector']" sourceMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']/@borderedNodeMappings[name='Event']" targetMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']" targetFinderExpression="feature:targetProcessFlowElement" sourceFinderExpression="feature:sourceProcessFlowElement" domainClass="md2dot0.ProcessConnector" useDomainElement="true">
+        <nodeMappings name="DataSource" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.1/@ownedTools[name='directEditDataSource']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::DataSource)" domainClass="md2dot0.DataSource">
+          <style xsi:type="style:EllipseNodeDescription" showIcon="false" labelExpression="service:getDataSourceLabelText()" labelPosition="node" resizeKind="NSEW" horizontalDiameterComputationExpression="10" verticalDiameterComputationExpression="5">
+            <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_orange']"/>
+          </style>
+        </nodeMappings>
+        <edgeMappings name="ProcessElementConnector" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.1/@ownedTools[name='directEditProcessElementConnector']" sourceMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']/@borderedNodeMappings[name='Event'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='DataSource']" targetMapping="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='DataSource']" targetFinderExpression="feature:targetProcessFlowElement" sourceFinderExpression="feature:sourceProcessFlowElement" domainClass="md2dot0.ProcessConnector" useDomainElement="true">
           <style targetArrow="InputFillClosedArrow" sizeComputationExpression="2" endsCentering="Both">
             <strokeColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='dark_gray']"/>
             <centerLabelStyleDescription showIcon="false" labelExpression="service:getProcessConnectorLabelText()">
@@ -169,7 +179,7 @@
             </initialOperation>
           </ownedTools>
         </toolSections>
-        <toolSections name="ConnectorSection" label="Process Connections">
+        <toolSections name="ConnectorSection" label="Data flow">
           <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createProcessConnector" label="Connect process steps" precondition="service:isConnectionEndAllowed(preSource, preTarget)" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@edgeMappings[name='ProcessElementConnector']" connectionStartPrecondition="service: isConnectionStartAllowed(preSource)">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
@@ -188,6 +198,39 @@
             <mask mask="{0}"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0"/>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createRemoteDataSource" label="Add remote datasource" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='DataSource']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.RemoteDataSource" referenceName="processFlowElements"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditDataSource" inputLabelExpression="aql:self.typeName">
+            <mask mask="{0}"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:SetValue" featureName="typeName" valueExpression="var:0"/>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createLocalDataSource" label="Add local datasource" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='DataSource']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.LocalDataSource" referenceName="processFlowElements"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createSingletonDataSource" label="Add singleton datasource" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='DataSource']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.SingletonDataSource" referenceName="processFlowElements"/>
+              </firstModelOperations>
             </initialOperation>
           </ownedTools>
         </toolSections>

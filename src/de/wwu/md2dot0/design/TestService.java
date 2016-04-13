@@ -6,15 +6,19 @@ import md2dot0.Call;
 import md2dot0.Camera;
 import md2dot0.ControlFlowElement;
 import md2dot0.CreateEntity;
+import md2dot0.DataSource;
 import md2dot0.DeleteEntity;
 import md2dot0.DisplayMessage;
 import md2dot0.Event;
+import md2dot0.LocalDataSource;
 import md2dot0.ParameterConnector;
 import md2dot0.ProcessConnector;
 import md2dot0.ProcessElement;
 import md2dot0.ProcessEndEvent;
+import md2dot0.RemoteDataSource;
 import md2dot0.SelectEntity;
 import md2dot0.ShowEntity;
+import md2dot0.SingletonDataSource;
 import md2dot0.UpdateEntity;
 
 public class TestService {
@@ -73,6 +77,35 @@ public class TestService {
 		return "error";
 	}
 	
+	// Label representation for Parameter Connectors
+	public String getDataSourceLabelText(EObject obj){
+		if(obj == null || !(obj instanceof DataSource)){
+			return "error";
+		}
+		
+		String labelText = "\"";
+		
+		if(((DataSource) obj).getTypeName() != null ){
+			labelText += ((DataSource) obj).getTypeName();
+		}
+		
+		labelText += "\"";
+		labelText = labelText.equals("\"\"") ? "" : labelText;
+		
+		labelText += "\n[";
+		
+		if(obj instanceof RemoteDataSource) {
+			labelText += "Remote";
+		} else if(obj instanceof LocalDataSource) {
+			labelText += "Local";
+		} else if(obj instanceof SingletonDataSource) {
+			labelText += "Singleton";
+		}
+		labelText += "]";
+		
+		return labelText;
+	}
+	
 	// Process element type representation
 	public static String getProcessElementType(ProcessElement obj){
 		if(obj instanceof ShowEntity){
@@ -106,6 +139,9 @@ public class TestService {
 		} else if (preSource instanceof ProcessElement){
 			// Process elements can have max 1 outgoing edge
 			return ((ProcessElement) preSource).getNextElements().size() < 1;
+		} else if (preSource instanceof DataSource){
+			// Data source elements can have max 1 outgoing edge
+			return ((DataSource) preSource).getNextElements().size() < 1;
 		} 
 		return false;
 	}
@@ -131,6 +167,9 @@ public class TestService {
 				// Process elements can have max 1 incoming edge
 				return ((ProcessElement) preTarget).getPreviousElements().size() < 1;
 			}
+		} else if (preTarget instanceof DataSource){
+			// Data source elements can have max 1 incoming edge
+			return ((DataSource) preTarget).getPreviousElements().size() < 1;
 		}
 		return false;
 	}
