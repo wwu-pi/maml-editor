@@ -91,7 +91,7 @@
           </style>
         </edgeMappings>
         <toolSections name="ProcessElementSection" label="Process Elements">
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createShowEntityProcessElement" label="Show entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createShowEntityProcessElement" label="Show entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']" iconPath="/de.wwu.md2dot0.design/icons/icon_processelement_interaction.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -102,7 +102,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createSelectEntityProcessElement" label="Select entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createSelectEntityProcessElement" label="Select entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']" iconPath="/de.wwu.md2dot0.design/icons/icon_processelement_interaction.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -113,7 +113,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createUpdateEntityProcessElement" label="Update entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createUpdateEntityProcessElement" label="Update entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']" iconPath="/de.wwu.md2dot0.design/icons/icon_processelement_interaction.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -124,7 +124,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createDeleteEntityProcessElement" label="Delete entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createDeleteEntityProcessElement" label="Delete entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']" iconPath="/de.wwu.md2dot0.design/icons/icon_processelement_interaction.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -135,7 +135,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createCreateEntityProcessElement" label="Create entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createCreateEntityProcessElement" label="Create entity" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']" iconPath="/de.wwu.md2dot0.design/icons/icon_processelement_interaction.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -146,7 +146,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createDisplayMessageProcessElement" label="Display message" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createDisplayMessageProcessElement" label="Display message" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']" iconPath="/de.wwu.md2dot0.design/icons/icon_processelement_interaction.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -157,7 +157,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createCallProcessElement" label="Call" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createCallProcessElement" label="Call" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']" iconPath="/de.wwu.md2dot0.design/icons/icon_processelement_interaction.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -168,7 +168,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createCameraProcessElement" label="Camera" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createCameraProcessElement" label="Camera" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']" iconPath="/de.wwu.md2dot0.design/icons/icon_processelement_interaction.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -195,7 +195,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createTransformProcessElement" label="Transform" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createTransformProcessElement" label="Transform" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']" iconPath="/de.wwu.md2dot0.design/icons/icon_processelement_automated.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -206,7 +206,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createWebserviceProcessElement" label="Webservice" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createWebserviceProcessElement" label="Webservice" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']" iconPath="/de.wwu.md2dot0.design/icons/icon_processelement_automated.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -217,7 +217,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createCheckConstraintProcessElement" label="Check constraint" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createCheckConstraintProcessElement" label="Check constraint" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']" iconPath="/de.wwu.md2dot0.design/icons/icon_processelement_automated.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -228,7 +228,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createIncludeProcessElement" label="Include" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createIncludeProcessElement" label="Include" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']" iconPath="/de.wwu.md2dot0.design/icons/icon_processelement_automated.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -239,7 +239,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createUseCaseTriggerProcessElement" label="Use Case Trigger" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createUseCaseTriggerProcessElement" label="Use Case Trigger" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']" iconPath="/de.wwu.md2dot0.design/icons/icon_processelement_automated.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -250,7 +250,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createRetrieveLocationProcessElement" label="Retrieve Location" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createRetrieveLocationProcessElement" label="Retrieve Location" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']" iconPath="/de.wwu.md2dot0.design/icons/icon_processelement_automated.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -263,7 +263,7 @@
           </ownedTools>
         </toolSections>
         <toolSections name="ConnectorSection" label="Data flow">
-          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createProcessConnector" label="Connect process steps" precondition="service:isConnectionEndAllowed(preSource, preTarget)" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@edgeMappings[name='ProcessElementConnector']" connectionStartPrecondition="service: isConnectionStartAllowed(preSource)">
+          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createProcessConnector" label="Connect process steps" precondition="service:isConnectionEndAllowed(preSource, preTarget)" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@edgeMappings[name='ProcessElementConnector']" iconPath="/de.wwu.md2dot0.design/icons/connector_process.png" connectionStartPrecondition="service: isConnectionStartAllowed(preSource)">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
@@ -283,7 +283,7 @@
               <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0"/>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createRemoteDataSource" label="Add remote datasource" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='DataSource']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createRemoteDataSource" label="Add remote datasource" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='DataSource']" iconPath="/de.wwu.md2dot0.design/icons/datasource_R.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -298,7 +298,7 @@
               <firstModelOperations xsi:type="tool:SetValue" featureName="typeName" valueExpression="var:0"/>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createLocalDataSource" label="Add local datasource" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='DataSource']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createLocalDataSource" label="Add local datasource" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='DataSource']" iconPath="/de.wwu.md2dot0.design/icons/datasource_L.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -307,7 +307,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createSingletonDataSource" label="Add singleton datasource" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='DataSource']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createSingletonDataSource" label="Add singleton datasource" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='DataSource']" iconPath="/de.wwu.md2dot0.design/icons/datasource_S.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -316,7 +316,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createXorConnector" label="Add XOR" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ControlFlowElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createXorConnector" label="Add XOR" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ControlFlowElement']" iconPath="/de.wwu.md2dot0.design/icons/XOR.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -353,7 +353,7 @@
           </ownedTools>
         </toolSections>
         <toolSections name="EventSection" label="Events">
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createProcessStartEvent" label="Start event" precondition="aql:container.eAllContents()->filter(md2dot0::ProcessStartEvent)->size() &lt; 1" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createProcessStartEvent" label="Start event" precondition="aql:container.eAllContents()->filter(md2dot0::ProcessStartEvent)->size() &lt; 1" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']" iconPath="/de.wwu.md2dot0.design/icons/event_start.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -362,7 +362,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createProcessEndEvent" label="End event" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createProcessEndEvent" label="End event" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']" iconPath="/de.wwu.md2dot0.design/icons/event_end.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -371,7 +371,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createProcessErrorEvent" label="Error event" precondition="aql:container.oclAsType(md2dot0::InteractionProcessElement).events->filter(md2dot0::ErrorEvent)->size() &lt; 1" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='Event']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createProcessErrorEvent" label="Error event" precondition="aql:container.oclAsType(md2dot0::InteractionProcessElement).events->filter(md2dot0::ErrorEvent)->size() &lt; 1" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='Event']" iconPath="/de.wwu.md2dot0.design/icons/event_error.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -380,7 +380,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createDatasourceNoResultEvent" label="No result event" precondition="aql:container.oclIsKindOf(md2dot0::SelectEntity) and container.oclAsType(md2dot0::SelectEntity).events->filter(md2dot0::NoResultEvent)->size() &lt; 1" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='Event']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createDatasourceNoResultEvent" label="No result event" precondition="aql:container.oclIsKindOf(md2dot0::SelectEntity) and container.oclAsType(md2dot0::SelectEntity).events->filter(md2dot0::NoResultEvent)->size() &lt; 1" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='Event']" iconPath="/de.wwu.md2dot0.design/icons/event_noresult.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -389,7 +389,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createDatasourceSingleResultEvent" label="Single result event" precondition="aql:container.oclIsKindOf(md2dot0::SelectEntity) and container.oclAsType(md2dot0::SelectEntity).events->filter(md2dot0::SingleResultEvent)->size() &lt; 1" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='Event']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createDatasourceSingleResultEvent" label="Single result event" precondition="aql:container.oclIsKindOf(md2dot0::SelectEntity) and container.oclAsType(md2dot0::SelectEntity).events->filter(md2dot0::SingleResultEvent)->size() &lt; 1" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='Event']" iconPath="/de.wwu.md2dot0.design/icons/event_singleresult.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -398,7 +398,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createDatasourceMultiResultEvent" label="Multi result event" precondition="aql:container.oclIsKindOf(md2dot0::SelectEntity) and container.oclAsType(md2dot0::SelectEntity).events->filter(md2dot0::MultiResultEvent)->size() &lt; 1" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='Event']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createDatasourceMultiResultEvent" label="Multi result event" precondition="aql:container.oclIsKindOf(md2dot0::SelectEntity) and container.oclAsType(md2dot0::SelectEntity).events->filter(md2dot0::MultiResultEvent)->size() &lt; 1" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='Event']" iconPath="/de.wwu.md2dot0.design/icons/event_multiresult.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -443,7 +443,7 @@
           </style>
         </containerMappings>
         <toolSections name="RoleSection" label="Roles">
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createRoleElement" label="Create role" precondition="aql:container.oclIsKindOf(md2dot0::UseCase)" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@containerMappings[name='RoleContainer']/@subNodeMappings[name='RoleElement']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createRoleElement" label="Create role" precondition="aql:container.oclIsKindOf(md2dot0::UseCase)" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@containerMappings[name='RoleContainer']/@subNodeMappings[name='RoleElement']" iconPath="/de.wwu.md2dot0.design/icons/woman.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -536,7 +536,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createParameterConnectorRead" label="Read attribute" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@edgeMappings[name='ProcessParameterConnectorRead']">
+          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createParameterConnectorRead" label="Read attribute" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@edgeMappings[name='ProcessParameterConnectorRead']" iconPath="/de.wwu.md2dot0.design/icons/connector_attribute_read.png">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
@@ -553,7 +553,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createParameterConnectorWrite" label="Write attribute" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@edgeMappings[name='ProcessParameterConnectorWrite']">
+          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createParameterConnectorWrite" label="Write attribute" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@edgeMappings[name='ProcessParameterConnectorWrite']" iconPath="/de.wwu.md2dot0.design/icons/connector_attribute_write.png">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
@@ -620,7 +620,7 @@
             </initialOperation>
             <edgeView name="edgeView"/>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createSumFunc" label="Add Sum function" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputedAttribute']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createSumFunc" label="Add Sum function" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputedAttribute']" iconPath="/de.wwu.md2dot0.design/icons/icon_computedattribute_sum.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -629,7 +629,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createAvgFunc" label="Add Average function" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputedAttribute']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createAvgFunc" label="Add Average function" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputedAttribute']" iconPath="/de.wwu.md2dot0.design/icons/icon_computedattribute_avg.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -638,7 +638,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createMinFunc" label="Add Minimum function" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputedAttribute']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createMinFunc" label="Add Minimum function" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputedAttribute']" iconPath="/de.wwu.md2dot0.design/icons/icon_computedattribute_min.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -647,7 +647,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createMaxFunc" label="Add Maximum function" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputedAttribute']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createMaxFunc" label="Add Maximum function" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputedAttribute']" iconPath="/de.wwu.md2dot0.design/icons/icon_computedattribute_max.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -656,7 +656,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createPlusOperator" label="Add Plus operator" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputationOperator']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createPlusOperator" label="Add Plus operator" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputationOperator']" iconPath="/de.wwu.md2dot0.design/icons/icon_computationoperator_plus.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -665,7 +665,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createMinusOperator" label="Add Minus operator" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputationOperator']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createMinusOperator" label="Add Minus operator" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputationOperator']" iconPath="/de.wwu.md2dot0.design/icons/icon_computationoperator_minus.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -674,7 +674,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createMultiplicationOperator" label="Add Multiplication operator" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputationOperator']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createMultiplicationOperator" label="Add Multiplication operator" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputationOperator']" iconPath="/de.wwu.md2dot0.design/icons/icon_computationoperator_multiplication.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -683,7 +683,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createDivisionOperator" label="Add Division operator" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputationOperator']">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createDivisionOperator" label="Add Division operator" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='ComputationOperator']" iconPath="/de.wwu.md2dot0.design/icons/icon_computationoperator_division.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
