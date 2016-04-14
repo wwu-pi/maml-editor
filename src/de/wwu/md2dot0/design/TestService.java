@@ -4,12 +4,14 @@ import org.eclipse.emf.ecore.EObject;
 
 import md2dot0.Call;
 import md2dot0.Camera;
+import md2dot0.CheckConstraint;
 import md2dot0.ControlFlowElement;
 import md2dot0.CreateEntity;
 import md2dot0.DataSource;
 import md2dot0.DeleteEntity;
 import md2dot0.DisplayMessage;
 import md2dot0.Event;
+import md2dot0.Include;
 import md2dot0.LocalDataSource;
 import md2dot0.ParameterConnector;
 import md2dot0.ProcessConnector;
@@ -17,10 +19,14 @@ import md2dot0.ProcessElement;
 import md2dot0.ProcessEndEvent;
 import md2dot0.ProcessFlowElement;
 import md2dot0.RemoteDataSource;
+import md2dot0.RetrieveLocation;
 import md2dot0.SelectEntity;
 import md2dot0.ShowEntity;
 import md2dot0.SingletonDataSource;
+import md2dot0.Transform;
 import md2dot0.UpdateEntity;
+import md2dot0.UseCaseTrigger;
+import md2dot0.Webservice;
 import md2dot0gui.AvgFunc;
 import md2dot0gui.MaxFunc;
 import md2dot0gui.MinFunc;
@@ -133,6 +139,18 @@ public class TestService {
 			return "Call";
 		} else if(obj instanceof Camera){
 			return "Camera";
+		} else if(obj instanceof UseCaseTrigger){
+			return "Use Case Trigger";
+		} else if(obj instanceof CheckConstraint){
+			return "Check";
+		} else if(obj instanceof Include){
+			return "Include";
+		} else if(obj instanceof Webservice){
+			return "Webservice";
+		} else if(obj instanceof RetrieveLocation){
+			return "Location";
+		} else if(obj instanceof Transform){
+			return "Transform";
 		}
 		return obj.getClass().getSimpleName();
 	}

@@ -23,7 +23,7 @@ import de.wwu.md2dot0.design.TestService;
 import md2dot0.ProcessElement;
 
 @SuppressWarnings("restriction")
-public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPart implements IStyleEditPart {
+public class InteractionProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPart implements IStyleEditPart {
 
 	@Override
 	public DragTracker getDragTracker(Request request) {
@@ -109,12 +109,12 @@ public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPa
 	/**
 	 * @was-generated
 	 */
-	protected ProcessElementFigure primaryShape;
+	protected InteractionProcessElementFigure primaryShape;
 
 	/**
 	 * @was-generated
 	 */
-	public ProcessElementEditPart(View view) {
+	public InteractionProcessElementEditPart(View view) {
 		super(view);
 	}
 
@@ -137,7 +137,7 @@ public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPa
 	 * @not-generated
 	 */
 	protected IFigure createNodeShape() {
-		ProcessElementFigure arrowShape = new ProcessElementFigure((CustomStyle) this.resolveSemanticElement());
+		InteractionProcessElementFigure arrowShape = new InteractionProcessElementFigure((CustomStyle) this.resolveSemanticElement());
 
 		// EditPart parent = this.getParent();
 		// if (parent instanceof IDiagramBorderNodeEditPart) {
@@ -151,8 +151,8 @@ public class ProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPa
 	/**
 	 * @was-generated
 	 */
-	public ProcessElementFigure getPrimaryShape() {
-		return (ProcessElementFigure) primaryShape;
+	public InteractionProcessElementFigure getPrimaryShape() {
+		return (InteractionProcessElementFigure) primaryShape;
 	}
 
 	/**

@@ -13,7 +13,7 @@ import org.eclipse.sirius.diagram.ui.tools.api.figure.SiriusWrapLabel;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
-public class ProcessElementFigure extends AbstractTransparentRectangle {
+public class InteractionProcessElementFigure extends AbstractTransparentRectangle {
 
 	protected Color processElementBackgroundColor = new Color(Display.getCurrent(), 107, 218, 247);
 	protected Color processElementBorderColor = new Color(Display.getCurrent(), 0, 0, 0);
@@ -26,7 +26,7 @@ public class ProcessElementFigure extends AbstractTransparentRectangle {
 	protected Label labelLower;
 	protected SiriusWrapLabel labelMain;
 
-	public ProcessElementFigure(CustomStyle style) {
+	public InteractionProcessElementFigure(CustomStyle style) {
 		setLayoutManager(new XYLayout());
 
 		arrowShape = new Polygon();
@@ -63,8 +63,8 @@ public class ProcessElementFigure extends AbstractTransparentRectangle {
 		int[] coordsArrow = { bounds.x + 0, bounds.y + 0, 
 				bounds.x + (int) (width * 0.8), bounds.y + 0,
 				bounds.x + width - 1, bounds.y + (int) (height / 2), 
-				bounds.x + (int) (width * 0.8),
-				bounds.y + height - 1, bounds.x + 0, bounds.y + height - 1, 
+				bounds.x + (int) (width * 0.8), bounds.y + height - 1, 
+				bounds.x + 0, bounds.y + height - 1, 
 				bounds.x + 0, bounds.y + 0 };
 		arrowShape.setPoints(new PointList(coordsArrow));
 

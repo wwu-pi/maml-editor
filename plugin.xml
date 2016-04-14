@@ -10,7 +10,7 @@
   <extension
         point="org.eclipse.gmf.runtime.diagram.ui.editpartProviders">
      <editpartProvider
-           class="de.wwu.md2dot0.diagram.ProcessElementEditPartProvider">
+           class="de.wwu.md2dot0.diagram.InteractionProcessElementEditPartProvider">
         <Priority
               name="Highest">
         </Priority>
@@ -19,10 +19,19 @@
   <extension
         point="org.eclipse.gmf.runtime.diagram.ui.editpolicyProviders">
      <editpolicyProvider
-           class="de.wwu.md2dot0.diagram.ProcessElementEditPartProvider">
+           class="de.wwu.md2dot0.diagram.InteractionProcessElementEditPartProvider">
         <Priority
               name="Highest">
         </Priority>
      </editpolicyProvider>
+  </extension>
+  <extension
+        point="org.eclipse.gmf.runtime.diagram.ui.editpartProviders">
+     <editpartProvider
+           class="de.wwu.md2dot0.diagram.AutomatedProcessElementEditPartProvider">
+        <Priority
+              name="Highest">
+        </Priority>
+     </editpartProvider>
   </extension>
 </plugin>
