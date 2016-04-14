@@ -42,7 +42,7 @@
             </style>
           </borderedNodeMappings>
           <borderedNodeMappings name="Event" semanticCandidatesExpression="aql:self.events" domainClass="md2dot0.Event">
-            <style xsi:type="style:WorkspaceImageDescription" showIcon="false" labelExpression="aql:''" hideLabelByDefault="true" workspacePath="/de.wwu.md2dot0.design/icons/event_error.png">
+            <style xsi:type="style:WorkspaceImageDescription" showIcon="false" labelExpression="aql:''" hideLabelByDefault="true" workspacePath="/de.wwu.md2dot0.design/icons/event_error.svg">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
               <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             </style>
@@ -53,20 +53,19 @@
           </style>
         </nodeMappings>
         <nodeMappings name="Event" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::Event)" domainClass="md2dot0.Event">
-          <style xsi:type="style:WorkspaceImageDescription" showIcon="false" labelExpression="" hideLabelByDefault="true" sizeComputationExpression="-1" resizeKind="NSEW" workspacePath="/de.wwu.md2dot0.design/icons/event_start.png">
+          <style xsi:type="style:WorkspaceImageDescription" showIcon="false" labelExpression="" hideLabelByDefault="true" sizeComputationExpression="-1" resizeKind="NSEW" workspacePath="/de.wwu.md2dot0.design/icons/event_start.svg">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           </style>
         </nodeMappings>
         <nodeMappings name="DataSource" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.1/@ownedTools[name='directEditDataSource']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::DataSource)" domainClass="md2dot0.DataSource">
-          <style xsi:type="style:EllipseNodeDescription" showIcon="false" labelExpression="service:getDataSourceLabelText()" labelPosition="node" resizeKind="NSEW" horizontalDiameterComputationExpression="10" verticalDiameterComputationExpression="5">
+          <style xsi:type="style:WorkspaceImageDescription" showIcon="false" labelExpression="service:getDataSourceLabelText()" sizeComputationExpression="-1" labelPosition="node" resizeKind="NSEW" workspacePath="/de.wwu.md2dot0.design/icons/datasource.svg">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
-            <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_orange']"/>
           </style>
         </nodeMappings>
         <nodeMappings name="ControlFlowElement" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::ControlFlowElement)" domainClass="md2dot0.ControlFlowElement">
-          <style xsi:type="style:WorkspaceImageDescription" showIcon="false" labelExpression="aql:''" hideLabelByDefault="true" sizeComputationExpression="-1" resizeKind="NSEW" workspacePath="/de.wwu.md2dot0.design/icons/XOR.png">
+          <style xsi:type="style:WorkspaceImageDescription" showIcon="false" labelExpression="aql:''" hideLabelByDefault="true" sizeComputationExpression="-1" resizeKind="NSEW" workspacePath="/de.wwu.md2dot0.design/icons/XOR.svg">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           </style>
@@ -336,16 +335,16 @@
             <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']/@borderedNodeMappings[name='ProcessElementRole']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/woman.svg'"/>
           </vsmElementCustomizations>
           <vsmElementCustomizations xsi:type="description:VSMElementCustomization" predicateExpression="aql:self.oclIsTypeOf(md2dot0::ProcessEndEvent)">
-            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/event_end.png'"/>
+            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/event_end.svg'"/>
           </vsmElementCustomizations>
           <vsmElementCustomizations xsi:type="description:VSMElementCustomization" predicateExpression="aql:self.oclIsTypeOf(md2dot0::NoResultEvent)">
-            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']/@borderedNodeMappings[name='Event']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/event_noresult.png'"/>
+            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']/@borderedNodeMappings[name='Event']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/event_noresult.svg'"/>
           </vsmElementCustomizations>
           <vsmElementCustomizations xsi:type="description:VSMElementCustomization" predicateExpression="aql:self.oclIsTypeOf(md2dot0::SingleResultEvent)">
-            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']/@borderedNodeMappings[name='Event']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/event_singleresult.png'"/>
+            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']/@borderedNodeMappings[name='Event']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/event_singleresult.svg'"/>
           </vsmElementCustomizations>
           <vsmElementCustomizations xsi:type="description:VSMElementCustomization" predicateExpression="aql:self.oclIsTypeOf(md2dot0::MultiResultEvent)">
-            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']/@borderedNodeMappings[name='Event']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/event_multiresult.png'"/>
+            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='ProcessElement']/@borderedNodeMappings[name='Event']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/event_multiresult.svg'"/>
           </vsmElementCustomizations>
         </customization>
       </defaultLayer>
