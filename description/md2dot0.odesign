@@ -206,6 +206,61 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createWebserviceProcessElement" label="Webservice" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.Webservice" referenceName="processFlowElements">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:self.getProcessElementType()+container.processFlowElements->size()"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createCheckConstraintProcessElement" label="Check constraint" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.CheckConstraint" referenceName="processFlowElements">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:self.getProcessElementType()+container.processFlowElements->size()"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createIncludeProcessElement" label="Include" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.Include" referenceName="processFlowElements">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:self.getProcessElementType()+container.processFlowElements->size()"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createUseCaseTriggerProcessElement" label="Use Case Trigger" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.UseCaseTrigger" referenceName="processFlowElements">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:self.getProcessElementType()+container.processFlowElements->size()"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createRetrieveLocationProcessElement" label="Retrieve Location" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']">
+            <variable name="container"/>
+            <viewVariable name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.RetrieveLocation" referenceName="processFlowElements">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:self.getProcessElementType()+container.processFlowElements->size()"/>
+                </subModelOperations>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
         </toolSections>
         <toolSections name="ConnectorSection" label="Data flow">
           <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createProcessConnector" label="Connect process steps" precondition="service:isConnectionEndAllowed(preSource, preTarget)" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@edgeMappings[name='ProcessElementConnector']" connectionStartPrecondition="service: isConnectionStartAllowed(preSource)">
