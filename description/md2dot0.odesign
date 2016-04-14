@@ -426,7 +426,7 @@
           </vsmElementCustomizations>
         </customization>
       </defaultLayer>
-      <additionalLayers name="RoleLayer" label="Role Layer" activeByDefault="true">
+      <additionalLayers name="RoleLayer" label="Role Layer">
         <containerMappings name="RoleContainer" label="RoleContainer" semanticCandidatesExpression="aql:self" domainClass="md2dot0.UseCase" dropDescriptions="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@toolSections.0/@ownedTools[name='ApplyRole']" childrenPresentation="List">
           <subNodeMappings name="RoleElement" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@toolSections.0/@ownedTools[name='directEditRoleName']" semanticCandidatesExpression="aql:self.roles" domainClass="md2dot0.Role">
             <style xsi:type="style:SquareDescription" iconPath="/de.wwu.md2dot0.design/icons/man.png" labelAlignment="LEFT" sizeComputationExpression="-1" labelPosition="node" resizeKind="NSEW" width="15">
@@ -479,7 +479,7 @@
         </customization>
       </additionalLayers>
       <additionalLayers name="AttributeLayer" label="Attribute Layer" activeByDefault="true">
-        <nodeMappings name="Attribute" domainClass="md2dot0gui.Attribute">
+        <nodeMappings name="Attribute" semanticCandidatesExpression="aql:self.attributes->filter(md2dot0gui::GUI" domainClass="md2dot0gui.Attribute">
           <borderedNodeMappings name="AttributeMultiplicity" semanticCandidatesExpression="var:self" doubleClickDescription="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='toggleAttributeMultiplicity']" domainClass="md2dot0gui.Attribute">
             <style xsi:type="style:LozengeNodeDescription" showIcon="false" labelExpression="[if(self.multiplicity.toString()='MANY') then '*' else '1' endif/]" labelPosition="node">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
@@ -493,14 +493,14 @@
             <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_orange']"/>
           </style>
         </nodeMappings>
-        <nodeMappings name="ComputedAttribute" domainClass="md2dot0gui.ComputedAttribute">
+        <nodeMappings name="ComputedAttribute" semanticCandidatesExpression="aql:self.attributes->filter(md2dot0gui::ComputedAttribute)" domainClass="md2dot0gui.ComputedAttribute">
           <style xsi:type="style:EllipseNodeDescription" showIcon="false" labelExpression="service:getComputationOperatorType()" labelPosition="node" resizeKind="NSEW" horizontalDiameterComputationExpression="3" verticalDiameterComputationExpression="3">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
           </style>
         </nodeMappings>
-        <nodeMappings name="ComputationOperator" domainClass="md2dot0gui.ComputationOperator">
+        <nodeMappings name="ComputationOperator" semanticCandidatesExpression="aql:self.attributes->filter(md2dot0gui::ComputationOperator)" domainClass="md2dot0gui.ComputationOperator">
           <style xsi:type="style:EllipseNodeDescription" showIcon="false" labelExpression="service:getComputationOperatorType()" labelPosition="node" resizeKind="NSEW" horizontalDiameterComputationExpression="3" verticalDiameterComputationExpression="3">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
