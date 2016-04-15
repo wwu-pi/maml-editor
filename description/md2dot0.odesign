@@ -453,7 +453,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:ContainerDropDescription" name="ApplyRole" precondition="aql:self.oclIsKindOf(md2dot0::Role)" forceRefresh="true" mappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@nodeMappings[name='RoleContainer']/@borderedNodeMappings[name='RoleForSelection'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='ProcessElementRole']">
+          <ownedTools xsi:type="tool_1:ContainerDropDescription" name="ApplyRole" precondition="aql:true" forceRefresh="true" mappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@nodeMappings[name='RoleContainer']/@borderedNodeMappings[name='RoleForSelection'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='ProcessElementRole']">
             <oldContainer name="oldSemanticContainer"/>
             <newContainer name="newSemanticContainer"/>
             <element name="element"/>
