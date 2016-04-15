@@ -410,7 +410,7 @@
         </toolSections>
         <customization>
           <vsmElementCustomizations xsi:type="description:VSMElementCustomization" predicateExpression="aql:view.eAllContents()->filter(md2dot0::Role)">
-            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='ProcessElementRole']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/woman.svg'"/>
+            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='ProcessElementRole']/@style //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@nodeMappings[name='RoleContainer']/@borderedNodeMappings[name='RoleForSelection']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/woman.svg'"/>
           </vsmElementCustomizations>
           <vsmElementCustomizations xsi:type="description:VSMElementCustomization" predicateExpression="aql:self.oclIsTypeOf(md2dot0::ProcessEndEvent)">
             <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='Event']/@style" attributeName="workspacePath" value="aql:'/de.wwu.md2dot0.design/icons/event_end.svg'"/>
@@ -428,36 +428,21 @@
       </defaultLayer>
       <additionalLayers name="RoleLayer" label="Role Layer">
         <nodeMappings name="RoleContainer" semanticCandidatesExpression="aql:self" domainClass="md2dot0.UseCase">
-          <borderedNodeMappings name="RoleForSelection" semanticCandidatesExpression="feature:roles" domainClass="md2dot0.Role">
-            <style xsi:type="style:SquareDescription" labelAlignment="LEFT" resizeKind="NSEW">
+          <borderedNodeMappings name="RoleForSelection" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@toolSections.0/@ownedTools[name='directEditRoleName']" semanticCandidatesExpression="feature:roles" domainClass="md2dot0.Role">
+            <style xsi:type="style:WorkspaceImageDescription" showIcon="false" sizeComputationExpression="2" workspacePath="/de.wwu.md2dot0.design/icons/man.svg">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
               <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
-              <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='gray']"/>
             </style>
           </borderedNodeMappings>
-          <style xsi:type="style:SquareDescription" labelExpression="feature:title" hideLabelByDefault="true" sizeComputationExpression="10" labelPosition="node" resizeKind="NSEW" width="5" height="20">
+          <style xsi:type="style:SquareDescription" labelSize="9" showIcon="false" labelExpression="All existing roles" sizeComputationExpression="-1" resizeKind="NSEW" width="9" height="15">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <labelFormat>bold</labelFormat>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
-            <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='gray']"/>
+            <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_green']"/>
           </style>
         </nodeMappings>
-        <containerMappings name="RoleContainer1" label="RoleContainer1" semanticCandidatesExpression="aql:not self" domainClass="md2dot0.UseCase" childrenPresentation="List">
-          <subNodeMappings name="RoleElement" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@toolSections.0/@ownedTools[name='directEditRoleName']" semanticCandidatesExpression="aql:self.roles" domainClass="md2dot0.Role">
-            <style xsi:type="style:SquareDescription" iconPath="/de.wwu.md2dot0.design/icons/man.png" labelAlignment="LEFT" sizeComputationExpression="-1" labelPosition="node" resizeKind="NSEW" width="15">
-              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
-              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
-              <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='gray']"/>
-            </style>
-          </subNodeMappings>
-          <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" labelSize="10" showIcon="false" labelExpression="All roles">
-            <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
-            <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
-            <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
-            <foregroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_green']"/>
-          </style>
-        </containerMappings>
         <toolSections name="RoleSection" label="Roles">
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createRoleElement" label="Create role" precondition="aql:container.oclIsKindOf(md2dot0::UseCase)" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@containerMappings[name='RoleContainer1']/@subNodeMappings[name='RoleElement']" iconPath="/de.wwu.md2dot0.design/icons/woman.png">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createRoleElement" label="Create role" precondition="aql:container.oclIsKindOf(md2dot0::UseCase)" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@nodeMappings[name='RoleContainer']/@borderedNodeMappings[name='RoleForSelection']" iconPath="/de.wwu.md2dot0.design/icons/woman.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -468,7 +453,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:ContainerDropDescription" name="ApplyRole" forceRefresh="true" mappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@nodeMappings[name='RoleContainer']/@borderedNodeMappings[name='RoleForSelection'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='ProcessElementRole']" dragSource="BOTH">
+          <ownedTools xsi:type="tool_1:ContainerDropDescription" name="ApplyRole" precondition="aql:self.oclIsKindOf(md2dot0::Role)" forceRefresh="true" mappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@nodeMappings[name='RoleContainer']/@borderedNodeMappings[name='RoleForSelection'] //@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='ProcessElementRole']">
             <oldContainer name="oldSemanticContainer"/>
             <newContainer name="newSemanticContainer"/>
             <element name="element"/>
@@ -486,11 +471,6 @@
             </initialOperation>
           </ownedTools>
         </toolSections>
-        <customization>
-          <vsmElementCustomizations xsi:type="description:VSMElementCustomization" predicateExpression="aql:view.eAllContents()->filter(md2dot0::Role)">
-            <featureCustomizations xsi:type="description:EAttributeCustomization" appliedOn="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@containerMappings[name='RoleContainer1']/@subNodeMappings[name='RoleElement']/@style" attributeName="iconPath" value="/de.wwu.md2dot0.design/icons/woman.png"/>
-          </vsmElementCustomizations>
-        </customization>
       </additionalLayers>
       <additionalLayers name="AttributeLayer" label="Attribute Layer" activeByDefault="true">
         <nodeMappings name="Attribute" semanticCandidatesExpression="aql:self.attributes->filter(md2dot0gui::GUIElement)" domainClass="md2dot0gui.Attribute">
