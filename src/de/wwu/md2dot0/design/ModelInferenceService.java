@@ -1,7 +1,5 @@
 package de.wwu.md2dot0.design;
 
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,6 +25,11 @@ public class ModelInferenceService {
 	protected Set<String> customTypes = new HashSet<String>();
 	protected Map<String, ProcessFlowElement> anonymousTypes = new HashMap<String, ProcessFlowElement>();
 	
+	/**
+	 * Method called by Sirius to get type for specific process element 
+	 * @param obj
+	 * @return
+	 */
 	public String getDataTypeRepresentation(EObject obj){
 		if(!(obj instanceof ProcessFlowElement)) return "error";
 		
@@ -36,6 +39,11 @@ public class ModelInferenceService {
 		return type != null ? type : "??";
 	}
 	
+	/**
+	 * Polymorphism helper in case multiple use cases are passed to infer.
+	 * TODO: Currently only first use case is considered, needs to be extended to infer multiple UC and merge them
+	 * @param obj
+	 */
 	public void startInferenceProcess(Collection<? extends EObject> obj){
 		Optional<UseCase> useCase = obj.stream()
 				.filter(elem -> elem instanceof UseCase)
@@ -49,6 +57,11 @@ public class ModelInferenceService {
 		startInferenceProcess((UseCase) useCase.get());
 	}
 
+	/**
+	 * Retrieve data type for given ProcessFlowElement
+	 * @param obj
+	 * @return
+	 */
 	protected String getType(ProcessFlowElement obj) {
 		return elementTypes.get(obj);
 	}
@@ -85,6 +98,11 @@ public class ModelInferenceService {
 		// TODO Merge process element inference pieces
 	}
 
+	/**
+	 * Initial call to infer the main data type for a sequence of ProcessFlowElements.
+	 * @param startElement
+	 * @return
+	 */
 	protected Set<ProcessFlowElement> inferProcessFlowChain(ProcessFlowElement startElement) {
 		Set<ProcessFlowElement> processed = new HashSet<ProcessFlowElement>();
 		String lastOccurredType = null;
@@ -95,6 +113,12 @@ public class ModelInferenceService {
 		return processed;
 	}
 	
+	/**
+	 * Recursive call to infer the main data type for a sequence of ProcessFlowElements. 
+	 * @param currentElement
+	 * @param lastOccurredType
+	 * @param processed
+	 */
 	protected void inferProcessFlowChainRecursive(ProcessFlowElement currentElement, String lastOccurredType, Set<ProcessFlowElement> processed) {
 		// Skip if currentElement was already processed
 		if(currentElement == null || processed.contains(currentElement)){
@@ -114,6 +138,12 @@ public class ModelInferenceService {
 		}
 	}
 	
+	/**
+	 * Infer the main data type for an individual ProcessFlowElement.
+	 * @param processing
+	 * @param lastOccurredType
+	 * @return
+	 */
 	protected String inferSingleItem(ProcessFlowElement processing, String lastOccurredType){
 		if(processing instanceof DataSource){
 			// Data Sources provide a type themselves (possibly a new one)
