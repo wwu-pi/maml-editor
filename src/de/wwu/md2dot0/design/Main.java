@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
+import de.wwu.md2dot0.inference.ModelInferrer;
 import md2dot0.Md2dot0Package;
 import md2dot0.UseCase;
 
@@ -31,8 +32,9 @@ public class Main {
 		}
 		UseCase data = (UseCase) resource.getContents().get(0);
 
-		ModelInferenceService inferenceService = new ModelInferenceService();
-		inferenceService.startInferenceProcess(data);
+		// Start via ModelInferrer (bypassing the Sirius ModelInferenceService layer)
+		ModelInferrer inferrer = new ModelInferrer();
+		inferrer.startInferenceProcess(data);
 		
 		System.out.println("Erfolgreich und fertig!");
 	}

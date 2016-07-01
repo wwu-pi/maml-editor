@@ -1,21 +1,16 @@
 package de.wwu.md2dot0.design;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.eclipse.emf.ecore.EObject;
 
-import de.wwu.md2dot0.inference.ModelInferenceDataTypeHelper;
+import de.wwu.md2dot0.inference.ModelInferrer;
 import md2dot0.ProcessFlowElement;
-import md2dot0.ProcessStartEvent;
 import md2dot0.UseCase;
 
 public class ModelInferenceService {
-	
-	protected ModelInferenceDataTypeHelper inferenceDataTypeHelper = new ModelInferenceDataTypeHelper(); 
+	// Inference component
+	ModelInferrer inferrer = new ModelInferrer();
 	
 	/**
 	 * Method called by Sirius to get type for specific process element 
@@ -25,9 +20,9 @@ public class ModelInferenceService {
 	public String getDataTypeRepresentation(EObject obj){
 		if(!(obj instanceof ProcessFlowElement)) return "error";
 		
-		startInferenceProcess((UseCase) obj.eContainer()); // Container is the use case itself
+		inferrer.startInferenceProcess((UseCase) obj.eContainer()); // Container is the use case itself
 		
-		String type = inferenceDataTypeHelper.getType((ProcessFlowElement) obj);
+		String type = inferrer.getType((ProcessFlowElement) obj);
 		return type != null ? type : "??";
 	}
 	
@@ -46,45 +41,6 @@ public class ModelInferenceService {
 			return;
 		}
 		
-		startInferenceProcess((UseCase) useCase.get());
+		inferrer.startInferenceProcess((UseCase) useCase.get());
 	}
-
-
-	
-	/**
-	 * Main method to trigger a full inference process of the process flow(!!).
-	 *  
-	 * @param useCase
-	 */
-	protected void startInferenceProcess(UseCase useCase) {
-		// Inference needed for all process elements
-		Set<ProcessFlowElement> toProcess = new HashSet<ProcessFlowElement>(useCase.getProcessFlowElements());
-		
-		// Select main process (using start event) and infer for following elements
-		Optional<ProcessStartEvent> start = toProcess.stream()
-				.filter(elem -> elem instanceof ProcessStartEvent)
-				.map(elem -> (ProcessStartEvent) elem)
-				.findFirst();
-		
-		if(start.isPresent()){
-			Set<ProcessFlowElement> processed = inferenceDataTypeHelper.inferProcessFlowChain(start.get());
-			toProcess.remove(processed);
-		}
-		
-		// Process remaining tangling element chains and infer subsequent elements
-		Set<ProcessFlowElement> tanglingElementStarts = toProcess.stream()
-				.filter(elem -> elem.getPreviousElements() == null)
-				.collect(Collectors.toSet());
-		
-		for(ProcessFlowElement elem : tanglingElementStarts){
-			inferenceDataTypeHelper.inferProcessFlowChain(elem);
-		}
-		
-		// TODO Merge process element inference pieces
-	}
-
-	
-	
-	// TODO validate model (no tangling, ...)
-	// TODO build data model and validate data types
 }
