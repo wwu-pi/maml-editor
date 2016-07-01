@@ -136,21 +136,23 @@ public class ModelInferenceService {
 			elementTypes.put(processing, typeName);
 			
 		} else if(processing instanceof ProcessElement){
-			// If a type is explicitly set then use it, else use previous known type
+			// If a type is explicitly set (anonymous or not) then use it, else use previous known type
 			String typeName = ((ProcessElement) processing).getDataType() != null ? ((CustomType) ((ProcessElement) processing).getDataType()).getName() : null;
 			if(typeName != null && !typeName.equals("X")){
 				customTypes.add(typeName);
 				lastOccurredType = typeName;
-			} else {
+			} else if(typeName != null && typeName.equals("X")){
 				// Build a new and unique custom type name
 				String newAnonType = "ANONYMOUS__" + processing.toString();
 				customTypes.add(newAnonType);
 				anonymousTypes.put(newAnonType, processing);
 				lastOccurredType = newAnonType;
-			}
+			} 
+			// In case no value is given, it must be the last known type
 			elementTypes.put(processing, lastOccurredType);
-			
 		}
+		// TODO Webservice erzeugt ggf. neuen Typ?
+		
 		// Do nothing for events and control flows as they have no proper type
 		
 		return lastOccurredType;
