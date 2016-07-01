@@ -273,6 +273,7 @@
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ProcessConnector" referenceName="processFlowConnections">
                   <subModelOperations xsi:type="tool:SetValue" featureName="sourceProcessFlowElement" valueExpression="var:source"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="targetProcessFlowElement" valueExpression="var:target"/>
+                  <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:source.getDataTypeRepresentation()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
@@ -707,5 +708,6 @@
       </additionalLayers>
     </ownedRepresentations>
     <ownedJavaExtensions qualifiedClassName="de.wwu.md2dot0.design.TestService"/>
+    <ownedJavaExtensions qualifiedClassName="de.wwu.md2dot0.design.ModelInferenceService"/>
   </ownedViewpoints>
 </description:Group>

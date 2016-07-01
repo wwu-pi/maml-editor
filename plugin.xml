@@ -34,4 +34,11 @@
         </Priority>
      </editpartProvider>
   </extension>
+  <extension
+        point="org.eclipse.sirius.externalJavaAction">
+     <javaActions
+           actionClass="de.wwu.md2dot0.diagram.ModelInferenceAction"
+           id="de.wwu.md2dot0.diagram.ModelInferenceAction">
+     </javaActions>
+  </extension>
 </plugin>
