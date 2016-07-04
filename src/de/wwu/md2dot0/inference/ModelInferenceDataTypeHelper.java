@@ -141,6 +141,8 @@ public class ModelInferenceDataTypeHelper {
 				.map(elem -> (Attribute) elem)
 				.collect(Collectors.toList());
 		
+		if(params.size() == 0) return; // Nothing to do
+		
 		if(processing instanceof ProcessElement){
 			String typeName = elementTypes.get(processing);
 			
@@ -152,7 +154,11 @@ public class ModelInferenceDataTypeHelper {
 			for(Attribute param : params){ 
 				if(param.getMultiplicity().equals(Multiplicity.ONE)){
 					// Consider related attribute directly
-					linkedAttributes.add(param.getType()); // TODO Overhead beim mergen auf neue Struktur?					
+					if(param.getType() != null){
+						linkedAttributes.add(param.getType()); // TODO Overhead beim mergen auf neue Struktur?
+					} else {
+						System.out.println("Error: no datatype instance given for " + param);
+					}
 				} else {
 					// Create collection to add with nested type
 					md2dot0data.Collection collection = Md2dot0dataFactory.eINSTANCE.createCollection();
@@ -163,7 +169,9 @@ public class ModelInferenceDataTypeHelper {
 			}
 			
 			// Add attributes to type
-			customTypes.get(typeName).getAttributes().addAll(linkedAttributes);
+			if(linkedAttributes.size() > 0) {
+				customTypes.get(typeName).getAttributes().addAll(linkedAttributes);
+			}
 			
 		} else if(processing instanceof Transform){
 			// TODO

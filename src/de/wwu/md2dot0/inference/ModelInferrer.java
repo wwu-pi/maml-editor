@@ -53,6 +53,9 @@ public class ModelInferrer {
 		// ------------------------------------------------------------------
 		// Infer attributes
 		// ------------------------------------------------------------------
+		for(ProcessFlowElement elem : useCase.getProcessFlowElements()){
+			inferenceDataTypeHelper.inferAttributes(elem);
+		}
 		
 		// TODO Merge process element inference pieces
 	}
