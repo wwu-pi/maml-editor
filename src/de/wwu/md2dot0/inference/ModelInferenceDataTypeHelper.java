@@ -1,20 +1,29 @@
 package de.wwu.md2dot0.inference;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import md2dot0.DataSource;
 import md2dot0.ProcessConnector;
 import md2dot0.ProcessElement;
 import md2dot0.ProcessFlowElement;
 import md2dot0.Transform;
+import md2dot0data.AnonymousType;
 import md2dot0data.CustomType;
+import md2dot0data.DataType;
+import md2dot0data.Md2dot0dataFactory;
+import md2dot0data.Multiplicity;
+import md2dot0gui.Attribute;
 
 public class ModelInferenceDataTypeHelper {
+	// TODO bidirectional map?
 	protected Map<ProcessFlowElement, String> elementTypes = new HashMap<ProcessFlowElement, String>();
-	protected Set<String> customTypes = new HashSet<String>();
+	protected Map<String, CustomType> customTypes = new HashMap<String, CustomType>();
 	protected Map<String, ProcessFlowElement> anonymousTypes = new HashMap<String, ProcessFlowElement>();
 	
 	/**
@@ -77,7 +86,9 @@ public class ModelInferenceDataTypeHelper {
 			// Data Sources provide a type themselves (possibly a new one)
 			String typeName = ((DataSource) processing).getTypeName();
 			if(typeName != null){
-				customTypes.add(typeName);
+				CustomType type = Md2dot0dataFactory.eINSTANCE.createCustomType();
+				type.setName(typeName);
+				customTypes.put(typeName, type);
 				lastOccurredType = typeName;
 			}
 			// In case no value is given, it must be the last known type
@@ -87,7 +98,9 @@ public class ModelInferenceDataTypeHelper {
 			// Special case because type changes
 			String typeName = ((Transform) processing).getDataType() != null ? ((CustomType) ((Transform) processing).getDataType()).getName() : null;
 			if(typeName != null){
-				customTypes.add(typeName);
+				CustomType type = Md2dot0dataFactory.eINSTANCE.createCustomType();
+				type.setName(typeName);
+				customTypes.put(typeName, type);
 			}
 			// In case no type is given, we cannot infer anything
 			lastOccurredType = typeName;
@@ -97,12 +110,16 @@ public class ModelInferenceDataTypeHelper {
 			// If a type is explicitly set (anonymous or not) then use it, else use previous known type
 			String typeName = ((ProcessElement) processing).getDataType() != null ? ((CustomType) ((ProcessElement) processing).getDataType()).getName() : null;
 			if(typeName != null && !typeName.equals("X")){
-				customTypes.add(typeName);
+				CustomType type = Md2dot0dataFactory.eINSTANCE.createCustomType();
+				type.setName(typeName);
+				customTypes.put(typeName, type);
 				lastOccurredType = typeName;
 			} else if(typeName != null && typeName.equals("X")){
 				// Build a new and unique custom type name
 				String newAnonType = "ANONYMOUS__" + processing.toString();
-				customTypes.add(newAnonType);
+				AnonymousType type = Md2dot0dataFactory.eINSTANCE.createAnonymousType();
+				type.setName(newAnonType);
+				customTypes.put(newAnonType, type);
 				anonymousTypes.put(newAnonType, processing);
 				lastOccurredType = newAnonType;
 			} 
@@ -114,5 +131,46 @@ public class ModelInferenceDataTypeHelper {
 		// Do nothing for events and control flows as they have no proper type
 		
 		return lastOccurredType;
+	}
+	
+	public void inferAttributes(ProcessFlowElement processing){
+		// Get (only) attached attributes
+		Collection<Attribute> params = processing.getParameters().stream()
+				.map(elem -> elem.getTargetElement())
+				.filter(elem -> elem instanceof Attribute)
+				.map(elem -> (Attribute) elem)
+				.collect(Collectors.toList());
+		
+		if(processing instanceof ProcessElement){
+			String typeName = elementTypes.get(processing);
+			
+			// Only continue attribute inference if it is not a basic type 
+			if(typeName == null || !customTypes.containsKey(typeName)) return;
+
+			// Go through attributes
+			ArrayList<DataType> linkedAttributes = new ArrayList<DataType>(); 
+			for(Attribute param : params){ 
+				if(param.getMultiplicity().equals(Multiplicity.ONE)){
+					// Consider related attribute directly
+					linkedAttributes.add(param.getType()); // TODO Overhead beim mergen auf neue Struktur?					
+				} else {
+					// Create collection to add with nested type
+					md2dot0data.Collection collection = Md2dot0dataFactory.eINSTANCE.createCollection();
+					collection.getValues().add(param.getType());
+					collection.setMultiplicity(param.getMultiplicity());
+					linkedAttributes.add(collection);
+				}
+			}
+			
+			// Add attributes to type
+			customTypes.get(typeName).getAttributes().addAll(linkedAttributes);
+			
+		} else if(processing instanceof Transform){
+			// TODO
+		}
+		// TODO Control flows 
+		// TODO Webservice?
+		
+		// Do nothing for datasource and events as they have no attributes
 	}
 }

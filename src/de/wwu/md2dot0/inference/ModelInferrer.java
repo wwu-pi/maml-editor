@@ -28,7 +28,9 @@ public class ModelInferrer {
 		// Inference needed for all process elements
 		Set<ProcessFlowElement> toProcess = new HashSet<ProcessFlowElement>(useCase.getProcessFlowElements());
 		
+		// ------------------------------------------------------------------
 		// Select main process (using start event) and infer for following elements
+		// ------------------------------------------------------------------
 		Optional<ProcessStartEvent> start = toProcess.stream()
 				.filter(elem -> elem instanceof ProcessStartEvent)
 				.map(elem -> (ProcessStartEvent) elem)
@@ -47,6 +49,10 @@ public class ModelInferrer {
 		for(ProcessFlowElement elem : tanglingElementStarts){
 			inferenceDataTypeHelper.inferProcessFlowChain(elem);
 		}
+		
+		// ------------------------------------------------------------------
+		// Infer attributes
+		// ------------------------------------------------------------------
 		
 		// TODO Merge process element inference pieces
 	}
