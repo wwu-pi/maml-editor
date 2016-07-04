@@ -18,6 +18,7 @@ public class ModelInferrer {
 	
 	// Manages data types
 	protected ModelInferenceDataTypeHelper inferenceDataTypeHelper = new ModelInferenceDataTypeHelper(); 
+	protected ModelInferenceMergeHelper inferenceMergeHelper = new ModelInferenceMergeHelper();
 	
 	/**
 	 * Main method to trigger a full inference process of the process flow(!!).
@@ -57,7 +58,10 @@ public class ModelInferrer {
 			inferenceDataTypeHelper.inferAttributes(elem);
 		}
 		
-		// TODO Merge process element inference pieces
+		// ------------------------------------------------------------------
+		// Merge individual process elements within a use case
+		// ------------------------------------------------------------------
+		inferenceMergeHelper.mergeProcessElements(useCase.getProcessFlowElements(), inferenceDataTypeHelper);
 	}
 
 	/**
