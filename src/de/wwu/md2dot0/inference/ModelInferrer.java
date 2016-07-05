@@ -1,5 +1,6 @@
 package de.wwu.md2dot0.inference;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -74,6 +75,13 @@ public class ModelInferrer {
 		return inferenceDataTypeHelper.getType(obj);
 	}
 	
+	public Set<String> getAllCustomTypes(){
+		return inferenceDataTypeHelper.customTypes.keySet();
+	}
 	// TODO validate model (no tangling, ...)
 	// TODO build data model and validate data types
+
+	public Collection<String> getAllPrimitiveTypes() {
+		return inferenceDataTypeHelper.getPrimitiveDataTypes();
+	}
 }

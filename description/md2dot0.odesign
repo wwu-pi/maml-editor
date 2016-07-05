@@ -490,13 +490,20 @@
         </toolSections>
       </additionalLayers>
       <additionalLayers name="AttributeLayer" label="Attribute Layer" activeByDefault="true">
-        <nodeMappings name="Attribute" semanticCandidatesExpression="aql:self.attributes->filter(md2dot0gui::GUIElement)" domainClass="md2dot0gui.Attribute">
+        <nodeMappings name="Attribute" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='directEditAttribute']" semanticCandidatesExpression="aql:self.attributes->filter(md2dot0gui::GUIElement)" domainClass="md2dot0gui.Attribute">
           <borderedNodeMappings name="AttributeMultiplicity" semanticCandidatesExpression="var:self" doubleClickDescription="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='toggleAttributeMultiplicity']" domainClass="md2dot0gui.Attribute">
             <style xsi:type="style:LozengeNodeDescription" showIcon="false" labelExpression="[if(self.multiplicity.toString()='MANY') then 'n' else '1' endif/]" labelPosition="node">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
               <labelFormat>bold</labelFormat>
               <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
               <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_orange']"/>
+            </style>
+          </borderedNodeMappings>
+          <borderedNodeMappings name="AttributeType" semanticCandidatesExpression="aql:self" doubleClickDescription="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='setAttributeDataType']" domainClass="md2dot0gui.Attribute">
+            <style xsi:type="style:SquareDescription" showIcon="false" labelExpression="feature:type" sizeComputationExpression="-1" labelPosition="node" resizeKind="EAST_WEST" width="10" height="3">
+              <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+              <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='orange']"/>
             </style>
           </borderedNodeMappings>
           <style xsi:type="style:SquareDescription" showIcon="false" labelExpression="feature:description" sizeComputationExpression="-1" labelPosition="node" resizeKind="EAST_WEST" width="15" height="3">
@@ -544,6 +551,7 @@
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0gui.Attribute" referenceName="attributes">
                   <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'Attribute'+container.attributes->filter(md2dot0gui::Attribute)->size()"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="aql:'String'"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
@@ -702,6 +710,27 @@
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0gui.DivisionOperator" referenceName="attributes"/>
               </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool:SelectionWizardDescription" name="selectAttributeType" label="Select Attribute Type" candidatesExpression="service:getDataTypeList(container)">
+            <element name="element"/>
+            <containerView name="containerView"/>
+            <container name="container"/>
+            <initialOperation/>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:DoubleClickDescription" name="setAttributeDataType" mappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']/@borderedNodeMappings[name='AttributeType']">
+            <element name="element"/>
+            <elementView name="elementView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
+                <subModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="service:openDataTypeSelectionWizard()"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttribute" inputLabelExpression="feature:description">
+            <mask mask="{0}"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0"/>
             </initialOperation>
           </ownedTools>
         </toolSections>

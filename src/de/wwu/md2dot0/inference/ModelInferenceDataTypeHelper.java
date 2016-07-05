@@ -1,6 +1,7 @@
 package de.wwu.md2dot0.inference;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -127,7 +128,7 @@ public class ModelInferenceDataTypeHelper {
 			elementTypes.put(processing, lastOccurredType);
 		}
 		// TODO Webservice erzeugt ggf. neuen Typ?
-		
+		//TODO enum
 		// Do nothing for events and control flows as they have no proper type
 		
 		return lastOccurredType;
@@ -155,14 +156,14 @@ public class ModelInferenceDataTypeHelper {
 				if(param.getMultiplicity().equals(Multiplicity.ONE)){
 					// Consider related attribute directly
 					if(param.getType() != null){
-						linkedAttributes.add(param.getType()); // TODO Overhead beim mergen auf neue Struktur?
+						linkedAttributes.add(getDataTypeFromString(param.getType())); // TODO Overhead beim mergen auf neue Struktur?
 					} else {
 						System.out.println("Error: no datatype instance given for " + param);
 					}
 				} else {
 					// Create collection to add with nested type
 					md2dot0data.Collection collection = Md2dot0dataFactory.eINSTANCE.createCollection();
-					collection.getValues().add(param.getType());
+					collection.getValues().add(getDataTypeFromString(param.getType()));
 					collection.setMultiplicity(param.getMultiplicity());
 					linkedAttributes.add(collection);
 				}
@@ -179,6 +180,50 @@ public class ModelInferenceDataTypeHelper {
 		// TODO Control flows 
 		// TODO Webservice?
 		
+		// TODO enum
 		// Do nothing for datasource and events as they have no attributes
+	}
+	
+	public DataType getDataTypeFromString(String type){ // TODO Overhead beim mergen auf neue Struktur?
+		if(anonymousTypes.containsKey(type)){
+			AnonymousType instance =  Md2dot0dataFactory.eINSTANCE.createAnonymousType();
+			instance.setName(type);
+			return instance;
+		} else if(customTypes.containsKey(type)){
+			// Anonymous types are also contained here but are treated differently in first clause
+			return customTypes.get(type);
+		} else if (type.equalsIgnoreCase("String")){
+			return Md2dot0dataFactory.eINSTANCE.createString();
+		} else if (type.equalsIgnoreCase("Boolean")){
+			return Md2dot0dataFactory.eINSTANCE.createBoolean();
+		} else if (type.equalsIgnoreCase("PhoneNumber")){
+			return Md2dot0dataFactory.eINSTANCE.createPhoneNumber();
+		} else if (type.equalsIgnoreCase("Url")){
+			return Md2dot0dataFactory.eINSTANCE.createUrl();
+		} else if (type.equalsIgnoreCase("Email")){
+			return Md2dot0dataFactory.eINSTANCE.createEmail();
+		} else if (type.equalsIgnoreCase("File")){
+			return Md2dot0dataFactory.eINSTANCE.createFile();
+		} else if (type.equalsIgnoreCase("Image")){
+			return Md2dot0dataFactory.eINSTANCE.createImage();
+		} else if (type.equalsIgnoreCase("Location")){
+			return Md2dot0dataFactory.eINSTANCE.createLocation();
+		} else if (type.equalsIgnoreCase("Integer")){
+			return Md2dot0dataFactory.eINSTANCE.createInteger();
+		} else if (type.equalsIgnoreCase("Float")){
+			return Md2dot0dataFactory.eINSTANCE.createFloat();
+		} else if (type.equalsIgnoreCase("Date")){
+			return Md2dot0dataFactory.eINSTANCE.createDate();
+		} else if (type.equalsIgnoreCase("Time")){
+			return Md2dot0dataFactory.eINSTANCE.createTime();
+		} else if (type.equalsIgnoreCase("DateTime")){
+			return Md2dot0dataFactory.eINSTANCE.createDateTime();
+		}
+		
+		return Md2dot0dataFactory.eINSTANCE.createString(); // Default
+	}
+	
+	public Collection<String> getPrimitiveDataTypes(){
+		return Arrays.asList("String", "Boolean", "PhoneNumber", "Url", "Email", "File", "Image", "Location", "Integer", "Float", "Date", "Time", "DateTime");
 	}
 }

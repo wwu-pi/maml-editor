@@ -1,12 +1,23 @@
 package de.wwu.md2dot0.design;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 import de.wwu.md2dot0.inference.ModelInferrer;
 import md2dot0.ProcessFlowElement;
 import md2dot0.UseCase;
+import md2dot0data.CustomType;
+import md2dot0data.DataType;
+import md2dot0data.Md2dot0dataFactory;
+import md2dot0data.Md2dot0dataPackage;
+import md2dot0data.PrimitiveType;
 
 public class ModelInferenceService {
 	// Inference component
@@ -42,5 +53,55 @@ public class ModelInferenceService {
 		}
 		
 		inferrer.startInferenceProcess((UseCase) useCase.get());
+	}
+	
+//	public String getDataTypeRepresentation(EObject elem){
+//		if(!(elem instanceof DataType)){
+//			return "";
+//		}
+//		
+//		if(elem instanceof PrimitiveType) {
+//			return elem.getClass().getSimpleName();
+//		} else if(elem instanceof CustomType){
+//			return ((CustomType) elem).getName();
+//		} else if(elem instanceof Collection && !((Collection) elem).getValues().isEmpty()){
+//			return getDataTypeRepresentation(((Collection) elem).getValues().get(0));
+//		}
+//		
+//		return "";
+//	}
+	
+	public String[] getDataTypeList(){
+		ArrayList<String> list = new ArrayList<String>();
+		list.addAll(inferrer.getAllPrimitiveTypes());
+		list.addAll(inferrer.getAllCustomTypes());
+		return list.toArray(new String[list.size()]);
+	}
+	
+//	public EObject instantiateEcoreStringWrapper(String string){
+//		md2dot0data.String wrapper = Md2dot0dataFactory.eINSTANCE.createString();
+//		wrapper.setValue(string);
+//		return wrapper;
+//	}
+	
+	public String openDataTypeSelectionWizard(EObject object){
+		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+
+		ElementListSelectionDialog dialog = new ElementListSelectionDialog(shell, new LabelProvider());
+		
+		dialog.setElements(getDataTypeList()); //new String[] { "Linux", "Mac", "Windows" });
+		dialog.setTitle("Select desired data type");
+		
+		// user pressed cancel
+		if (dialog.open() != Window.OK) {
+			return null;
+		}
+		Object[] result = dialog.getResult();
+		
+		if(result.length > 0) {
+			System.out.println(result[0]);
+			return (String) result[0];
+		}
+		return null;
 	}
 }

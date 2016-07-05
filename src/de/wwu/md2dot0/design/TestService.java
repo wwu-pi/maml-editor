@@ -1,6 +1,9 @@
 package de.wwu.md2dot0.design;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.ui.PlatformUI;
 
 import md2dot0.Call;
 import md2dot0.Camera;
@@ -263,4 +266,19 @@ public class TestService {
 		
 		return isConnectionEndAllowed(elem, edge.getSourceProcessFlowElement(), preTarget);
 	}
+	
+	/**
+	 * Get pixel width of an element based on its textual content.
+	 * CANNOT be used currently because size computation renders square field from weird integer value 
+	 * @param content
+	 * @return
+	 */
+//	public int getSize(EObject content){
+//		GC gc = new GC(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
+//		FontMetrics fontMetrics = gc.getFontMetrics();
+//		gc.dispose();
+//		int width = fontMetrics.getAverageCharWidth() * ((content != null) ? content.toString().toCharArray().length : 0);
+//		System.out.println(width);
+//		return width;
+//	}
 }
