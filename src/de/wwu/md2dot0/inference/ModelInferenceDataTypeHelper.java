@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import md2dot0.DataSource;
+import md2dot0.ParameterConnector;
 import md2dot0.ProcessConnector;
 import md2dot0.ProcessElement;
 import md2dot0.ProcessFlowElement;
@@ -167,6 +168,11 @@ public class ModelInferenceDataTypeHelper {
 					collection.setMultiplicity(param.getMultiplicity());
 					linkedAttributes.add(collection);
 				}
+				
+				// Nested attributes for complex types
+				if(param.getParameters().size() > 0){
+					inferAttributes(param.getParameters());
+				}
 			}
 			
 			// Add attributes to type
@@ -182,6 +188,57 @@ public class ModelInferenceDataTypeHelper {
 		
 		// TODO enum
 		// Do nothing for datasource and events as they have no attributes
+	}
+	
+	public void inferAttributes(Collection<ParameterConnector> connectors){
+		for(ParameterConnector connector : connectors){
+			inferAttributes(connector);
+		}
+	}
+	
+	public void inferAttributes(ParameterConnector connector){
+		if(connector.getTargetElement() == null || !(connector.getTargetElement() instanceof Attribute)) return;
+		Attribute attr = (Attribute) connector.getTargetElement();
+
+		// Only continue attribute inference if it is not a basic type 
+		if(getPrimitiveDataTypes().contains(attr.getType())) return;
+
+		// Attribute's type itself already known? Else add
+		CustomType type;
+		if(!customTypes.containsKey(attr.getType())){
+			customTypes.put(attr.getType(), (CustomType) getDataTypeFromString(attr.getType()));
+		} 
+		type = customTypes.get(attr.getType());
+				
+		// Go through attributes
+//		ArrayList<DataType> linkedAttributes = new ArrayList<DataType>(); 
+//		params = attr.getParameters();
+//		for(Attribute param : params){ 
+//			if(param.getMultiplicity().equals(Multiplicity.ONE)){
+//				// Consider related attribute directly
+//				if(param.getType() != null){
+//					linkedAttributes.add(getDataTypeFromString(param.getType())); // TODO Overhead beim mergen auf neue Struktur?
+//				} else {
+//					System.out.println("Error: no datatype instance given for " + param);
+//				}
+//			} else {
+//				// Create collection to add with nested type
+//				md2dot0data.Collection collection = Md2dot0dataFactory.eINSTANCE.createCollection();
+//				collection.getValues().add(getDataTypeFromString(param.getType()));
+//				collection.setMultiplicity(param.getMultiplicity());
+//				linkedAttributes.add(collection);
+//			}
+//			
+//			// Nested attributes for complex types
+//			if(param.getParameters().size() > 0){
+//				inferAttributes(param.getParameters());
+//			}
+//		}
+		
+		// Add attributes to type
+//		if(linkedAttributes.size() > 0) {
+//			customTypes.get(typeName).getAttributes().addAll(linkedAttributes);
+//		}
 	}
 	
 	public DataType getDataTypeFromString(String type){ // TODO Overhead beim mergen auf neue Struktur?

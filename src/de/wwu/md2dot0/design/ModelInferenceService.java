@@ -13,11 +13,7 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import de.wwu.md2dot0.inference.ModelInferrer;
 import md2dot0.ProcessFlowElement;
 import md2dot0.UseCase;
-import md2dot0data.CustomType;
-import md2dot0data.DataType;
-import md2dot0data.Md2dot0dataFactory;
-import md2dot0data.Md2dot0dataPackage;
-import md2dot0data.PrimitiveType;
+import md2dot0gui.Attribute;
 
 public class ModelInferenceService {
 	// Inference component
@@ -35,6 +31,14 @@ public class ModelInferenceService {
 		
 		String type = inferrer.getType((ProcessFlowElement) obj);
 		return type != null ? type : "??";
+	}
+	
+	/** 
+	 * Perform the data model inference without returning a value
+	 * @param obj
+	 */
+	public void startInferenceProcess(EObject obj){
+		getDataTypeRepresentation(obj);
 	}
 	
 	/**
@@ -94,7 +98,8 @@ public class ModelInferenceService {
 		
 		// user pressed cancel
 		if (dialog.open() != Window.OK) {
-			return null;
+			// Return previous value
+			if(object instanceof Attribute) return ((Attribute) object).getType();
 		}
 		Object[] result = dialog.getResult();
 		
@@ -102,6 +107,8 @@ public class ModelInferenceService {
 			System.out.println(result[0]);
 			return (String) result[0];
 		}
+		
+		// Unknown error?
 		return null;
 	}
 }

@@ -6,9 +6,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import md2dot0.ParameterConnector;
 import md2dot0.ProcessFlowElement;
 import md2dot0.ProcessStartEvent;
 import md2dot0.UseCase;
+import md2dot0gui.Attribute;
 
 /**
  * Main component for inferring data models from .md2dot0 models 
@@ -40,17 +42,19 @@ public class ModelInferrer {
 		
 		if(start.isPresent()){
 			Set<ProcessFlowElement> processed = inferenceDataTypeHelper.inferProcessFlowChain(start.get());
-			toProcess.remove(processed);
+			toProcess.removeAll(processed);
 		}
 		
 		// Process remaining tangling element chains and infer subsequent elements
 		Set<ProcessFlowElement> tanglingElementStarts = toProcess.stream()
-				.filter(elem -> elem.getPreviousElements() == null)
+				.filter(elem -> !(elem instanceof ProcessStartEvent) && elem.getPreviousElements().size() == 0)
 				.collect(Collectors.toSet());
 		
 		for(ProcessFlowElement elem : tanglingElementStarts){
 			inferenceDataTypeHelper.inferProcessFlowChain(elem);
 		}
+		
+		// TODO infer data types from attributes
 		
 		// ------------------------------------------------------------------
 		// Infer attributes
@@ -58,11 +62,28 @@ public class ModelInferrer {
 		for(ProcessFlowElement elem : useCase.getProcessFlowElements()){
 			inferenceDataTypeHelper.inferAttributes(elem);
 		}
+
+		// Process remaining tangling attributes
+		Set<Attribute> connectedAttributes = useCase.eContents().stream()
+				.filter(elem -> (elem instanceof ParameterConnector) && ((ParameterConnector) elem).getTargetElement() instanceof Attribute)
+				.map(elem -> (Attribute) ((ParameterConnector) elem).getTargetElement())
+				.collect(Collectors.toSet());
 		
+		Set<Attribute> tanglingAttributes = useCase.eContents().stream()
+				.filter(elem -> (elem instanceof Attribute))
+				.map(elem -> (Attribute) elem)
+				.collect(Collectors.toSet());
+		tanglingAttributes.removeAll(connectedAttributes);
+		
+				
 		// ------------------------------------------------------------------
 		// Merge individual process elements within a use case
 		// ------------------------------------------------------------------
 		inferenceMergeHelper.mergeProcessElements(useCase.getProcessFlowElements(), inferenceDataTypeHelper);
+		
+		// Output Helper
+		System.out.println("Custom data types:" + getAllCustomTypes().toString());
+		System.out.println("Anonymous types:" + getAllCustomTypes().toString());
 	}
 
 	/**
