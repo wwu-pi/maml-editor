@@ -23,16 +23,16 @@ import md2dot0gui.Attribute;
 
 public class ModelInferenceDataTypeHelper {
 	// TODO bidirectional map?
-	protected Map<ProcessFlowElement, String> elementTypes = new HashMap<ProcessFlowElement, String>();
-	protected Map<String, CustomType> customTypes = new HashMap<String, CustomType>();
-	protected Map<String, ProcessFlowElement> anonymousTypes = new HashMap<String, ProcessFlowElement>();
+	protected Map<ProcessFlowElement, TypeLiteral> elementTypes = new HashMap<ProcessFlowElement, TypeLiteral>();
+//	protected Map<String, TypeLiteral> customTypes = new HashMap<String, TypeLiteral>();
+//	protected Map<TypeLiteral, ProcessFlowElement> anonymousTypes = new HashMap<TypeLiteral, ProcessFlowElement>();
 	
 	/**
 	 * Retrieve data type for given ProcessFlowElement
 	 * @param obj
 	 * @return
 	 */
-	public String getType(ProcessFlowElement obj) {
+	public TypeLiteral getType(ProcessFlowElement obj) {
 		return elementTypes.get(obj);
 	}
 	
@@ -87,45 +87,32 @@ public class ModelInferenceDataTypeHelper {
 			// Data Sources provide a type themselves (possibly a new one)
 			String typeName = ((DataSource) processing).getTypeName();
 			if(typeName != null){
-				CustomType type = Md2dot0dataFactory.eINSTANCE.createCustomType();
-				type.setName(typeName);
-				customTypes.put(typeName, type);
 				lastOccurredType = typeName;
 			}
 			// In case no value is given, it must be the last known type
-			elementTypes.put(processing, lastOccurredType);
+			elementTypes.put(processing, TypeLiteral.from(lastOccurredType));
 			
 		} else if(processing instanceof Transform){
 			// Special case because type changes
 			String typeName = ((Transform) processing).getDataType() != null ? ((CustomType) ((Transform) processing).getDataType()).getName() : null;
 			if(typeName != null){
-				CustomType type = Md2dot0dataFactory.eINSTANCE.createCustomType();
-				type.setName(typeName);
-				customTypes.put(typeName, type);
+				// TODO
+				lastOccurredType = typeName;
 			}
 			// In case no type is given, we cannot infer anything
-			lastOccurredType = typeName;
-			elementTypes.put(processing, typeName);
+			elementTypes.put(processing, TypeLiteral.from(lastOccurredType));
 			
 		} else if(processing instanceof ProcessElement){
 			// If a type is explicitly set (anonymous or not) then use it, else use previous known type
 			String typeName = ((ProcessElement) processing).getDataType() != null ? ((CustomType) ((ProcessElement) processing).getDataType()).getName() : null;
 			if(typeName != null && !typeName.equals("X")){
-				CustomType type = Md2dot0dataFactory.eINSTANCE.createCustomType();
-				type.setName(typeName);
-				customTypes.put(typeName, type);
 				lastOccurredType = typeName;
 			} else if(typeName != null && typeName.equals("X")){
 				// Build a new and unique custom type name
-				String newAnonType = TypeLiteral.ANONYMOUS_PREFIX + processing.toString();
-				AnonymousType type = Md2dot0dataFactory.eINSTANCE.createAnonymousType();
-				type.setName(newAnonType);
-				customTypes.put(newAnonType, type);
-				anonymousTypes.put(newAnonType, processing);
-				lastOccurredType = newAnonType;
+				lastOccurredType = TypeLiteral.ANONYMOUS_PREFIX + processing.toString();
 			} 
 			// In case no value is given, it must be the last known type
-			elementTypes.put(processing, lastOccurredType);
+			elementTypes.put(processing, TypeLiteral.from(lastOccurredType));
 		}
 		// TODO Webservice erzeugt ggf. neuen Typ?
 		//TODO enum
@@ -145,27 +132,27 @@ public class ModelInferenceDataTypeHelper {
 		if(params.size() == 0) return; // Nothing to do
 		
 		if(processing instanceof ProcessElement){
-			String typeName = elementTypes.get(processing);
+			TypeLiteral typeName = elementTypes.get(processing);
 			
 			// Only continue attribute inference if it is not a basic type 
-			if(typeName == null || !customTypes.containsKey(typeName)) return;
+			if(typeName.isPrimitive()) return;
 
 			// Go through attributes
-			ArrayList<DataType> linkedAttributes = new ArrayList<DataType>(); 
+			ArrayList<TypeLiteral> linkedAttributes = new ArrayList<TypeLiteral>(); 
 			for(Attribute param : params){ 
 				if(param.getMultiplicity().equals(Multiplicity.ONE)){
 					// Consider related attribute directly
 					if(param.getType() != null){
-						linkedAttributes.add(getDataTypeFromString(param.getType())); // TODO Overhead beim mergen auf neue Struktur?
+						linkedAttributes.add(TypeLiteral.from(param.getType())); // TODO Overhead beim mergen auf neue Struktur?
 					} else {
 						System.out.println("Error: no datatype instance given for " + param);
 					}
 				} else {
 					// Create collection to add with nested type
-					md2dot0data.Collection collection = Md2dot0dataFactory.eINSTANCE.createCollection();
-					collection.getValues().add(getDataTypeFromString(param.getType()));
-					collection.setMultiplicity(param.getMultiplicity());
-					linkedAttributes.add(collection);
+//					md2dot0data.Collection collection = Md2dot0dataFactory.eINSTANCE.createCollection();
+//					collection.getValues().add(TypeLiteral.from(param.getType()));
+//					collection.setMultiplicity(param.getMultiplicity());
+//					linkedAttributes.add(collection);
 				}
 				
 				// Nested attributes for complex types
@@ -176,7 +163,7 @@ public class ModelInferenceDataTypeHelper {
 			
 			// Add attributes to type
 			if(linkedAttributes.size() > 0) {
-				customTypes.get(typeName).getAttributes().addAll(linkedAttributes);
+//				customTypes.get(typeName).getAttributes().addAll(linkedAttributes);
 			}
 			
 		} else if(processing instanceof Transform){
@@ -203,11 +190,7 @@ public class ModelInferenceDataTypeHelper {
 		if(TypeLiteral.getPrimitiveDataTypesAsString().contains(attr.getType())) return;
 
 		// Attribute's type itself already known? Else add
-		CustomType type;
-		if(!customTypes.containsKey(attr.getType())){
-			customTypes.put(attr.getType(), (CustomType) getDataTypeFromString(attr.getType()));
-		} 
-		type = customTypes.get(attr.getType());
+		TypeLiteral type = TypeLiteral.from(attr.getType());
 				
 		// Go through attributes
 //		ArrayList<DataType> linkedAttributes = new ArrayList<DataType>(); 
@@ -238,46 +221,44 @@ public class ModelInferenceDataTypeHelper {
 //		if(linkedAttributes.size() > 0) {
 //			customTypes.get(typeName).getAttributes().addAll(linkedAttributes);
 //		}
-		
-		TypeLiteral.from("STRING");
 	}
 	
-	public DataType getDataTypeFromString(String type){ // TODO Overhead beim mergen auf neue Struktur?
-		if(anonymousTypes.containsKey(type)){
-			AnonymousType instance =  Md2dot0dataFactory.eINSTANCE.createAnonymousType();
-			instance.setName(type);
-			return instance;
-		} else if(customTypes.containsKey(type)){
-			// Anonymous types are also contained here but are treated differently in first clause
-			return customTypes.get(type);
-		} else if (type.equalsIgnoreCase("String")){
-			return Md2dot0dataFactory.eINSTANCE.createString();
-		} else if (type.equalsIgnoreCase("Boolean")){
-			return Md2dot0dataFactory.eINSTANCE.createBoolean();
-		} else if (type.equalsIgnoreCase("PhoneNumber")){
-			return Md2dot0dataFactory.eINSTANCE.createPhoneNumber();
-		} else if (type.equalsIgnoreCase("Url")){
-			return Md2dot0dataFactory.eINSTANCE.createUrl();
-		} else if (type.equalsIgnoreCase("Email")){
-			return Md2dot0dataFactory.eINSTANCE.createEmail();
-		} else if (type.equalsIgnoreCase("File")){
-			return Md2dot0dataFactory.eINSTANCE.createFile();
-		} else if (type.equalsIgnoreCase("Image")){
-			return Md2dot0dataFactory.eINSTANCE.createImage();
-		} else if (type.equalsIgnoreCase("Location")){
-			return Md2dot0dataFactory.eINSTANCE.createLocation();
-		} else if (type.equalsIgnoreCase("Integer")){
-			return Md2dot0dataFactory.eINSTANCE.createInteger();
-		} else if (type.equalsIgnoreCase("Float")){
-			return Md2dot0dataFactory.eINSTANCE.createFloat();
-		} else if (type.equalsIgnoreCase("Date")){
-			return Md2dot0dataFactory.eINSTANCE.createDate();
-		} else if (type.equalsIgnoreCase("Time")){
-			return Md2dot0dataFactory.eINSTANCE.createTime();
-		} else if (type.equalsIgnoreCase("DateTime")){
-			return Md2dot0dataFactory.eINSTANCE.createDateTime();
-		}
-		
-		return Md2dot0dataFactory.eINSTANCE.createString(); // Default
-	}
+//	public DataType getDataTypeFromString(String type){ // TODO Overhead beim mergen auf neue Struktur?
+//		if(anonymousTypes.containsKey(type)){
+//			AnonymousType instance =  Md2dot0dataFactory.eINSTANCE.createAnonymousType();
+//			instance.setName(type);
+//			return instance;
+//		} else if(customTypes.containsKey(type)){
+//			// Anonymous types are also contained here but are treated differently in first clause
+//			return customTypes.get(type);
+//		} else if (type.equalsIgnoreCase("String")){
+//			return Md2dot0dataFactory.eINSTANCE.createString();
+//		} else if (type.equalsIgnoreCase("Boolean")){
+//			return Md2dot0dataFactory.eINSTANCE.createBoolean();
+//		} else if (type.equalsIgnoreCase("PhoneNumber")){
+//			return Md2dot0dataFactory.eINSTANCE.createPhoneNumber();
+//		} else if (type.equalsIgnoreCase("Url")){
+//			return Md2dot0dataFactory.eINSTANCE.createUrl();
+//		} else if (type.equalsIgnoreCase("Email")){
+//			return Md2dot0dataFactory.eINSTANCE.createEmail();
+//		} else if (type.equalsIgnoreCase("File")){
+//			return Md2dot0dataFactory.eINSTANCE.createFile();
+//		} else if (type.equalsIgnoreCase("Image")){
+//			return Md2dot0dataFactory.eINSTANCE.createImage();
+//		} else if (type.equalsIgnoreCase("Location")){
+//			return Md2dot0dataFactory.eINSTANCE.createLocation();
+//		} else if (type.equalsIgnoreCase("Integer")){
+//			return Md2dot0dataFactory.eINSTANCE.createInteger();
+//		} else if (type.equalsIgnoreCase("Float")){
+//			return Md2dot0dataFactory.eINSTANCE.createFloat();
+//		} else if (type.equalsIgnoreCase("Date")){
+//			return Md2dot0dataFactory.eINSTANCE.createDate();
+//		} else if (type.equalsIgnoreCase("Time")){
+//			return Md2dot0dataFactory.eINSTANCE.createTime();
+//		} else if (type.equalsIgnoreCase("DateTime")){
+//			return Md2dot0dataFactory.eINSTANCE.createDateTime();
+//		}
+//		
+//		return Md2dot0dataFactory.eINSTANCE.createString(); // Default
+//	}
 }

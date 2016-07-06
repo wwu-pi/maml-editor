@@ -82,6 +82,7 @@ public class ModelInferrer {
 		
 		// Output Helper
 		System.out.println("Custom data types:" + TypeLiteral.getCustomDataTypesAsString().toString());
+		System.out.println("Anonymous data types:" + TypeLiteral.getAnonymousDataTypesAsString().toString());
 	}
 
 	/**
@@ -91,7 +92,7 @@ public class ModelInferrer {
 	 */
 	public String getType(ProcessFlowElement obj) {
 		// Pass to data type helper
-		return inferenceDataTypeHelper.getType(obj);
+		return inferenceDataTypeHelper.getType(obj).toString();
 	}
 	
 	// TODO validate model (no tangling, ...)

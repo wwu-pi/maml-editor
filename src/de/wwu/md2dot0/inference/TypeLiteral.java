@@ -11,8 +11,9 @@ import md2dot0data.DataType;
 public class TypeLiteral {
 	
 	public static final String ANONYMOUS_PREFIX = "__ANONYMOUS__";
+	private static final String ANONYMOUS_TYPE_UI = "X";
 
-	static Map<String, TypeLiteral> customTypes = new HashMap<String, TypeLiteral>();  
+	static Map<String, TypeLiteral> complexTypes = new HashMap<String, TypeLiteral>();  
 	static Map<String, TypeLiteral> primitives = new HashMap<String, TypeLiteral>();
 	
 	protected String identifier;
@@ -61,9 +62,12 @@ public class TypeLiteral {
 		// Prepare user input
 		String type = string.toUpperCase().trim();
 		
+		// Catch anonymous type
+		if(type.equals(ANONYMOUS_TYPE_UI)) return null;
+				
 		// Lookup or create new
 		if(!literalExists(type)){
-			customTypes.put(type, new TypeLiteral(type, string.trim()));
+			complexTypes.put(type, new TypeLiteral(type, string.trim()));
 		}
 		
 		return getLiteral(type);
@@ -84,7 +88,7 @@ public class TypeLiteral {
 	 * @return
 	 */
 	private static TypeLiteral getLiteral(String type){
-		return primitives.get(type) != null ? primitives.get(type) : customTypes.get(type);  
+		return primitives.get(type) != null ? primitives.get(type) : complexTypes.get(type);  
 	}
 	
 	/**
@@ -94,7 +98,7 @@ public class TypeLiteral {
 	public static Collection<TypeLiteral> values(){
 		initPrimitives();
 		
-		return Stream.concat(primitives.values().stream(), customTypes.values().stream()).collect(Collectors.toList());
+		return Stream.concat(primitives.values().stream(), complexTypes.values().stream()).collect(Collectors.toList());
 	}
 	
 	/**
@@ -110,9 +114,12 @@ public class TypeLiteral {
 	 * @return
 	 */
 	public static Collection<String> getCustomDataTypesAsString(){
-		return customTypes.values().stream().map(elem -> elem.name).collect(Collectors.toList());
+		return complexTypes.values().stream()
+				.map(elem -> elem.name)
+				.filter(elem -> !elem.startsWith(ANONYMOUS_PREFIX))
+				.collect(Collectors.toList());
 	}
-	
+
 	/**
 	 * String representation of all data types.
 	 * @return
@@ -124,5 +131,20 @@ public class TypeLiteral {
 	public static DataType getDataType(){
 		initPrimitives();
 		return null; // TODO from inferencedatatype.getDataTypeFromString
+	}
+	
+	public boolean isPrimitive(){
+		return primitives.containsValue(this);
+	}
+
+	/**
+	 * String representation of anonymous data types.
+	 * @return
+	 */
+	public static Object getAnonymousDataTypesAsString() {
+		return complexTypes.values().stream()
+				.map(elem -> elem.name)
+				.filter(elem -> elem.startsWith(ANONYMOUS_PREFIX))
+				.collect(Collectors.toList());
 	}
 }
