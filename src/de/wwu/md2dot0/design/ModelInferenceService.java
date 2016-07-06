@@ -27,13 +27,19 @@ public class ModelInferenceService {
 	 * @return
 	 */
 	public String getDataTypeRepresentation(EObject obj){
-		if(!(obj instanceof ProcessFlowElement)) return "error";
+		if(!(obj.eContainer() instanceof UseCase)) return "error";
 		
 		inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
 		inferrer.startInferenceProcess((UseCase) obj.eContainer()); // Container is the use case itself
 		
-		String type = inferrer.getType((ProcessFlowElement) obj);
-		return type != null ? type : "??";
+		if(obj instanceof ProcessFlowElement){
+			String type = inferrer.getType((ProcessFlowElement) obj);
+			return type != null ? type : "??";
+		} else if(obj instanceof Attribute){
+			TypeLiteral type = TypeLiteral.from(((Attribute) obj).getType());
+			return type != null ? type.toString() : "??";
+		} 
+		return "??";
 	}
 	
 	/** 
@@ -63,8 +69,10 @@ public class ModelInferenceService {
 		inferrer.startInferenceProcess((UseCase) useCase.get());
 	}
 	
-	public String[] getDataTypeList(){
-		// TODO empty list if no inference process first??
+	public String[] getDataTypeList(EObject object){
+		// Refresh inferred model types
+		startInferenceProcess(object);
+		
 		ArrayList<String> list = new ArrayList<String>();
 		list.addAll(TypeLiteral.getPrimitiveDataTypesAsString());
 		list.addAll(TypeLiteral.getCustomDataTypesAsString());
@@ -76,7 +84,7 @@ public class ModelInferenceService {
 
 		ElementListSelectionDialog dialog = new ElementListSelectionDialog(shell, new LabelProvider());
 		
-		dialog.setElements(getDataTypeList()); //new String[] { "Linux", "Mac", "Windows" });
+		dialog.setElements(getDataTypeList(object)); //new String[] { "Linux", "Mac", "Windows" });
 		dialog.setTitle("Select desired data type");
 		
 		// user pressed cancel

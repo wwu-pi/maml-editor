@@ -33,19 +33,19 @@ public class TypeLiteral {
 	private static void initPrimitives() {
 		// Initialize primitives
 		if(primitives.size() == 0){
-			primitives.put("STRING", new TypeLiteral("String", "STRING"));
-			primitives.put("BOOLEAN", new TypeLiteral("Boolean", "BOOLEAN"));
-			primitives.put("PHONENUMBER", new TypeLiteral("PhoneNumber", "PHONENUMBER"));
-			primitives.put("URL", new TypeLiteral("Url", "URL"));
-			primitives.put("EMAIL", new TypeLiteral("Email", "EMAIL"));
-			primitives.put("FILE", new TypeLiteral("File", "FILE"));
-			primitives.put("IMAGE", new TypeLiteral("Image", "IMAGE"));
-			primitives.put("LOCATION", new TypeLiteral("Location", "LOCATION"));
-			primitives.put("INTEGER", new TypeLiteral("Integer", "INTEGER"));
-			primitives.put("FLOAT", new TypeLiteral("Float", "FLOAT"));
-			primitives.put("DATE", new TypeLiteral("Date", "DATE"));
-			primitives.put("TIME", new TypeLiteral("Time", "TIME"));
-			primitives.put("DATETIME", new TypeLiteral("DateTime", "DATETIME"));
+			primitives.put("STRING", new TypeLiteral("STRING", "String"));
+			primitives.put("BOOLEAN", new TypeLiteral("BOOLEAN", "Boolean"));
+			primitives.put("PHONENUMBER", new TypeLiteral("PHONENUMBER", "PhoneNumber"));
+			primitives.put("URL", new TypeLiteral("URL", "Url"));
+			primitives.put("EMAIL", new TypeLiteral("EMAIL", "Email"));
+			primitives.put("FILE", new TypeLiteral("FILE", "File"));
+			primitives.put("IMAGE", new TypeLiteral("IMAGE", "Image"));
+			primitives.put("LOCATION", new TypeLiteral("LOCATION", "Location"));
+			primitives.put("INTEGER", new TypeLiteral("INTEGER", "Integer"));
+			primitives.put("FLOAT", new TypeLiteral("FLOAT", "Float"));
+			primitives.put("DATE", new TypeLiteral("DATE", "Date"));
+			primitives.put("TIME", new TypeLiteral("TIME", "Time"));
+			primitives.put("DATETIME", new TypeLiteral("DATETIME", "DateTime"));
 		}
 	}
 
@@ -104,6 +104,8 @@ public class TypeLiteral {
 	 * @return
 	 */
 	public static Collection<String> getPrimitiveDataTypesAsString(){
+		initPrimitives();
+		
 		return primitives.values().stream().map(elem -> elem.name).collect(Collectors.toList());
 	}
 	
@@ -123,6 +125,8 @@ public class TypeLiteral {
 	 * @return
 	 */
 	public static Collection<String> getAllDataTypesAsString(){
+		initPrimitives();
+		
 		return values().stream().map(elem -> elem.name).collect(Collectors.toList());
 	}
 	
@@ -132,6 +136,8 @@ public class TypeLiteral {
 //	}
 	
 	public boolean isPrimitive(){
+		initPrimitives();
+		
 		return primitives.containsValue(this);
 	}
 	
