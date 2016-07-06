@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import md2dot0data.DataType;
-
 public class TypeLiteral {
 	
 	public static final String ANONYMOUS_PREFIX = "__ANONYMOUS__";
@@ -62,8 +60,8 @@ public class TypeLiteral {
 		// Prepare user input
 		String type = string.toUpperCase().trim();
 		
-		// Catch anonymous type
-		if(type.equals(ANONYMOUS_TYPE_UI)) return null;
+		// Catch invalid types
+		if(!isAllowedTypeName(type)) return null;
 				
 		// Lookup or create new
 		if(!literalExists(type)){
@@ -128,13 +126,17 @@ public class TypeLiteral {
 		return values().stream().map(elem -> elem.name).collect(Collectors.toList());
 	}
 	
-	public static DataType getDataType(){
-		initPrimitives();
-		return null; // TODO from inferencedatatype.getDataTypeFromString
-	}
+//	public static DataType getDataType(){
+//		initPrimitives();
+//		return null; // TODO from inferencedatatype.getDataTypeFromString
+//	}
 	
 	public boolean isPrimitive(){
 		return primitives.containsValue(this);
+	}
+	
+	public static boolean isAllowedTypeName(String typeName){
+		return typeName != null && !typeName.equals("") && !typeName.startsWith("_") && !typeName.equals(ANONYMOUS_TYPE_UI);
 	}
 
 	/**

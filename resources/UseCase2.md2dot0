@@ -14,6 +14,6 @@
   <roles name="Role1"/>
   <roles name="Role2"/>
   <roles name="Role3"/>
-  <attributes xsi:type="de.wwu.md2dot0gui:Attribute" description="Attribute1"/>
-  <attributes xsi:type="de.wwu.md2dot0gui:Attribute" description="Attribute2"/>
+  <attributes xsi:type="de.wwu.md2dot0gui:Attribute" description="Attribute1" type="Autor"/>
+  <attributes xsi:type="de.wwu.md2dot0gui:Attribute" description="Attribute2" type="Buch"/>
 </de.wwu.md2dot0:UseCase>

@@ -1,32 +1,25 @@
 package de.wwu.md2dot0.inference;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-
 import md2dot0.DataSource;
 import md2dot0.ParameterConnector;
+import md2dot0.ParameterSource;
 import md2dot0.ProcessConnector;
 import md2dot0.ProcessElement;
 import md2dot0.ProcessFlowElement;
 import md2dot0.Transform;
-import md2dot0data.AnonymousType;
 import md2dot0data.CustomType;
-import md2dot0data.DataType;
-import md2dot0data.Md2dot0dataFactory;
-import md2dot0data.Multiplicity;
 import md2dot0gui.Attribute;
 
 public class ModelInferenceDataTypeHelper {
-	// TODO bidirectional map?
-	protected Map<ProcessFlowElement, TypeLiteral> elementTypes = new HashMap<ProcessFlowElement, TypeLiteral>();
-//	protected Map<String, TypeLiteral> customTypes = new HashMap<String, TypeLiteral>();
-//	protected Map<TypeLiteral, ProcessFlowElement> anonymousTypes = new HashMap<TypeLiteral, ProcessFlowElement>();
 	
+	protected Map<ProcessFlowElement, TypeLiteral> elementTypes = new HashMap<ProcessFlowElement, TypeLiteral>(); // TODO bidirectional map?
+	protected ArrayList<TypeStructureNode> typeGraph = new ArrayList<TypeStructureNode>();
+
 	/**
 	 * Retrieve data type for given ProcessFlowElement
 	 * @param obj
@@ -43,7 +36,7 @@ public class ModelInferenceDataTypeHelper {
 	 */
 	public Set<ProcessFlowElement> inferProcessFlowChain(ProcessFlowElement startElement) {
 		Set<ProcessFlowElement> processed = new HashSet<ProcessFlowElement>();
-		String lastOccurredType = null;
+		TypeLiteral lastOccurredType = null;
 		
 		// Recursively iterate through chain (control flow elements may have multiple followers)
 		inferProcessFlowChainRecursive(startElement, lastOccurredType, processed);
@@ -57,7 +50,7 @@ public class ModelInferenceDataTypeHelper {
 	 * @param lastOccurredType
 	 * @param processed
 	 */
-	public void inferProcessFlowChainRecursive(ProcessFlowElement currentElement, String lastOccurredType, Set<ProcessFlowElement> processed) {
+	public void inferProcessFlowChainRecursive(ProcessFlowElement currentElement, TypeLiteral lastOccurredType, Set<ProcessFlowElement> processed) {
 		// Skip if currentElement was already processed
 		if(currentElement == null || processed.contains(currentElement)){
 			return;
@@ -82,145 +75,67 @@ public class ModelInferenceDataTypeHelper {
 	 * @param lastOccurredType
 	 * @return
 	 */
-	public String inferSingleItem(ProcessFlowElement processing, String lastOccurredType){
+	public TypeLiteral inferSingleItem(ProcessFlowElement processing, TypeLiteral lastOccurredType){
+		String lastOccuredTypeName = lastOccurredType != null ? lastOccurredType.identifier : "";
+		
 		if(processing instanceof DataSource){
 			// Data Sources provide a type themselves (possibly a new one)
 			String typeName = ((DataSource) processing).getTypeName();
 			if(typeName != null){
-				lastOccurredType = typeName;
+				lastOccuredTypeName = typeName;
 			}
 			// In case no value is given, it must be the last known type
-			elementTypes.put(processing, TypeLiteral.from(lastOccurredType));
+			elementTypes.put(processing, TypeLiteral.from(lastOccuredTypeName));
 			
 		} else if(processing instanceof Transform){
 			// Special case because type changes
 			String typeName = ((Transform) processing).getDataType() != null ? ((CustomType) ((Transform) processing).getDataType()).getName() : null;
 			if(typeName != null){
 				// TODO
-				lastOccurredType = typeName;
+				lastOccuredTypeName = typeName;
 			}
 			// In case no type is given, we cannot infer anything
-			elementTypes.put(processing, TypeLiteral.from(lastOccurredType));
+			elementTypes.put(processing, TypeLiteral.from(lastOccuredTypeName));
 			
 		} else if(processing instanceof ProcessElement){
 			// If a type is explicitly set (anonymous or not) then use it, else use previous known type
 			String typeName = ((ProcessElement) processing).getDataType() != null ? ((CustomType) ((ProcessElement) processing).getDataType()).getName() : null;
 			if(typeName != null && !typeName.equals("X")){
-				lastOccurredType = typeName;
+				lastOccuredTypeName = typeName;
 			} else if(typeName != null && typeName.equals("X")){
 				// Build a new and unique custom type name
-				lastOccurredType = TypeLiteral.ANONYMOUS_PREFIX + processing.toString();
+				lastOccuredTypeName = TypeLiteral.ANONYMOUS_PREFIX + processing.toString();
 			} 
 			// In case no value is given, it must be the last known type
-			elementTypes.put(processing, TypeLiteral.from(lastOccurredType));
+			elementTypes.put(processing, TypeLiteral.from(lastOccuredTypeName));
 		}
 		// TODO Webservice erzeugt ggf. neuen Typ?
 		//TODO enum
 		// Do nothing for events and control flows as they have no proper type
 		
-		return lastOccurredType;
+		return TypeLiteral.from(lastOccuredTypeName);
 	}
 	
-	public void inferAttributes(ProcessFlowElement processing){
-		// Get (only) attached attributes
-		Collection<Attribute> params = processing.getParameters().stream()
-				.map(elem -> elem.getTargetElement())
-				.filter(elem -> elem instanceof Attribute)
-				.map(elem -> (Attribute) elem)
-				.collect(Collectors.toList());
-		
-		if(params.size() == 0) return; // Nothing to do
-		
-		if(processing instanceof ProcessElement){
-			TypeLiteral typeName = elementTypes.get(processing);
+	public void inferAttributes(ParameterSource source){
+		// Process all connected attributes
+		for(ParameterConnector connector : source.getParameters()){
+			// Check that target is a concrete Attribute
+			if(!(connector.getTargetElement() instanceof Attribute)) continue;
 			
-			// Only continue attribute inference if it is not a basic type 
-			if(typeName.isPrimitive()) return;
-
-			// Go through attributes
-			ArrayList<TypeLiteral> linkedAttributes = new ArrayList<TypeLiteral>(); 
-			for(Attribute param : params){ 
-				if(param.getMultiplicity().equals(Multiplicity.ONE)){
-					// Consider related attribute directly
-					if(param.getType() != null){
-						linkedAttributes.add(TypeLiteral.from(param.getType())); // TODO Overhead beim mergen auf neue Struktur?
-					} else {
-						System.out.println("Error: no datatype instance given for " + param);
-					}
-				} else {
-					// Create collection to add with nested type
-//					md2dot0data.Collection collection = Md2dot0dataFactory.eINSTANCE.createCollection();
-//					collection.getValues().add(TypeLiteral.from(param.getType()));
-//					collection.setMultiplicity(param.getMultiplicity());
-//					linkedAttributes.add(collection);
-				}
-				
-				// Nested attributes for complex types
-				if(param.getParameters().size() > 0){
-					inferAttributes(param.getParameters());
-				}
+			Attribute target = (Attribute) connector.getTargetElement();
+			
+			// Check that target has a non-anonymous type
+			if(!TypeLiteral.isAllowedTypeName(target.getType())) continue;
+			
+			// Process current connection
+			TypeStructureNode node = new TypeStructureNode(target.getDescription(), TypeLiteral.from(target.getType()), target.getMultiplicity(), source);
+			typeGraph.add(node);
+			
+			// Process attached attributes if current source is not a primitive type
+			if(!TypeLiteral.from(target.getType()).isPrimitive()){
+				inferAttributes(target);
 			}
-			
-			// Add attributes to type
-			if(linkedAttributes.size() > 0) {
-//				customTypes.get(typeName).getAttributes().addAll(linkedAttributes);
-			}
-			
-		} else if(processing instanceof Transform){
-			// TODO
 		}
-		// TODO Control flows 
-		// TODO Webservice?
-		
-		// TODO enum
-		// Do nothing for datasource and events as they have no attributes
-	}
-	
-	public void inferAttributes(Collection<ParameterConnector> connectors){
-		for(ParameterConnector connector : connectors){
-			inferAttributes(connector);
-		}
-	}
-	
-	public void inferAttributes(ParameterConnector connector){
-		if(connector.getTargetElement() == null || !(connector.getTargetElement() instanceof Attribute)) return;
-		Attribute attr = (Attribute) connector.getTargetElement();
-
-		// Only continue attribute inference if it is not a basic type 
-		if(TypeLiteral.getPrimitiveDataTypesAsString().contains(attr.getType())) return;
-
-		// Attribute's type itself already known? Else add
-		TypeLiteral type = TypeLiteral.from(attr.getType());
-				
-		// Go through attributes
-//		ArrayList<DataType> linkedAttributes = new ArrayList<DataType>(); 
-//		params = attr.getParameters();
-//		for(Attribute param : params){ 
-//			if(param.getMultiplicity().equals(Multiplicity.ONE)){
-//				// Consider related attribute directly
-//				if(param.getType() != null){
-//					linkedAttributes.add(getDataTypeFromString(param.getType())); // TODO Overhead beim mergen auf neue Struktur?
-//				} else {
-//					System.out.println("Error: no datatype instance given for " + param);
-//				}
-//			} else {
-//				// Create collection to add with nested type
-//				md2dot0data.Collection collection = Md2dot0dataFactory.eINSTANCE.createCollection();
-//				collection.getValues().add(getDataTypeFromString(param.getType()));
-//				collection.setMultiplicity(param.getMultiplicity());
-//				linkedAttributes.add(collection);
-//			}
-//			
-//			// Nested attributes for complex types
-//			if(param.getParameters().size() > 0){
-//				inferAttributes(param.getParameters());
-//			}
-//		}
-		
-		// Add attributes to type
-//		if(linkedAttributes.size() > 0) {
-//			customTypes.get(typeName).getAttributes().addAll(linkedAttributes);
-//		}
 	}
 	
 //	public DataType getDataTypeFromString(String type){ // TODO Overhead beim mergen auf neue Struktur?

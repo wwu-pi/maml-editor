@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import md2dot0.ParameterConnector;
+import md2dot0.ParameterSource;
 import md2dot0.ProcessFlowElement;
 import md2dot0.ProcessStartEvent;
 import md2dot0.UseCase;
@@ -74,6 +75,9 @@ public class ModelInferrer {
 				.collect(Collectors.toSet());
 		tanglingAttributes.removeAll(connectedAttributes);
 		
+		for(ParameterSource elem : tanglingAttributes){
+			inferenceDataTypeHelper.inferAttributes(elem);
+		}
 				
 		// ------------------------------------------------------------------
 		// Merge individual process elements within a use case
