@@ -1,7 +1,6 @@
 package de.wwu.md2dot0.inference;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -118,7 +117,7 @@ public class ModelInferenceDataTypeHelper {
 				lastOccurredType = typeName;
 			} else if(typeName != null && typeName.equals("X")){
 				// Build a new and unique custom type name
-				String newAnonType = "ANONYMOUS__" + processing.toString();
+				String newAnonType = TypeLiteral.ANONYMOUS_PREFIX + processing.toString();
 				AnonymousType type = Md2dot0dataFactory.eINSTANCE.createAnonymousType();
 				type.setName(newAnonType);
 				customTypes.put(newAnonType, type);
@@ -281,6 +280,4 @@ public class ModelInferenceDataTypeHelper {
 		
 		return Md2dot0dataFactory.eINSTANCE.createString(); // Default
 	}
-	
-
 }

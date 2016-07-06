@@ -1,6 +1,5 @@
 package de.wwu.md2dot0.inference;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -82,8 +81,7 @@ public class ModelInferrer {
 		inferenceMergeHelper.mergeProcessElements(useCase.getProcessFlowElements(), inferenceDataTypeHelper);
 		
 		// Output Helper
-		System.out.println("Custom data types:" + getAllCustomTypes().toString());
-		System.out.println("Anonymous types:" + getAllCustomTypes().toString());
+		System.out.println("Custom data types:" + TypeLiteral.getCustomDataTypesAsString().toString());
 	}
 
 	/**
@@ -96,9 +94,6 @@ public class ModelInferrer {
 		return inferenceDataTypeHelper.getType(obj);
 	}
 	
-	public Set<String> getAllCustomTypes(){
-		return inferenceDataTypeHelper.customTypes.keySet();
-	}
 	// TODO validate model (no tangling, ...)
 	// TODO build data model and validate data types
 }

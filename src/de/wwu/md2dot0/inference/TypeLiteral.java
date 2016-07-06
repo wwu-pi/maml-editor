@@ -9,6 +9,8 @@ import java.util.stream.Stream;
 import md2dot0data.DataType;
 
 public class TypeLiteral {
+	
+	public static final String ANONYMOUS_PREFIX = "__ANONYMOUS__";
 
 	static Map<String, TypeLiteral> customTypes = new HashMap<String, TypeLiteral>();  
 	static Map<String, TypeLiteral> primitives = new HashMap<String, TypeLiteral>();
@@ -101,6 +103,22 @@ public class TypeLiteral {
 	 */
 	public static Collection<String> getPrimitiveDataTypesAsString(){
 		return primitives.values().stream().map(elem -> elem.name).collect(Collectors.toList());
+	}
+	
+	/**
+	 * String representation of custom data types.
+	 * @return
+	 */
+	public static Collection<String> getCustomDataTypesAsString(){
+		return customTypes.values().stream().map(elem -> elem.name).collect(Collectors.toList());
+	}
+	
+	/**
+	 * String representation of all data types.
+	 * @return
+	 */
+	public static Collection<String> getAllDataTypesAsString(){
+		return values().stream().map(elem -> elem.name).collect(Collectors.toList());
 	}
 	
 	public static DataType getDataType(){

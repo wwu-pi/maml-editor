@@ -17,7 +17,7 @@ import md2dot0.UseCase;
 import md2dot0gui.Attribute;
 
 public class ModelInferenceService {
-	// Inference component
+	// Central inference component
 	ModelInferrer inferrer = new ModelInferrer();
 	
 	/**
@@ -60,26 +60,10 @@ public class ModelInferenceService {
 		inferrer.startInferenceProcess((UseCase) useCase.get());
 	}
 	
-//	public String getDataTypeRepresentation(EObject elem){
-//		if(!(elem instanceof DataType)){
-//			return "";
-//		}
-//		
-//		if(elem instanceof PrimitiveType) {
-//			return elem.getClass().getSimpleName();
-//		} else if(elem instanceof CustomType){
-//			return ((CustomType) elem).getName();
-//		} else if(elem instanceof Collection && !((Collection) elem).getValues().isEmpty()){
-//			return getDataTypeRepresentation(((Collection) elem).getValues().get(0));
-//		}
-//		
-//		return "";
-//	}
-	
 	public String[] getDataTypeList(){
 		ArrayList<String> list = new ArrayList<String>();
 		list.addAll(TypeLiteral.getPrimitiveDataTypesAsString());
-		list.addAll(inferrer.getAllCustomTypes()); //TODO typeliteral functions
+		list.addAll(TypeLiteral.getCustomDataTypesAsString());
 		return list.toArray(new String[list.size()]);
 	}
 	
@@ -104,12 +88,14 @@ public class ModelInferenceService {
 		}
 		Object[] result = dialog.getResult();
 		
-		if(result.length > 0) {
+		// Value given and does not start with invalid character?
+		if(result.length > 0 && !((String) result[0]).startsWith("__")){
 			System.out.println(result[0]);
 			return (String) result[0];
 		}
 		
-		// Unknown error?
-		return null;
+		// Return previous value
+		if(object instanceof Attribute) return ((Attribute) object).getType();
+		return null; // Unknown error
 	}
 }
