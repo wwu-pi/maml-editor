@@ -201,7 +201,7 @@ public class ModelInferenceDataTypeHelper {
 		Attribute attr = (Attribute) connector.getTargetElement();
 
 		// Only continue attribute inference if it is not a basic type 
-		if(getPrimitiveDataTypes().contains(attr.getType())) return;
+		if(TypeLiteral.getPrimitiveDataTypesAsString().contains(attr.getType())) return;
 
 		// Attribute's type itself already known? Else add
 		CustomType type;
@@ -239,6 +239,8 @@ public class ModelInferenceDataTypeHelper {
 //		if(linkedAttributes.size() > 0) {
 //			customTypes.get(typeName).getAttributes().addAll(linkedAttributes);
 //		}
+		
+		TypeLiteral.from("STRING");
 	}
 	
 	public DataType getDataTypeFromString(String type){ // TODO Overhead beim mergen auf neue Struktur?
@@ -280,7 +282,5 @@ public class ModelInferenceDataTypeHelper {
 		return Md2dot0dataFactory.eINSTANCE.createString(); // Default
 	}
 	
-	public Collection<String> getPrimitiveDataTypes(){
-		return Arrays.asList("String", "Boolean", "PhoneNumber", "Url", "Email", "File", "Image", "Location", "Integer", "Float", "Date", "Time", "DateTime");
-	}
+
 }

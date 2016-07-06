@@ -11,6 +11,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 import de.wwu.md2dot0.inference.ModelInferrer;
+import de.wwu.md2dot0.inference.TypeLiteral;
 import md2dot0.ProcessFlowElement;
 import md2dot0.UseCase;
 import md2dot0gui.Attribute;
@@ -77,8 +78,8 @@ public class ModelInferenceService {
 	
 	public String[] getDataTypeList(){
 		ArrayList<String> list = new ArrayList<String>();
-		list.addAll(inferrer.getAllPrimitiveTypes());
-		list.addAll(inferrer.getAllCustomTypes());
+		list.addAll(TypeLiteral.getPrimitiveDataTypesAsString());
+		list.addAll(inferrer.getAllCustomTypes()); //TODO typeliteral functions
 		return list.toArray(new String[list.size()]);
 	}
 	

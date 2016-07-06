@@ -101,8 +101,4 @@ public class ModelInferrer {
 	}
 	// TODO validate model (no tangling, ...)
 	// TODO build data model and validate data types
-
-	public Collection<String> getAllPrimitiveTypes() {
-		return inferenceDataTypeHelper.getPrimitiveDataTypes();
-	}
 }
