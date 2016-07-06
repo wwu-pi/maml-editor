@@ -11,6 +11,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 import de.wwu.md2dot0.inference.ModelInferrer;
+import de.wwu.md2dot0.inference.ModelInferrerManager;
 import de.wwu.md2dot0.inference.TypeLiteral;
 import md2dot0.ProcessFlowElement;
 import md2dot0.UseCase;
@@ -18,7 +19,7 @@ import md2dot0gui.Attribute;
 
 public class ModelInferenceService {
 	// Central inference component
-	ModelInferrer inferrer = new ModelInferrer();
+	ModelInferrer inferrer;
 	
 	/**
 	 * Method called by Sirius to get type for specific process element 
@@ -28,6 +29,7 @@ public class ModelInferenceService {
 	public String getDataTypeRepresentation(EObject obj){
 		if(!(obj instanceof ProcessFlowElement)) return "error";
 		
+		inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
 		inferrer.startInferenceProcess((UseCase) obj.eContainer()); // Container is the use case itself
 		
 		String type = inferrer.getType((ProcessFlowElement) obj);
@@ -57,21 +59,17 @@ public class ModelInferenceService {
 			return;
 		}
 		
+		inferrer = ModelInferrerManager.getInstance().getModelInferrer(useCase.get());
 		inferrer.startInferenceProcess((UseCase) useCase.get());
 	}
 	
 	public String[] getDataTypeList(){
+		// TODO empty list if no inference process first??
 		ArrayList<String> list = new ArrayList<String>();
 		list.addAll(TypeLiteral.getPrimitiveDataTypesAsString());
 		list.addAll(TypeLiteral.getCustomDataTypesAsString());
 		return list.toArray(new String[list.size()]);
 	}
-	
-//	public EObject instantiateEcoreStringWrapper(String string){
-//		md2dot0data.String wrapper = Md2dot0dataFactory.eINSTANCE.createString();
-//		wrapper.setValue(string);
-//		return wrapper;
-//	}
 	
 	public String openDataTypeSelectionWizard(EObject object){
 		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
