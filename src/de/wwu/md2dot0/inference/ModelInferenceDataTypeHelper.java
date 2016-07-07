@@ -138,6 +138,14 @@ public class ModelInferenceDataTypeHelper {
 		}
 	}
 	
+	/**
+	 * Remove all known data type mappings and reset attribute graph structure.
+	 */
+	public void clearDataModel(){
+		this.elementTypes.clear();
+		this.typeGraph.clear();
+	}
+	
 //	public DataType getDataTypeFromString(String type){ // TODO Overhead beim mergen auf neue Struktur?
 //		if(anonymousTypes.containsKey(type)){
 //			AnonymousType instance =  Md2dot0dataFactory.eINSTANCE.createAnonymousType();

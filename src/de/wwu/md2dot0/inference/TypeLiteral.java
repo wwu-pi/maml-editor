@@ -155,4 +155,11 @@ public class TypeLiteral {
 				.filter(elem -> elem.startsWith(ANONYMOUS_PREFIX))
 				.collect(Collectors.toList());
 	}
+	
+	/**
+	 * Remove all complex types to prepare for fresh inference run.
+	 */
+	public static void clearTypeList(){
+		complexTypes.clear();
+	}
 }

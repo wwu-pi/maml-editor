@@ -33,6 +33,12 @@ public class ModelInferrer {
 		Set<ProcessFlowElement> toProcess = new HashSet<ProcessFlowElement>(useCase.getProcessFlowElements());
 		
 		// ------------------------------------------------------------------
+		// Reset type list and attribute structure
+		// ------------------------------------------------------------------
+		TypeLiteral.clearTypeList();
+		inferenceDataTypeHelper.clearDataModel();
+		
+		// ------------------------------------------------------------------
 		// Select main process (using start event) and infer for following elements
 		// ------------------------------------------------------------------
 		Optional<ProcessStartEvent> start = toProcess.stream()
