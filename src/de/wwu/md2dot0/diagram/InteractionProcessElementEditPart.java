@@ -19,8 +19,12 @@ import org.eclipse.sirius.diagram.ui.tools.api.figure.AirStyleDefaultSizeNodeFig
 import org.eclipse.sirius.diagram.ui.tools.api.policies.LayoutEditPolicy;
 import org.eclipse.sirius.ui.tools.api.color.VisualBindingManager;
 
+import de.wwu.md2dot0.design.ModelInferenceService;
 import de.wwu.md2dot0.design.TestService;
+import de.wwu.md2dot0.inference.ModelInferrer;
+import de.wwu.md2dot0.inference.ModelInferrerManager;
 import md2dot0.ProcessElement;
+import md2dot0.UseCase;
 
 @SuppressWarnings("restriction")
 public class InteractionProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPart implements IStyleEditPart {
@@ -47,10 +51,12 @@ public class InteractionProcessElementEditPart extends AbstractNotSelectableShap
 
 				// Update process element subtype
 				getPrimaryShape().setProcessElementType(TestService.getProcessElementType(modelElement));
-
+				
 				// Update data type
-				String dataTypeName = modelElement.getDataType() != null ? modelElement.getDataType().toString() : "X";
-				getPrimaryShape().setProcessElementDataType(dataTypeName); // Todo infer from service class?
+				//ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) modelElement.eContainer());
+				//String dataTypeName = inferrer.getType(modelElement);
+				String dataTypeName = new ModelInferenceService().getDataTypeRepresentation(modelElement);
+				getPrimaryShape().setProcessElementDataType(dataTypeName);
 			}
 		}
 

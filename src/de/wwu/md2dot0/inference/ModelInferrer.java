@@ -102,7 +102,15 @@ public class ModelInferrer {
 	 */
 	public String getType(ProcessFlowElement obj) {
 		// Pass to data type helper
-		return inferenceDataTypeHelper.getType(obj).toString();
+		TypeLiteral type = inferenceDataTypeHelper.getType(obj);
+		
+		// If not found try an inference run
+//		if(type == null){
+//			startInferenceProcess((UseCase) obj.eContainer());
+//			type = inferenceDataTypeHelper.getType(obj);
+//		}
+		
+		return type != null ? type.toString() : null;
 	}
 	
 	// TODO validate model (no tangling, ...)
