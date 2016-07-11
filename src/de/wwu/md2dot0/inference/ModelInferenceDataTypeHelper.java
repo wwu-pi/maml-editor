@@ -78,6 +78,8 @@ public class ModelInferenceDataTypeHelper {
 	public TypeLiteral inferSingleItem(ProcessFlowElement processing, TypeLiteral lastOccurredType){
 		String lastOccuredTypeName = lastOccurredType != null ? lastOccurredType.identifier : "";
 		
+		//processing.setChanged(!processing.isChanged());
+		
 		if(processing instanceof DataSource){
 			// Data Sources provide a type themselves (possibly a new one)
 			String typeName = ((DataSource) processing).getTypeName();

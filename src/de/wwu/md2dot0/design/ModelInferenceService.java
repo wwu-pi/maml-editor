@@ -8,7 +8,10 @@ import java.util.Optional;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.util.TransactionUtil;
@@ -50,6 +53,40 @@ public class ModelInferenceService {
 	// Central inference component
 	ModelInferrer inferrer;
 	
+	public String updateDataType(EObject obj, String newType){
+		System.out.println("TEST" + getDataTypeRepresentation(obj));
+		
+		System.out.println(getDataTypeRepresentation(obj));
+		
+		Session session = SessionManager.INSTANCE.getSession(obj);
+		TransactionalEditingDomain domain = session.getTransactionalEditingDomain();//TransactionUtil.getEditingDomain(obj);//
+		
+		Collection<ProcessFlowElement> pfes = ((UseCase) obj.eContainer()).getProcessFlowElements();
+		for(ProcessFlowElement pfe : pfes){
+			pfe.setChanged(!pfe.isChanged());
+			EList<EStructuralFeature> fs = pfe.eClass().getEAllStructuralFeatures();
+			Command cmd = new SetCommand(domain, pfe, fs.get(0), getDataTypeRepresentation(pfe));
+			domain.getCommandStack().execute(cmd);
+		}
+		
+//		ProcessFlowElement pfeNext = ((ProcessFlowElement) obj).getNextElements().get(0).getTargetProcessFlowElement();
+//		pfeNext.setChanged(!pfeNext.isChanged());
+//		EList<EStructuralFeature> fs = pfeNext.eClass().getEAllStructuralFeatures();
+//		Command cmd = new SetCommand(domain, pfeNext, fs.get(0), getDataTypeRepresentation(pfeNext));
+		
+		
+//		for(DView view : session.getOwnedViews()){
+//			Command cmd = new RefreshRepresentationsCommand(domain, null, view.getOwnedRepresentations());//domain, null, DialectManager.INSTANCE.getAllRepresentations(session));
+//			if (cmd.canExecute()) {
+//				domain.getCommandStack().execute(cmd);
+//			} else {
+//				System.out.println("Nope");
+//			}
+//		}
+		
+		return newType;
+	}
+	
 	/**
 	 * Method called by Sirius to get type for specific process element 
 	 * @param obj
@@ -65,15 +102,15 @@ public class ModelInferenceService {
 		Session session = SessionManager.INSTANCE.getSession(obj);
 		TransactionalEditingDomain domain = session.getTransactionalEditingDomain();//TransactionUtil.getEditingDomain(obj);//
 		
-		CommandStack stack = domain.getCommandStack();
-		for(DView view : session.getOwnedViews()){
-			Command cmd = new RefreshRepresentationsCommand(domain, null, view.getOwnedRepresentations());//domain, null, DialectManager.INSTANCE.getAllRepresentations(session));
-			if (cmd.canExecute()) {
-				domain.getCommandStack().execute(cmd);
-			} else {
-				System.out.println("Nope");
-			}
-		}
+//		CommandStack stack = domain.getCommandStack();
+//		for(DView view : session.getOwnedViews()){
+//			Command cmd = new RefreshRepresentationsCommand(domain, null, view.getOwnedRepresentations());//domain, null, DialectManager.INSTANCE.getAllRepresentations(session));
+//			if (cmd.canExecute()) {
+//				domain.getCommandStack().execute(cmd);
+//			} else {
+//				System.out.println("Nope");
+//			}
+//		}
 		
 //		Collection<DRepresentation> c = DialectManager.INSTANCE.getAllRepresentations(session);
 //		

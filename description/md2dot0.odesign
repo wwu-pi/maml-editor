@@ -34,7 +34,7 @@
         </ownedRules>
       </validationSet>
       <defaultLayer name="ProcessLayer" label="Process Layer">
-        <nodeMappings name="InteractionProcessElement" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.0/@ownedTools[name='directEditProcessElement']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::InteractionProcessElement)" domainClass="md2dot0.InteractionProcessElement" dropDescriptions="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@toolSections.0/@ownedTools[name='ApplyRole']">
+        <nodeMappings name="InteractionProcessElement" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.0/@ownedTools[name='directEditProcessElement']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::InteractionProcessElement)" semanticElements="aql:self.eContainer().processFlowElements" synchronizationLock="true" domainClass="md2dot0.InteractionProcessElement" dropDescriptions="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@toolSections.0/@ownedTools[name='ApplyRole']">
           <borderedNodeMappings name="ProcessElementRole" deletionDescription="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.0/@ownedTools[name='deleteRole']" semanticCandidatesExpression="aql:self.roles" domainClass="md2dot0.Role">
             <style xsi:type="style:WorkspaceImageDescription" showIcon="false" labelExpression="" hideLabelByDefault="true" sizeComputationExpression="2" workspacePath="/de.wwu.md2dot0.design/icons/man.svg">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
@@ -58,7 +58,7 @@
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           </style>
         </nodeMappings>
-        <nodeMappings name="DataSource" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.1/@ownedTools[name='directEditDataSource']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::DataSource)" domainClass="md2dot0.DataSource">
+        <nodeMappings name="DataSource" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@toolSections.1/@ownedTools[name='directEditDataSource']" semanticCandidatesExpression="aql:self.processFlowElements->filter(md2dot0::DataSource)" synchronizationLock="true" domainClass="md2dot0.DataSource">
           <style xsi:type="style:WorkspaceImageDescription" showIcon="false" labelExpression="service:getDataSourceLabelText()" sizeComputationExpression="13" labelPosition="node" resizeKind="NSEW" workspacePath="/de.wwu.md2dot0.design/icons/datasource.svg">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
@@ -296,7 +296,9 @@
           <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditDataSource" elementsToSelect="service:startInferenceProcess()" inputLabelExpression="aql:self.typeName">
             <mask mask="{0}"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool:SetValue" featureName="typeName" valueExpression="var:0"/>
+              <firstModelOperations xsi:type="tool:SetValue" featureName="typeName" valueExpression="var:0">
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="service:updateDataType(0)"/>
+              </firstModelOperations>
             </initialOperation>
           </ownedTools>
           <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createLocalDataSource" label="Add local datasource" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='DataSource']" iconPath="/de.wwu.md2dot0.design/icons/datasource_L.png">
