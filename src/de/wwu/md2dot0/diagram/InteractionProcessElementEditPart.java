@@ -9,41 +9,27 @@ import org.eclipse.gef.Request;
 import org.eclipse.gef.editpolicies.ResizableEditPolicy;
 import org.eclipse.gmf.runtime.diagram.core.listener.DiagramEventBroker;
 import org.eclipse.gmf.runtime.diagram.core.listener.NotificationListener;
-import org.eclipse.gmf.runtime.diagram.core.listener.NotificationPreCommitListener;
-import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.sirius.business.api.dialect.command.RefreshRepresentationsCommand;
-import org.eclipse.sirius.business.api.session.Session;
-import org.eclipse.sirius.business.api.session.SessionManager;
 import org.eclipse.sirius.diagram.CustomStyle;
-import org.eclipse.sirius.diagram.DDiagramElement;
 import org.eclipse.sirius.diagram.DNode;
 import org.eclipse.sirius.diagram.Square;
 import org.eclipse.sirius.diagram.business.internal.metamodel.spec.DNodeSpec;
 import org.eclipse.sirius.diagram.ui.edit.api.part.AbstractNotSelectableShapeNodeEditPart;
-import org.eclipse.sirius.diagram.ui.edit.api.part.IDiagramElementEditPart;
 import org.eclipse.sirius.diagram.ui.edit.api.part.IStyleEditPart;
 import org.eclipse.sirius.diagram.ui.internal.edit.policies.FixedLayoutEditPolicy;
 import org.eclipse.sirius.diagram.ui.tools.api.figure.AirStyleDefaultSizeNodeFigure;
 import org.eclipse.sirius.diagram.ui.tools.api.policies.LayoutEditPolicy;
 import org.eclipse.sirius.ui.tools.api.color.VisualBindingManager;
-import org.eclipse.sirius.viewpoint.DView;
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.command.SetCommand;
-import org.eclipse.emf.transaction.TransactionalEditingDomain;
-
 import de.wwu.md2dot0.design.ModelInferenceService;
 import de.wwu.md2dot0.design.TestService;
-import de.wwu.md2dot0.inference.ModelInferrer;
-import de.wwu.md2dot0.inference.ModelInferrerManager;
 import md2dot0.ProcessElement;
-import md2dot0.UseCase;
 
 @SuppressWarnings("restriction")
-public class InteractionProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPart implements IStyleEditPart, NotificationListener {
+public class InteractionProcessElementEditPart extends AbstractNotSelectableShapeNodeEditPart
+		implements IStyleEditPart, NotificationListener {
 
 	@Override
 	public DragTracker getDragTracker(Request request) {
@@ -57,7 +43,7 @@ public class InteractionProcessElementEditPart extends AbstractNotSelectableShap
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-		
+
 		CustomStyle customStyle = (CustomStyle) this.resolveSemanticElement();
 		if (getPrimaryShape() != null && customStyle.eContainer() instanceof DNode) {
 			DNode node = (DNode) customStyle.eContainer();
@@ -67,28 +53,12 @@ public class InteractionProcessElementEditPart extends AbstractNotSelectableShap
 
 				// Update process element subtype
 				getPrimaryShape().setProcessElementType(TestService.getProcessElementType(modelElement));
-				
+
 				// Update data type
-				//ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) modelElement.eContainer());
-				//String dataTypeName = inferrer.getType(modelElement);
 				String dataTypeName = new ModelInferenceService().getDataTypeRepresentation(modelElement);
 				getPrimaryShape().setProcessElementDataType(dataTypeName);
 			}
 		}
-
-		// GraphicalEditPart part = ((GraphicalEditPart) getParent());
-		//
-		// EObject dde = this.resolveSemanticElement();
-		// if (dde instanceof Square) {
-		// Square square = (Square) dde;
-		// int borderSize = 0;
-		// if (square.getBorderSize() != null) {
-		// borderSize = square.getBorderSize().intValue();
-		// }
-		// DiagramNodeEditPartOperation.refreshFigure(this);
-		// DiagramElementEditPartOperation.refreshLabelAlignment(((GraphicalEditPart)
-		// getParent()).getContentPane(), square);
-		// }
 	}
 
 	/**
@@ -159,7 +129,8 @@ public class InteractionProcessElementEditPart extends AbstractNotSelectableShap
 	 * @not-generated
 	 */
 	protected IFigure createNodeShape() {
-		InteractionProcessElementFigure arrowShape = new InteractionProcessElementFigure((CustomStyle) this.resolveSemanticElement());
+		InteractionProcessElementFigure arrowShape = new InteractionProcessElementFigure(
+				(CustomStyle) this.resolveSemanticElement());
 
 		// EditPart parent = this.getParent();
 		// if (parent instanceof IDiagramBorderNodeEditPart) {
@@ -241,56 +212,26 @@ public class InteractionProcessElementEditPart extends AbstractNotSelectableShap
 	protected Class<?> getMetamodelType() {
 		return ProcessElement.class;
 	}
-	
+
+	/**
+	 * Manual registration of a notification listener in order to update the representation after model inference.
+	 */
 	@Override
-	public void activate(){
+	public void activate() {
 		super.activate();
-		InteractionProcessElementEditPart self = this;
-		TransactionalEditingDomain domain = this.getEditingDomain();
-		DiagramEventBroker broker = DiagramEventBroker.getInstance(domain);
-		EObject elem =  ((DNodeSpec) this.resolveSemanticElement().eContainer()).getTarget();
-		broker.addNotificationListener(elem, this); 
-//		new NotificationPreCommitListener() {
-//
-//            @SuppressWarnings("unchecked")
-//			@Override
-//            public Command transactionAboutToCommit(final Notification msg) {
-//            	System.out.println("call");
-//                return new RefreshRepresentationsCommand(domain, null, self.getDiagramView().getChildren());
-//            }
-//		});
+		
+		DiagramEventBroker broker = DiagramEventBroker.getInstance(this.getEditingDomain());
+		EObject elem = ((DNodeSpec) this.resolveSemanticElement().eContainer()).getTarget();
+		broker.addNotificationListener(elem, this);
 	}
-	
-	private DDiagramElement getDDiagramElement(IGraphicalEditPart graphicalEditPart) {
-        DDiagramElement dDiagramElement = null;
-        if (graphicalEditPart instanceof IDiagramElementEditPart) {
-            dDiagramElement = ((IDiagramElementEditPart) graphicalEditPart).resolveDiagramElement();
-        } else if (graphicalEditPart.getParent() instanceof IDiagramElementEditPart) {
-            dDiagramElement = ((IDiagramElementEditPart) graphicalEditPart.getParent()).resolveDiagramElement();
-        }
-        return dDiagramElement;
-}
-	
+
+	/** 
+	 * Refresh itself when update notification is called.
+	 */
 	@Override
 	public void notifyChanged(Notification notification) {
-		System.out.println(notification);
-		System.out.println("TESTs");
-		
-//		Session session = SessionManager.INSTANCE.getSession((EObject) notification.getNotifier());
-//		TransactionalEditingDomain domain = this.getEditingDomain();
-//		
-//		for(DView view : session.getOwnedViews()){
-//		//	new SetCommand(domain, view, null, model);
-//			
-//			Command cmd = new RefreshRepresentationsCommand(domain, null, view.getOwnedRepresentations());//domain, null, DialectManager.INSTANCE.getAllRepresentations(session));
-//			if (cmd.canExecute()) {
-//				domain.getCommandStack().execute(cmd);
-////			} else {
-////				System.out.println("Nope");
-//			}
-//		}
+		System.out.println("Update visuals for " + notification.getNotifier().toString());
 		refreshVisuals();
 	}
-	
-	
+
 }
