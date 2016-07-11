@@ -8,12 +8,12 @@ import md2dot0data.Multiplicity;
 public class TypeStructureNode {
 
 	protected String attributeName;
-	protected TypeLiteral type;
+	protected DynamicTypeLiteral type;
 	protected Multiplicity multiplicity;
 	protected ParameterSource source;
 	protected ArrayList<TypeStructureNode> children = new ArrayList<TypeStructureNode>();
 	
-	public TypeStructureNode(String attributeName, TypeLiteral type, Multiplicity multiplicity, ParameterSource source) {
+	public TypeStructureNode(String attributeName, DynamicTypeLiteral type, Multiplicity multiplicity, ParameterSource source) {
 		this.attributeName = attributeName;
 		this.type = type;
 		this.multiplicity = multiplicity;
@@ -28,11 +28,11 @@ public class TypeStructureNode {
 		this.attributeName = attributeName;
 	}
 
-	public TypeLiteral getType() {
+	public DynamicTypeLiteral getType() {
 		return type;
 	}
 
-	public void setType(TypeLiteral type) {
+	public void setType(DynamicTypeLiteral type) {
 		this.type = type;
 	}
 

@@ -12,7 +12,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import de.wwu.md2dot0.inference.ModelInferrer;
 import de.wwu.md2dot0.inference.ModelInferrerManager;
-import de.wwu.md2dot0.inference.TypeLiteral;
+import de.wwu.md2dot0.inference.DynamicTypeLiteral;
 import md2dot0.ProcessFlowElement;
 import md2dot0.UseCase;
 import md2dot0gui.Attribute;
@@ -26,12 +26,20 @@ public class ModelInferenceService {
 	 * @param obj
 	 */
 	public EObject updateDataType(EObject obj){
-		getDataTypeRepresentation(obj);
+		if(!(obj.eContainer() instanceof UseCase)) return null;
+		
+		UseCase useCase = (UseCase) obj.eContainer();
+		inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
+		inferrer.startInferenceProcess(useCase); // Container is the use case itself
+		
+		
+		//getDataTypeRepresentation(obj);
 		
 		// TODO better logic: Diff for changed elements only
 		Collection<ProcessFlowElement> pfes = ((UseCase) obj.eContainer()).getProcessFlowElements();
 		for(ProcessFlowElement pfe : pfes){
-			pfe.setChanged(!pfe.isChanged()); // Artificial update that triggers redraw
+		//	pfe.setChanged(!pfe.isChanged()); // Artificial update that triggers redraw
+			pfe.setDataType(inferrer.getType(pfe));
 		}
 
 		return obj;
@@ -50,10 +58,10 @@ public class ModelInferenceService {
 		inferrer.startInferenceProcess(useCase); // Container is the use case itself
 		
 		if(obj instanceof ProcessFlowElement){
-			String type = inferrer.getType((ProcessFlowElement) obj);
-			return type != null ? type : "??";
+			DynamicTypeLiteral type = inferrer.getType((ProcessFlowElement) obj);
+			return type != null ? type.toString() : "??";
 		} else if(obj instanceof Attribute){
-			TypeLiteral type = TypeLiteral.from(((Attribute) obj).getType());
+			DynamicTypeLiteral type = DynamicTypeLiteral.from(((Attribute) obj).getType());
 			return type != null ? type.toString() : "??";
 		} 
 		return "??";
@@ -91,8 +99,8 @@ public class ModelInferenceService {
 		startInferenceProcess(object);
 		
 		ArrayList<String> list = new ArrayList<String>();
-		list.addAll(TypeLiteral.getPrimitiveDataTypesAsString());
-		list.addAll(TypeLiteral.getCustomDataTypesAsString());
+		list.addAll(DynamicTypeLiteral.getPrimitiveDataTypesAsString());
+		list.addAll(DynamicTypeLiteral.getCustomDataTypesAsString());
 		return list.toArray(new String[list.size()]);
 	}
 	

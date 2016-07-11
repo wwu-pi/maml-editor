@@ -17,7 +17,7 @@ import md2dot0gui.Attribute;
 
 public class ModelInferenceDataTypeHelper {
 	
-	protected Map<ProcessFlowElement, TypeLiteral> elementTypes = new HashMap<ProcessFlowElement, TypeLiteral>(); // TODO bidirectional map?
+	protected Map<ProcessFlowElement, DynamicTypeLiteral> elementTypes = new HashMap<ProcessFlowElement, DynamicTypeLiteral>(); // TODO bidirectional map?
 	protected ArrayList<TypeStructureNode> typeGraph = new ArrayList<TypeStructureNode>();
 
 	/**
@@ -25,7 +25,7 @@ public class ModelInferenceDataTypeHelper {
 	 * @param obj
 	 * @return
 	 */
-	public TypeLiteral getType(ProcessFlowElement obj) {
+	public DynamicTypeLiteral getType(ProcessFlowElement obj) {
 		return elementTypes.get(obj);
 	}
 	
@@ -36,7 +36,7 @@ public class ModelInferenceDataTypeHelper {
 	 */
 	public Set<ProcessFlowElement> inferProcessFlowChain(ProcessFlowElement startElement) {
 		Set<ProcessFlowElement> processed = new HashSet<ProcessFlowElement>();
-		TypeLiteral lastOccurredType = null;
+		DynamicTypeLiteral lastOccurredType = null;
 		
 		// Recursively iterate through chain (control flow elements may have multiple followers)
 		inferProcessFlowChainRecursive(startElement, lastOccurredType, processed);
@@ -50,7 +50,7 @@ public class ModelInferenceDataTypeHelper {
 	 * @param lastOccurredType
 	 * @param processed
 	 */
-	public void inferProcessFlowChainRecursive(ProcessFlowElement currentElement, TypeLiteral lastOccurredType, Set<ProcessFlowElement> processed) {
+	public void inferProcessFlowChainRecursive(ProcessFlowElement currentElement, DynamicTypeLiteral lastOccurredType, Set<ProcessFlowElement> processed) {
 		// Skip if currentElement was already processed
 		if(currentElement == null || processed.contains(currentElement)){
 			return;
@@ -75,10 +75,8 @@ public class ModelInferenceDataTypeHelper {
 	 * @param lastOccurredType
 	 * @return
 	 */
-	public TypeLiteral inferSingleItem(ProcessFlowElement processing, TypeLiteral lastOccurredType){
-		String lastOccuredTypeName = lastOccurredType != null ? lastOccurredType.identifier : "";
-		
-		//processing.setChanged(!processing.isChanged());
+	public DynamicTypeLiteral inferSingleItem(ProcessFlowElement processing, DynamicTypeLiteral lastOccurredType){
+		String lastOccuredTypeName = lastOccurredType != null ? lastOccurredType.getIdentifier() : "";
 		
 		if(processing instanceof DataSource){
 			// Data Sources provide a type themselves (possibly a new one)
@@ -87,7 +85,7 @@ public class ModelInferenceDataTypeHelper {
 				lastOccuredTypeName = typeName;
 			}
 			// In case no value is given, it must be the last known type
-			elementTypes.put(processing, TypeLiteral.from(lastOccuredTypeName));
+			elementTypes.put(processing, DynamicTypeLiteral.from(lastOccuredTypeName));
 			
 		} else if(processing instanceof Transform){
 			// Special case because type changes
@@ -97,25 +95,25 @@ public class ModelInferenceDataTypeHelper {
 				lastOccuredTypeName = typeName;
 			}
 			// In case no type is given, we cannot infer anything
-			elementTypes.put(processing, TypeLiteral.from(lastOccuredTypeName));
+			elementTypes.put(processing, DynamicTypeLiteral.from(lastOccuredTypeName));
 			
 		} else if(processing instanceof ProcessElement){
 			// If a type is explicitly set (anonymous or not) then use it, else use previous known type
-			String typeName = ((ProcessElement) processing).getDataType() != null ? ((CustomType) ((ProcessElement) processing).getDataType()).getName() : null;
+			String typeName = ((ProcessElement) processing).getDataType() != null && (processing.getDataType() instanceof CustomType) ? ((CustomType) ((ProcessElement) processing).getDataType()).getName() : null;
 			if(typeName != null && !typeName.equals("X")){
 				lastOccuredTypeName = typeName;
 			} else if(typeName != null && typeName.equals("X")){
 				// Build a new and unique custom type name
-				lastOccuredTypeName = TypeLiteral.ANONYMOUS_PREFIX + processing.toString();
+				lastOccuredTypeName = DynamicTypeLiteral.ANONYMOUS_PREFIX + processing.toString();
 			} 
 			// In case no value is given, it must be the last known type
-			elementTypes.put(processing, TypeLiteral.from(lastOccuredTypeName));
+			elementTypes.put(processing, DynamicTypeLiteral.from(lastOccuredTypeName));
 		}
 		// TODO Webservice erzeugt ggf. neuen Typ?
 		//TODO enum
 		// Do nothing for events and control flows as they have no proper type
 		
-		return TypeLiteral.from(lastOccuredTypeName);
+		return DynamicTypeLiteral.from(lastOccuredTypeName);
 	}
 	
 	public void inferAttributes(ParameterSource source){
@@ -127,14 +125,14 @@ public class ModelInferenceDataTypeHelper {
 			Attribute target = (Attribute) connector.getTargetElement();
 			
 			// Check that target has a non-anonymous type
-			if(!TypeLiteral.isAllowedTypeName(target.getType())) continue;
+			if(!DynamicTypeLiteral.isAllowedTypeName(target.getType())) continue;
 			
 			// Process current connection
-			TypeStructureNode node = new TypeStructureNode(target.getDescription(), TypeLiteral.from(target.getType()), target.getMultiplicity(), source);
+			TypeStructureNode node = new TypeStructureNode(target.getDescription(), DynamicTypeLiteral.from(target.getType()), target.getMultiplicity(), source);
 			typeGraph.add(node);
 			
 			// Process attached attributes if current source is not a primitive type
-			if(!TypeLiteral.from(target.getType()).isPrimitive()){
+			if(!DynamicTypeLiteral.from(target.getType()).isPrimitive()){
 				inferAttributes(target);
 			}
 		}

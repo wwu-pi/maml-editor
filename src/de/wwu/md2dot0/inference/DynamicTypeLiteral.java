@@ -6,20 +6,30 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class TypeLiteral {
+import md2dot0.UseCase;
+import md2dot0data.impl.DataTypeLiteralImpl;
+
+public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 	
 	public static final String ANONYMOUS_PREFIX = "__ANONYMOUS__";
 	private static final String ANONYMOUS_TYPE_UI = "X";
 
-	static Map<String, TypeLiteral> complexTypes = new HashMap<String, TypeLiteral>();  
-	static Map<String, TypeLiteral> primitives = new HashMap<String, TypeLiteral>();
+	static UseCase container;
+	static Map<String, DynamicTypeLiteral> complexTypes = new HashMap<String, DynamicTypeLiteral>();  
+	static Map<String, DynamicTypeLiteral> primitives = new HashMap<String, DynamicTypeLiteral>();
 	
-	protected String identifier;
-	protected String name;
-	
-	public TypeLiteral(String identifier, String name) {
+	public DynamicTypeLiteral(String identifier, String name) {
 		this.identifier = identifier;
 		this.name = name;
+		if(container != null){
+			container.getDatatypes().add(this);
+		} else {
+			System.out.println("no container exists");
+		}
+	}
+	
+	public static void setDataTypeContainer(UseCase useCase){
+		container = useCase;
 	}
 	
 	@Override
@@ -33,19 +43,19 @@ public class TypeLiteral {
 	private static void initPrimitives() {
 		// Initialize primitives
 		if(primitives.size() == 0){
-			primitives.put("STRING", new TypeLiteral("STRING", "String"));
-			primitives.put("BOOLEAN", new TypeLiteral("BOOLEAN", "Boolean"));
-			primitives.put("PHONENUMBER", new TypeLiteral("PHONENUMBER", "PhoneNumber"));
-			primitives.put("URL", new TypeLiteral("URL", "Url"));
-			primitives.put("EMAIL", new TypeLiteral("EMAIL", "Email"));
-			primitives.put("FILE", new TypeLiteral("FILE", "File"));
-			primitives.put("IMAGE", new TypeLiteral("IMAGE", "Image"));
-			primitives.put("LOCATION", new TypeLiteral("LOCATION", "Location"));
-			primitives.put("INTEGER", new TypeLiteral("INTEGER", "Integer"));
-			primitives.put("FLOAT", new TypeLiteral("FLOAT", "Float"));
-			primitives.put("DATE", new TypeLiteral("DATE", "Date"));
-			primitives.put("TIME", new TypeLiteral("TIME", "Time"));
-			primitives.put("DATETIME", new TypeLiteral("DATETIME", "DateTime"));
+			primitives.put("STRING", new DynamicTypeLiteral("STRING", "String"));
+			primitives.put("BOOLEAN", new DynamicTypeLiteral("BOOLEAN", "Boolean"));
+			primitives.put("PHONENUMBER", new DynamicTypeLiteral("PHONENUMBER", "PhoneNumber"));
+			primitives.put("URL", new DynamicTypeLiteral("URL", "Url"));
+			primitives.put("EMAIL", new DynamicTypeLiteral("EMAIL", "Email"));
+			primitives.put("FILE", new DynamicTypeLiteral("FILE", "File"));
+			primitives.put("IMAGE", new DynamicTypeLiteral("IMAGE", "Image"));
+			primitives.put("LOCATION", new DynamicTypeLiteral("LOCATION", "Location"));
+			primitives.put("INTEGER", new DynamicTypeLiteral("INTEGER", "Integer"));
+			primitives.put("FLOAT", new DynamicTypeLiteral("FLOAT", "Float"));
+			primitives.put("DATE", new DynamicTypeLiteral("DATE", "Date"));
+			primitives.put("TIME", new DynamicTypeLiteral("TIME", "Time"));
+			primitives.put("DATETIME", new DynamicTypeLiteral("DATETIME", "DateTime"));
 		}
 	}
 
@@ -54,7 +64,7 @@ public class TypeLiteral {
 	 * @param string
 	 * @return
 	 */
-	public static TypeLiteral from(String string) {
+	public static DynamicTypeLiteral from(String string) {
 		initPrimitives();
 		
 		// Prepare user input
@@ -65,7 +75,7 @@ public class TypeLiteral {
 				
 		// Lookup or create new
 		if(!literalExists(type)){
-			complexTypes.put(type, new TypeLiteral(type, string.trim()));
+			complexTypes.put(type, new DynamicTypeLiteral(type, string.trim()));
 		}
 		
 		return getLiteral(type);
@@ -85,7 +95,7 @@ public class TypeLiteral {
 	 * @param type
 	 * @return
 	 */
-	private static TypeLiteral getLiteral(String type){
+	private static DynamicTypeLiteral getLiteral(String type){
 		return primitives.get(type) != null ? primitives.get(type) : complexTypes.get(type);  
 	}
 	
@@ -93,7 +103,7 @@ public class TypeLiteral {
 	 * List all know data type literals.
 	 * @return
 	 */
-	public static Collection<TypeLiteral> values(){
+	public static Collection<DynamicTypeLiteral> values(){
 		initPrimitives();
 		
 		return Stream.concat(primitives.values().stream(), complexTypes.values().stream()).collect(Collectors.toList());
@@ -129,12 +139,7 @@ public class TypeLiteral {
 		
 		return values().stream().map(elem -> elem.name).collect(Collectors.toList());
 	}
-	
-//	public static DataType getDataType(){
-//		initPrimitives();
-//		return null; // TODO from inferencedatatype.getDataTypeFromString
-//	}
-	
+
 	public boolean isPrimitive(){
 		initPrimitives();
 		
@@ -160,6 +165,6 @@ public class TypeLiteral {
 	 * Remove all complex types to prepare for fresh inference run.
 	 */
 	public static void clearTypeList(){
-		complexTypes.clear();
+		complexTypes.clear();// TODO reflect clearing in full model
 	}
 }

@@ -1,9 +1,12 @@
 package de.wwu.md2dot0.inference;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.sun.prism.PixelFormat.DataType;
 
 import md2dot0.ParameterConnector;
 import md2dot0.ParameterSource;
@@ -35,8 +38,9 @@ public class ModelInferrer {
 		// ------------------------------------------------------------------
 		// Reset type list and attribute structure
 		// ------------------------------------------------------------------
-		TypeLiteral.clearTypeList();
+		DynamicTypeLiteral.clearTypeList();
 		inferenceDataTypeHelper.clearDataModel();
+		useCase.getDatatypes().clear();
 		
 		// ------------------------------------------------------------------
 		// Select main process (using start event) and infer for following elements
@@ -91,8 +95,11 @@ public class ModelInferrer {
 		inferenceMergeHelper.mergeProcessElements(useCase.getProcessFlowElements(), inferenceDataTypeHelper);
 		
 		// Output Helper
-		System.out.println("Custom data types:" + TypeLiteral.getCustomDataTypesAsString().toString());
-		System.out.println("Anonymous data types:" + TypeLiteral.getAnonymousDataTypesAsString().toString());
+		System.out.println("Custom data types:" + DynamicTypeLiteral.getCustomDataTypesAsString().toString());
+		System.out.println("Anonymous data types:" + DynamicTypeLiteral.getAnonymousDataTypesAsString().toString());
+		
+		// Save type list to resource to allow saving the model
+		useCase.getDatatypes().addAll(DynamicTypeLiteral.values());
 	}
 
 	/**
@@ -100,9 +107,9 @@ public class ModelInferrer {
 	 * @param obj
 	 * @return
 	 */
-	public String getType(ProcessFlowElement obj) {
+	public DynamicTypeLiteral getType(ProcessFlowElement obj) {
 		// Pass to data type helper
-		TypeLiteral type = inferenceDataTypeHelper.getType(obj);
+		DynamicTypeLiteral type = inferenceDataTypeHelper.getType(obj);
 		
 		// If not found try an inference run
 //		if(type == null){
@@ -110,7 +117,7 @@ public class ModelInferrer {
 //			type = inferenceDataTypeHelper.getType(obj);
 //		}
 		
-		return type != null ? type.toString() : null;
+		return type != null ? type : null;
 	}
 	
 	// TODO validate model (no tangling, ...)
