@@ -15,14 +15,15 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 	private static final String ANONYMOUS_TYPE_UI = "X";
 
 	static UseCase container;
-	static Map<String, DynamicTypeLiteral> complexTypes = new HashMap<String, DynamicTypeLiteral>();  
-	static Map<String, DynamicTypeLiteral> primitives = new HashMap<String, DynamicTypeLiteral>();
+	static Map<String, DynamicTypeLiteral> types = new HashMap<String, DynamicTypeLiteral>();  
 	
-	public DynamicTypeLiteral(String identifier, String name) {
+	public DynamicTypeLiteral(String identifier, String name, boolean isPrimitive) {
 		this.identifier = identifier;
 		this.name = name;
+		this.primitive = isPrimitive;
+		
 		if(container != null){
-			container.getDatatypes().add(this);
+			container.getDataTypes().add(this);
 		} else {
 			System.out.println("no container exists");
 		}
@@ -42,20 +43,20 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 	 */
 	private static void initPrimitives() {
 		// Initialize primitives
-		if(primitives.size() == 0){
-			primitives.put("STRING", new DynamicTypeLiteral("STRING", "String"));
-			primitives.put("BOOLEAN", new DynamicTypeLiteral("BOOLEAN", "Boolean"));
-			primitives.put("PHONENUMBER", new DynamicTypeLiteral("PHONENUMBER", "PhoneNumber"));
-			primitives.put("URL", new DynamicTypeLiteral("URL", "Url"));
-			primitives.put("EMAIL", new DynamicTypeLiteral("EMAIL", "Email"));
-			primitives.put("FILE", new DynamicTypeLiteral("FILE", "File"));
-			primitives.put("IMAGE", new DynamicTypeLiteral("IMAGE", "Image"));
-			primitives.put("LOCATION", new DynamicTypeLiteral("LOCATION", "Location"));
-			primitives.put("INTEGER", new DynamicTypeLiteral("INTEGER", "Integer"));
-			primitives.put("FLOAT", new DynamicTypeLiteral("FLOAT", "Float"));
-			primitives.put("DATE", new DynamicTypeLiteral("DATE", "Date"));
-			primitives.put("TIME", new DynamicTypeLiteral("TIME", "Time"));
-			primitives.put("DATETIME", new DynamicTypeLiteral("DATETIME", "DateTime"));
+		if(getPrimitiveDataTypesAsString().size() == 0){
+			types.put("STRING", new DynamicTypeLiteral("STRING", "String", true));
+			types.put("BOOLEAN", new DynamicTypeLiteral("BOOLEAN", "Boolean", true));
+			types.put("PHONENUMBER", new DynamicTypeLiteral("PHONENUMBER", "PhoneNumber", true));
+			types.put("URL", new DynamicTypeLiteral("URL", "Url", true));
+			types.put("EMAIL", new DynamicTypeLiteral("EMAIL", "Email", true));
+			types.put("FILE", new DynamicTypeLiteral("FILE", "File", true));
+			types.put("IMAGE", new DynamicTypeLiteral("IMAGE", "Image", true));
+			types.put("LOCATION", new DynamicTypeLiteral("LOCATION", "Location", true));
+			types.put("INTEGER", new DynamicTypeLiteral("INTEGER", "Integer", true));
+			types.put("FLOAT", new DynamicTypeLiteral("FLOAT", "Float", true));
+			types.put("DATE", new DynamicTypeLiteral("DATE", "Date", true));
+			types.put("TIME", new DynamicTypeLiteral("TIME", "Time", true));
+			types.put("DATETIME", new DynamicTypeLiteral("DATETIME", "DateTime", true));
 		}
 	}
 
@@ -75,7 +76,7 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 				
 		// Lookup or create new
 		if(!literalExists(type)){
-			complexTypes.put(type, new DynamicTypeLiteral(type, string.trim()));
+			types.put(type, new DynamicTypeLiteral(type, string.trim(), false));
 		}
 		
 		return getLiteral(type);
@@ -96,7 +97,7 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 	 * @return
 	 */
 	private static DynamicTypeLiteral getLiteral(String type){
-		return primitives.get(type) != null ? primitives.get(type) : complexTypes.get(type);  
+		return types.get(type);  
 	}
 	
 	/**
@@ -106,7 +107,7 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 	public static Collection<DynamicTypeLiteral> values(){
 		initPrimitives();
 		
-		return Stream.concat(primitives.values().stream(), complexTypes.values().stream()).collect(Collectors.toList());
+		return types.values();
 	}
 	
 	/**
@@ -116,7 +117,7 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 	public static Collection<String> getPrimitiveDataTypesAsString(){
 		initPrimitives();
 		
-		return primitives.values().stream().map(elem -> elem.name).collect(Collectors.toList());
+		return types.values().stream().filter(elem -> elem.isPrimitive()).map(elem -> elem.name).collect(Collectors.toList());
 	}
 	
 	/**
@@ -124,7 +125,8 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 	 * @return
 	 */
 	public static Collection<String> getCustomDataTypesAsString(){
-		return complexTypes.values().stream()
+		return types.values().stream()
+				.filter(elem -> !elem.isPrimitive())
 				.map(elem -> elem.name)
 				.filter(elem -> !elem.startsWith(ANONYMOUS_PREFIX))
 				.collect(Collectors.toList());
@@ -141,9 +143,7 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 	}
 
 	public boolean isPrimitive(){
-		initPrimitives();
-		
-		return primitives.containsValue(this);
+		return primitive;
 	}
 	
 	public static boolean isAllowedTypeName(String typeName){
@@ -155,7 +155,7 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 	 * @return
 	 */
 	public static Object getAnonymousDataTypesAsString() {
-		return complexTypes.values().stream()
+		return types.values().stream()
 				.map(elem -> elem.name)
 				.filter(elem -> elem.startsWith(ANONYMOUS_PREFIX))
 				.collect(Collectors.toList());
@@ -165,6 +165,6 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 	 * Remove all complex types to prepare for fresh inference run.
 	 */
 	public static void clearTypeList(){
-		complexTypes.clear();// TODO reflect clearing in full model
+		types.clear();// TODO reflect clearing in full model
 	}
 }

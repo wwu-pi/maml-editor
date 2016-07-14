@@ -38,9 +38,8 @@ public class ModelInferrer {
 		// ------------------------------------------------------------------
 		// Reset type list and attribute structure
 		// ------------------------------------------------------------------
-		DynamicTypeLiteral.clearTypeList();
+//		DynamicTypeLiteral.clearTypeList();
 		inferenceDataTypeHelper.clearDataModel();
-		useCase.getDatatypes().clear();
 		
 		// ------------------------------------------------------------------
 		// Select main process (using start event) and infer for following elements
@@ -94,12 +93,14 @@ public class ModelInferrer {
 		// ------------------------------------------------------------------
 		inferenceMergeHelper.mergeProcessElements(useCase.getProcessFlowElements(), inferenceDataTypeHelper);
 		
+		// TODO remove unused data types from use case
+		
 		// Output Helper
 		System.out.println("Custom data types:" + DynamicTypeLiteral.getCustomDataTypesAsString().toString());
 		System.out.println("Anonymous data types:" + DynamicTypeLiteral.getAnonymousDataTypesAsString().toString());
 		
 		// Save type list to resource to allow saving the model
-		useCase.getDatatypes().addAll(DynamicTypeLiteral.values());
+		useCase.getDataTypes().addAll(DynamicTypeLiteral.values());
 	}
 
 	/**
