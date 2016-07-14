@@ -13,6 +13,7 @@ import md2dot0.ParameterSource;
 import md2dot0.ProcessFlowElement;
 import md2dot0.ProcessStartEvent;
 import md2dot0.UseCase;
+import md2dot0data.DataTypeLiteral;
 import md2dot0gui.Attribute;
 
 /**
@@ -100,7 +101,7 @@ public class ModelInferrer {
 		System.out.println("Anonymous data types:" + DynamicTypeLiteral.getAnonymousDataTypesAsString().toString());
 		
 		// Save type list to resource to allow saving the model
-		useCase.getDataTypes().addAll(DynamicTypeLiteral.values());
+		//useCase.getDataTypes().addAll(DynamicTypeLiteral.values());
 	}
 
 	/**
@@ -108,17 +109,10 @@ public class ModelInferrer {
 	 * @param obj
 	 * @return
 	 */
-	public DynamicTypeLiteral getType(ProcessFlowElement obj) {
+	public DataTypeLiteral getType(ProcessFlowElement obj) {
 		// Pass to data type helper
-		DynamicTypeLiteral type = inferenceDataTypeHelper.getType(obj);
-		
-		// If not found try an inference run
-//		if(type == null){
-//			startInferenceProcess((UseCase) obj.eContainer());
-//			type = inferenceDataTypeHelper.getType(obj);
-//		}
-		
-		return type != null ? type : null;
+		DataTypeLiteral type = inferenceDataTypeHelper.getType(obj);
+		return type;
 	}
 	
 	// TODO validate model (no tangling, ...)

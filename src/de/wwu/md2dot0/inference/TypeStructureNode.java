@@ -3,17 +3,18 @@ package de.wwu.md2dot0.inference;
 import java.util.ArrayList;
 
 import md2dot0.ParameterSource;
+import md2dot0data.DataTypeLiteral;
 import md2dot0data.Multiplicity;
 
 public class TypeStructureNode {
 
 	protected String attributeName;
-	protected DynamicTypeLiteral type;
+	protected DataTypeLiteral type;
 	protected Multiplicity multiplicity;
 	protected ParameterSource source;
 	protected ArrayList<TypeStructureNode> children = new ArrayList<TypeStructureNode>();
 	
-	public TypeStructureNode(String attributeName, DynamicTypeLiteral type, Multiplicity multiplicity, ParameterSource source) {
+	public TypeStructureNode(String attributeName, DataTypeLiteral type, Multiplicity multiplicity, ParameterSource source) {
 		this.attributeName = attributeName;
 		this.type = type;
 		this.multiplicity = multiplicity;
@@ -28,11 +29,11 @@ public class TypeStructureNode {
 		this.attributeName = attributeName;
 	}
 
-	public DynamicTypeLiteral getType() {
+	public DataTypeLiteral getType() {
 		return type;
 	}
 
-	public void setType(DynamicTypeLiteral type) {
+	public void setType(DataTypeLiteral type) {
 		this.type = type;
 	}
 

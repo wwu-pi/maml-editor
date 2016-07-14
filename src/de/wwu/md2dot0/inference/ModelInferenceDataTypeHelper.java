@@ -13,11 +13,12 @@ import md2dot0.ProcessElement;
 import md2dot0.ProcessFlowElement;
 import md2dot0.Transform;
 import md2dot0data.CustomType;
+import md2dot0data.DataTypeLiteral;
 import md2dot0gui.Attribute;
 
 public class ModelInferenceDataTypeHelper {
 	
-	protected Map<ProcessFlowElement, DynamicTypeLiteral> elementTypes = new HashMap<ProcessFlowElement, DynamicTypeLiteral>(); // TODO bidirectional map?
+	protected Map<ProcessFlowElement, DataTypeLiteral> elementTypes = new HashMap<ProcessFlowElement, DataTypeLiteral>(); // TODO bidirectional map?
 	protected ArrayList<TypeStructureNode> typeGraph = new ArrayList<TypeStructureNode>();
 
 	/**
@@ -25,7 +26,7 @@ public class ModelInferenceDataTypeHelper {
 	 * @param obj
 	 * @return
 	 */
-	public DynamicTypeLiteral getType(ProcessFlowElement obj) {
+	public DataTypeLiteral getType(ProcessFlowElement obj) {
 		return elementTypes.get(obj);
 	}
 	
@@ -36,7 +37,7 @@ public class ModelInferenceDataTypeHelper {
 	 */
 	public Set<ProcessFlowElement> inferProcessFlowChain(ProcessFlowElement startElement) {
 		Set<ProcessFlowElement> processed = new HashSet<ProcessFlowElement>();
-		DynamicTypeLiteral lastOccurredType = null;
+		DataTypeLiteral lastOccurredType = null;
 		
 		// Recursively iterate through chain (control flow elements may have multiple followers)
 		inferProcessFlowChainRecursive(startElement, lastOccurredType, processed);
@@ -50,7 +51,7 @@ public class ModelInferenceDataTypeHelper {
 	 * @param lastOccurredType
 	 * @param processed
 	 */
-	public void inferProcessFlowChainRecursive(ProcessFlowElement currentElement, DynamicTypeLiteral lastOccurredType, Set<ProcessFlowElement> processed) {
+	public void inferProcessFlowChainRecursive(ProcessFlowElement currentElement, DataTypeLiteral lastOccurredType, Set<ProcessFlowElement> processed) {
 		// Skip if currentElement was already processed
 		if(currentElement == null || processed.contains(currentElement)){
 			return;
@@ -75,7 +76,7 @@ public class ModelInferenceDataTypeHelper {
 	 * @param lastOccurredType
 	 * @return
 	 */
-	public DynamicTypeLiteral inferSingleItem(ProcessFlowElement processing, DynamicTypeLiteral lastOccurredType){
+	public DataTypeLiteral inferSingleItem(ProcessFlowElement processing, DataTypeLiteral lastOccurredType){
 		String lastOccuredTypeName = lastOccurredType != null ? lastOccurredType.getIdentifier() : "";
 		
 		if(processing instanceof DataSource){

@@ -15,6 +15,7 @@ import de.wwu.md2dot0.inference.ModelInferrerManager;
 import de.wwu.md2dot0.inference.DynamicTypeLiteral;
 import md2dot0.ProcessFlowElement;
 import md2dot0.UseCase;
+import md2dot0data.DataTypeLiteral;
 import md2dot0gui.Attribute;
 
 public class ModelInferenceService {
@@ -58,10 +59,10 @@ public class ModelInferenceService {
 		inferrer.startInferenceProcess(useCase); // Container is the use case itself
 		
 		if(obj instanceof ProcessFlowElement){
-			DynamicTypeLiteral type = inferrer.getType((ProcessFlowElement) obj);
+			DataTypeLiteral type = inferrer.getType((ProcessFlowElement) obj);
 			return type != null ? type.toString() : "??";
 		} else if(obj instanceof Attribute){
-			DynamicTypeLiteral type = DynamicTypeLiteral.from(((Attribute) obj).getType());
+			DataTypeLiteral type = DynamicTypeLiteral.from(((Attribute) obj).getType());
 			return type != null ? type.toString() : "??";
 		} 
 		return "??";
