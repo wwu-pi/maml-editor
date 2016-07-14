@@ -28,7 +28,7 @@ public class ModelInferenceAction implements IExternalJavaAction {
 	@Override
 	public void execute(Collection<? extends EObject> arg0, Map<String, Object> arg1) {
 		ModelInferenceService inferenceService = new ModelInferenceService();
-		//inferenceService.startInferenceProcess(arg0);
+		inferenceService.startInferenceProcess(arg0);
 		System.out.println("HALLO TEST");
 	}
 

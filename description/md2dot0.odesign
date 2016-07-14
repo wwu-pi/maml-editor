@@ -552,7 +552,7 @@
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0gui.Attribute" referenceName="attributes">
                   <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'Attribute'+container.attributes->filter(md2dot0gui::Attribute)->size()"/>
-                  <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0data::Multiplicity::ONE"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="aql:'String'"/>
                 </subModelOperations>
               </firstModelOperations>
@@ -566,7 +566,6 @@
             <initialOperation>
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:source.eContainer(md2dot0::UseCase)">
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ParameterConnector" referenceName="processFlowConnections">
-                  <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="accessType" valueExpression="aql:md2dot0gui::AccessType::READ"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="targetElement" valueExpression="var:target"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="order" valueExpression="aql:source.parameters->size()"/>
@@ -583,7 +582,6 @@
             <initialOperation>
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:source.eContainer()">
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ParameterConnector" referenceName="processFlowConnections">
-                  <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="accessType" valueExpression="aql:md2dot0gui::AccessType::WRITE"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="sourceElement" valueExpression="var:source"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="targetElement" valueExpression="var:target"/>

@@ -1,12 +1,9 @@
 package de.wwu.md2dot0.inference;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.sun.prism.PixelFormat.DataType;
 
 import md2dot0.ParameterConnector;
 import md2dot0.ParameterSource;
