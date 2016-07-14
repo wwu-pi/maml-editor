@@ -740,5 +740,6 @@
     </ownedRepresentations>
     <ownedJavaExtensions qualifiedClassName="de.wwu.md2dot0.design.TestService"/>
     <ownedJavaExtensions qualifiedClassName="de.wwu.md2dot0.design.ModelInferenceService"/>
+    <ownedJavaExtensions qualifiedClassName="de.wwu.md2dot0.diagram.ModelInferenceAction"/>
   </ownedViewpoints>
 </description:Group>

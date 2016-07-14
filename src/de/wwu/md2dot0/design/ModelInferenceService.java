@@ -60,10 +60,10 @@ public class ModelInferenceService {
 		
 		if(obj instanceof ProcessFlowElement){
 			DataTypeLiteral type = inferrer.getType((ProcessFlowElement) obj);
-			return type != null ? type.toString() : "??";
+			return type != null ? type.getName() : "??";
 		} else if(obj instanceof Attribute){
 			DataTypeLiteral type = DynamicTypeLiteral.from(((Attribute) obj).getType());
-			return type != null ? type.toString() : "??";
+			return type != null ? type.getName() : "??";
 		} 
 		return "??";
 	}

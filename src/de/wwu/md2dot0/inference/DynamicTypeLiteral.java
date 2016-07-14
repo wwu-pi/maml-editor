@@ -1,12 +1,9 @@
 package de.wwu.md2dot0.inference;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import md2dot0.UseCase;
 import md2dot0data.DataTypeLiteral;
 import md2dot0data.impl.DataTypeLiteralImpl;
@@ -47,7 +44,7 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 		if(getTypes().values().stream().filter(elem -> elem.isPrimitive()).collect(Collectors.toList()).size() == 0){
 			getTypes().put("STRING", new DynamicTypeLiteral("STRING", "String", true));
 			getTypes().put("BOOLEAN", new DynamicTypeLiteral("BOOLEAN", "Boolean", true));
-//			getTypes().put("PHONENUMBER", new DynamicTypeLiteral("PHONENUMBER", "PhoneNumber", true));
+//			getTypes().put("PHONENUMBER", new DynamicTypeLiteral("PHONENUMBER", "PhoneNumber", true)); //TODO add them again 
 //			getTypes().put("URL", new DynamicTypeLiteral("URL", "Url", true));
 //			getTypes().put("EMAIL", new DynamicTypeLiteral("EMAIL", "Email", true));
 //			getTypes().put("FILE", new DynamicTypeLiteral("FILE", "File", true));
@@ -70,6 +67,7 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 		initPrimitives();
 		
 		// Prepare user input
+		if(string == null) return null;
 		String type = string.toUpperCase().trim();
 		
 		// Catch invalid types
