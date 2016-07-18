@@ -29,7 +29,7 @@ public class ModelInferrer {
 	 *  
 	 * @param useCase
 	 */
-	public void startInferenceProcess(UseCase useCase) {
+	public void startInferenceProcess(UseCase useCase, boolean readOnly) {
 		// Inference needed for all process elements
 		Set<ProcessFlowElement> toProcess = new HashSet<ProcessFlowElement>(useCase.getProcessFlowElements());
 		
@@ -37,6 +37,8 @@ public class ModelInferrer {
 		// Reset type list and attribute structure
 		// ------------------------------------------------------------------
 		inferenceDataTypeHelper.clearDataModel();
+		
+		DynamicTypeLiteral.setReadOnly(readOnly);
 		
 		// ------------------------------------------------------------------
 		// Select main process (using start event) and infer for following elements

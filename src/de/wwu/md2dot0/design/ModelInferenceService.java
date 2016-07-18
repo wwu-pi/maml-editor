@@ -5,8 +5,11 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
+import org.eclipse.sirius.business.api.session.Session;
+import org.eclipse.sirius.business.api.session.SessionManager;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
@@ -29,9 +32,13 @@ public class ModelInferenceService {
 	public EObject updateDataType(EObject obj){
 		if(!(obj.eContainer() instanceof UseCase)) return null;
 		
+		// Check if we are in read-only mode
+		Session session = SessionManager.INSTANCE.getSession(obj);
+		TransactionalEditingDomain editingDomain = session.getTransactionalEditingDomain();
+		
 		UseCase useCase = (UseCase) obj.eContainer();
 		inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
-		inferrer.startInferenceProcess(useCase); // Container is the use case itself
+		inferrer.startInferenceProcess(useCase, editingDomain.isReadOnly(obj.eResource())); // Container is the use case itself
 		
 		
 		//getDataTypeRepresentation(obj);
@@ -54,9 +61,14 @@ public class ModelInferenceService {
 	public String getDataTypeRepresentation(EObject obj){
 		if(!(obj.eContainer() instanceof UseCase)) return "error";
 		
+		// Check if we are in read-only mode
+		Session session = SessionManager.INSTANCE.getSession(obj);
+		TransactionalEditingDomain editingDomain = session.getTransactionalEditingDomain();
+		
 		UseCase useCase = (UseCase) obj.eContainer();
 		inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
-		inferrer.startInferenceProcess(useCase); // Container is the use case itself
+		System.out.println("Is write? " + editingDomain.isReadOnly(obj.eResource()));
+		inferrer.startInferenceProcess(useCase, editingDomain.isReadOnly(obj.eResource())); // Container is the use case itself
 		
 		if(obj instanceof ProcessFlowElement){
 			DataTypeLiteral type = inferrer.getType((ProcessFlowElement) obj);
@@ -81,19 +93,23 @@ public class ModelInferenceService {
 	 * TODO: Currently only first use case is considered, needs to be extended to infer multiple UC and merge them
 	 * @param obj
 	 */
-	public void startInferenceProcess(Collection<? extends EObject> obj){
-		Optional<UseCase> useCase = obj.stream()
-				.filter(elem -> elem instanceof UseCase)
-				.map(elem -> (UseCase) elem)
-				.findFirst();
-		
-		if(!useCase.isPresent()){
-			return;
-		}
-		
-		inferrer = ModelInferrerManager.getInstance().getModelInferrer(useCase.get());
-		inferrer.startInferenceProcess((UseCase) useCase.get());
-	}
+//	public void startInferenceProcess(Collection<? extends EObject> obj){
+//		Optional<UseCase> useCase = obj.stream()
+//				.filter(elem -> elem instanceof UseCase)
+//				.map(elem -> (UseCase) elem)
+//				.findFirst();
+//		
+//		if(!useCase.isPresent()){
+//			return;
+//		}
+//		
+//		// Check if we are in read-only mode
+//		Session session = SessionManager.INSTANCE.getSession(useCase);
+//		TransactionalEditingDomain editingDomain = session.getTransactionalEditingDomain();
+//				
+//		inferrer = ModelInferrerManager.getInstance().getModelInferrer(useCase.get());
+//		inferrer.startInferenceProcess((UseCase) useCase.get(), editingDomain.isReadOnly(useCase.eResource()));
+//	}
 	
 	public String[] getDataTypeList(EObject object){
 		// Refresh inferred model types

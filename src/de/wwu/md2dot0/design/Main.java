@@ -34,7 +34,7 @@ public class Main {
 
 		// Start via ModelInferrer (bypassing the Sirius ModelInferenceService layer)
 		ModelInferrer inferrer = new ModelInferrer();
-		inferrer.startInferenceProcess(data);
+		inferrer.startInferenceProcess(data, false);
 		
 		System.out.println("Erfolgreich und fertig!");
 	}

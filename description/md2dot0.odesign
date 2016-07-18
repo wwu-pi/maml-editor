@@ -596,20 +596,21 @@
               <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0"/>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:DoubleClickDescription" name="toggleAttributeMultiplicity" forceRefresh="true" elementsToSelect="service:startInferenceProcess()" mappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']/@borderedNodeMappings[name='AttributeMultiplicity']">
+          <ownedTools xsi:type="tool_1:DoubleClickDescription" name="toggleAttributeMultiplicity" mappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']/@borderedNodeMappings[name='AttributeMultiplicity']">
             <element name="element"/>
             <elementView name="elementView"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
                 <subModelOperations xsi:type="tool:Switch">
-                  <cases conditionExpression="aql:self.oclAsType(md2dot0gui::Attribute).multiplicity = md2dot0gui::Multiplicity::ONE">
-                    <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::MANY"/>
+                  <cases conditionExpression="aql:self.oclAsType(md2dot0gui::Attribute).multiplicity = md2dot0data::Multiplicity::ONE">
+                    <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0data::Multiplicity::MANY"/>
                   </cases>
-                  <cases conditionExpression="aql:self.oclAsType(md2dot0gui::Attribute).multiplicity = md2dot0gui::Multiplicity::MANY">
-                    <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0gui::Multiplicity::ONE"/>
+                  <cases conditionExpression="aql:self.oclAsType(md2dot0gui::Attribute).multiplicity = md2dot0data::Multiplicity::MANY">
+                    <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0data::Multiplicity::ONE"/>
                   </cases>
                   <default/>
                 </subModelOperations>
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="service:startInferenceProcess()"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>

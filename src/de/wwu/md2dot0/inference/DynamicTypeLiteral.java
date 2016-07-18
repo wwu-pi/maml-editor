@@ -1,6 +1,7 @@
 package de.wwu.md2dot0.inference;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 	private static final String ANONYMOUS_TYPE_UI = "X";
 
 	static UseCase container;
+	static boolean readOnly = true;
 	
 	public DynamicTypeLiteral(String identifier, String name, boolean isPrimitive) {
 		this.identifier = identifier;
@@ -41,20 +43,22 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 	 */
 	private static void initPrimitives() {
 		// Initialize primitives
-		if(getTypes().values().stream().filter(elem -> elem.isPrimitive()).collect(Collectors.toList()).size() == 0){
-			getTypes().put("STRING", new DynamicTypeLiteral("STRING", "String", true));
-			getTypes().put("BOOLEAN", new DynamicTypeLiteral("BOOLEAN", "Boolean", true));
-//			getTypes().put("PHONENUMBER", new DynamicTypeLiteral("PHONENUMBER", "PhoneNumber", true)); //TODO add them again 
-//			getTypes().put("URL", new DynamicTypeLiteral("URL", "Url", true));
-//			getTypes().put("EMAIL", new DynamicTypeLiteral("EMAIL", "Email", true));
-//			getTypes().put("FILE", new DynamicTypeLiteral("FILE", "File", true));
-//			getTypes().put("IMAGE", new DynamicTypeLiteral("IMAGE", "Image", true));
-//			getTypes().put("LOCATION", new DynamicTypeLiteral("LOCATION", "Location", true));
-//			getTypes().put("INTEGER", new DynamicTypeLiteral("INTEGER", "Integer", true));
-//			getTypes().put("FLOAT", new DynamicTypeLiteral("FLOAT", "Float", true));
-//			getTypes().put("DATE", new DynamicTypeLiteral("DATE", "Date", true));
-//			getTypes().put("TIME", new DynamicTypeLiteral("TIME", "Time", true));
-//			getTypes().put("DATETIME", new DynamicTypeLiteral("DATETIME", "DateTime", true));
+		if(!readOnly && getTypes().values().stream().filter(elem -> elem.isPrimitive()).collect(Collectors.toList()).size() == 0){
+			Map<String, DynamicTypeLiteral> primitiveTypes = new HashMap<String, DynamicTypeLiteral>();
+			primitiveTypes.put("STRING", new DynamicTypeLiteral("STRING", "String", true));
+			primitiveTypes.put("BOOLEAN", new DynamicTypeLiteral("BOOLEAN", "Boolean", true));
+			primitiveTypes.put("PHONENUMBER", new DynamicTypeLiteral("PHONENUMBER", "PhoneNumber", true)); //TODO add them again 
+			primitiveTypes.put("URL", new DynamicTypeLiteral("URL", "Url", true));
+			primitiveTypes.put("EMAIL", new DynamicTypeLiteral("EMAIL", "Email", true));
+			primitiveTypes.put("FILE", new DynamicTypeLiteral("FILE", "File", true));
+			primitiveTypes.put("IMAGE", new DynamicTypeLiteral("IMAGE", "Image", true));
+			primitiveTypes.put("LOCATION", new DynamicTypeLiteral("LOCATION", "Location", true));
+			primitiveTypes.put("INTEGER", new DynamicTypeLiteral("INTEGER", "Integer", true));
+			primitiveTypes.put("FLOAT", new DynamicTypeLiteral("FLOAT", "Float", true));
+			primitiveTypes.put("DATE", new DynamicTypeLiteral("DATE", "Date", true));
+			primitiveTypes.put("TIME", new DynamicTypeLiteral("TIME", "Time", true));
+			primitiveTypes.put("DATETIME", new DynamicTypeLiteral("DATETIME", "DateTime", true));
+			getTypes().putAll(primitiveTypes);
 		}
 	}
 
@@ -175,5 +179,9 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 				.map(elem -> (DataTypeLiteral) elem)
 				.collect(Collectors.toMap(DataTypeLiteral::getIdentifier, Function.<DataTypeLiteral>identity()));
 		return types;
+	}
+
+	public static void setReadOnly(boolean newReadOnly) {
+		readOnly = newReadOnly;
 	}
 }
