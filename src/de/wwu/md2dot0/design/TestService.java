@@ -108,7 +108,7 @@ public class TestService {
 		}
 		
 		labelText += "\"";
-		labelText = labelText.equals("\"\"") ? "" : labelText;
+		labelText = labelText.equals("\"\"") ? "<no type>" : labelText;
 		
 		labelText += "\n[";
 		

@@ -492,7 +492,7 @@
         </toolSections>
       </additionalLayers>
       <additionalLayers name="AttributeLayer" label="Attribute Layer" activeByDefault="true">
-        <nodeMappings name="Attribute" semanticCandidatesExpression="aql:self.attributes->filter(md2dot0gui::GUIElement)" domainClass="md2dot0gui.Attribute">
+        <nodeMappings name="Attribute" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='directEditAttributeDescription']" semanticCandidatesExpression="aql:self.attributes->filter(md2dot0gui::GUIElement)" domainClass="md2dot0gui.Attribute">
           <borderedNodeMappings name="AttributeMultiplicity" semanticCandidatesExpression="var:self" doubleClickDescription="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='toggleAttributeMultiplicity']" domainClass="md2dot0gui.Attribute">
             <style xsi:type="style:LozengeNodeDescription" showIcon="false" labelExpression="[if(self.multiplicity.toString()='MANY') then 'n' else '1' endif/]" labelPosition="node">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
@@ -721,10 +721,12 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttributeDescription" elementsToSelect="service:startInferenceProcess()" inputLabelExpression="feature:description">
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttributeDescription" inputLabelExpression="feature:description">
             <mask mask="{0}"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0"/>
+              <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0">
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="service:startInferenceProcess()"/>
+              </firstModelOperations>
             </initialOperation>
           </ownedTools>
           <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttributeDataType" elementsToSelect="service:startInferenceProcess()" inputLabelExpression="feature:type">
