@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import md2dot0.DataSource;
+import md2dot0.Event;
 import md2dot0.ParameterConnector;
 import md2dot0.ParameterSource;
 import md2dot0.ProcessConnector;
@@ -66,6 +67,15 @@ public class ModelInferenceDataTypeHelper {
 			// Control flow elements: may have >1 outgoing connections!
 			for(ProcessConnector next : currentElement.getNextElements()){
 				inferProcessFlowChainRecursive(next.getTargetProcessFlowElement(), lastOccurredType, processed);
+			}
+		}
+		
+		// In addition check none/single/multi events
+		if(currentElement instanceof ProcessElement){
+			for(Event event : ((ProcessElement) currentElement).getEvents()){
+				for(ProcessConnector next : event.getNextElements()){
+					inferProcessFlowChainRecursive(next.getTargetProcessFlowElement(), lastOccurredType, processed);
+				}
 			}
 		}
 	}
