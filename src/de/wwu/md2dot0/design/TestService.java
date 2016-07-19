@@ -1,6 +1,8 @@
 package de.wwu.md2dot0.design;
 
 import org.eclipse.emf.ecore.EObject;
+
+import md2dot0.AutomatedProcessElement;
 import md2dot0.Call;
 import md2dot0.Camera;
 import md2dot0.CheckConstraint;
@@ -34,6 +36,7 @@ import md2dot0gui.MinusOperator;
 import md2dot0gui.PlusOperator;
 import md2dot0gui.MultiplicationOperator;
 import md2dot0gui.DivisionOperator;
+import md2dot0gui.Label;
 import md2dot0gui.SumFunc;
 
 public class TestService {
@@ -75,7 +78,22 @@ public class TestService {
 			}
 			labelText += "\"";
 			
-			return labelText.equals("\"\"") ? "<no caption>" : labelText;
+			// Special cases
+			if(connector.getSourceElement() instanceof ControlFlowElement){
+				// Don't show order and label on control flow attribute connections
+				labelText = "";
+			} else if(connector.getSourceElement() instanceof AutomatedProcessElement){
+				// Don't show order and label on automated process flow elements
+				labelText = "";
+			} else if(connector.getTargetElement() instanceof Label){
+				// No label for labels, only order
+				labelText = connector.getOrder() + "";
+			} else if (labelText.equals("\"\"")) {
+				// Empty text?
+				labelText = "<no caption>";
+			}
+			
+			return labelText;
 		}
 		return "error";
 	}
