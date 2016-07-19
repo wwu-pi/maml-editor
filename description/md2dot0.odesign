@@ -584,12 +584,12 @@
             <sourceViewVariable name="sourceView"/>
             <targetViewVariable name="targetView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:source.eContainer(md2dot0::UseCase)">
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:source.eContainer()">
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ParameterConnector" referenceName="processFlowConnections">
                   <subModelOperations xsi:type="tool:SetValue" featureName="accessType" valueExpression="aql:md2dot0gui::AccessType::READ"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="targetElement" valueExpression="var:target"/>
-                  <subModelOperations xsi:type="tool:SetValue" featureName="order" valueExpression="aql:source.parameters->size()"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="sourceElement" valueExpression="var:source"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="order" valueExpression="aql:source.parameters->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
@@ -610,7 +610,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createLabel" label="Create Label" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Label']" iconPath="/de.wwu.md2dot0.design/icons/icon_attribute.png">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createLabel" label="Create label" nodeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Label']" iconPath="/de.wwu.md2dot0.design/icons/icon_attribute.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
