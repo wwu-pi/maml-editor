@@ -132,7 +132,13 @@ public class TestService {
 		String labelText = "\"";
 		
 		if(((DataSource) obj).getTypeName() != null ){
+			// Use type given by user
 			labelText += ((DataSource) obj).getTypeName();
+		} else {
+			// Try to retrieve inferred type from incoming elements
+			ModelInferenceService service = new ModelInferenceService();
+			String result = service.getDataTypeRepresentation(obj, true);
+			if(result != null && result != "??") labelText += result;
 		}
 		
 		labelText += "\"";
