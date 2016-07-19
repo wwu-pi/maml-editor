@@ -210,11 +210,14 @@ public class TestService {
 		// Check preconditions on source side
 		if(!isConnectionStartAllowed(elem, preSource)) return false;
 		
-		// For certain elements there is only one connection allowed. For reconnection we need to check 
-		// if the connector is already part of the previous elements (and allow a second temporary connection)
-		// The old connector is passed as elem in this case.
+		// For certain elements there is only one connection allowed.
 		int maxConnections = 1;
 		if(preTarget instanceof ProcessFlowElement && ((ProcessFlowElement) preTarget).getPreviousElements().contains(elem)){
+			// For reconnection we need to check if the connector is already part of the previous elements 
+			// (and allow a second temporary connection). The old connector is passed as elem in this case.
+			maxConnections++;
+		} else if(preSource instanceof ControlFlowElement){
+			// XOR elements can have multiple cases.
 			maxConnections++;
 		}
 		
