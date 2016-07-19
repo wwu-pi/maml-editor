@@ -28,8 +28,11 @@ import md2dot0.Transform;
 import md2dot0.UpdateEntity;
 import md2dot0.UseCaseTrigger;
 import md2dot0.Webservice;
+import md2dot0gui.ArithmeticOperator;
 import md2dot0gui.Attribute;
 import md2dot0gui.AvgFunc;
+import md2dot0gui.ComputedAttribute;
+import md2dot0gui.CountFunc;
 import md2dot0gui.MaxFunc;
 import md2dot0gui.MinFunc;
 import md2dot0gui.MinusOperator;
@@ -87,6 +90,12 @@ public class TestService {
 				labelText = "";
 			} else if(connector.getTargetElement() instanceof Label){
 				// No label for labels, only order
+				labelText = connector.getOrder() + "";
+			} else if(connector.getSourceElement() instanceof ComputedAttribute){
+				// Don't show order and label on computed attribute
+				labelText = "";
+			} else if(connector.getSourceElement() instanceof ArithmeticOperator){
+				// Only show order on arithmetic operator
 				labelText = connector.getOrder() + "";
 			} else if (labelText.equals("\"\"")) {
 				// Empty text?
@@ -179,7 +188,9 @@ public class TestService {
 	
 	// Process element type representation
 	public static String getComputationOperatorType(EObject obj){
-		if(obj instanceof SumFunc){
+		if(obj instanceof CountFunc){
+			return "#";
+		} else if(obj instanceof SumFunc){
 			return "Sum";
 		} else if(obj instanceof MinFunc){
 			return "Min";
