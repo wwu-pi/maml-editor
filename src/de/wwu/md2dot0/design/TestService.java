@@ -1,10 +1,6 @@
 package de.wwu.md2dot0.design;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.swt.graphics.FontMetrics;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.ui.PlatformUI;
-
 import md2dot0.Call;
 import md2dot0.Camera;
 import md2dot0.CheckConstraint;
@@ -70,7 +66,7 @@ public class TestService {
 			if(connector.getDescription() != null && connector.getDescription().length() > 0) {
 				labelText += connector.getDescription();
 			} else if(connector.getTargetElement() != null && connector.getTargetElement().getDescription() != null){
-				labelText += connector.getTargetElement().getDescription();
+				labelText += Md2dot0Helper.toFirstUpper(connector.getTargetElement().getDescription());
 			}
 			labelText += "\"";
 			

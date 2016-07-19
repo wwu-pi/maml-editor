@@ -2,8 +2,6 @@ package de.wwu.md2dot0.design;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.jface.viewers.LabelProvider;
