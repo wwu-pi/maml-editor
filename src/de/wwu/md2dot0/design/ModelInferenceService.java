@@ -65,10 +65,15 @@ public class ModelInferenceService {
 		Session session = SessionManager.INSTANCE.getSession(obj);
 		TransactionalEditingDomain editingDomain = session.getTransactionalEditingDomain();
 		
+		return getDataTypeRepresentation(obj, editingDomain.isReadOnly(obj.eResource()));
+	}
+	
+	public String getDataTypeRepresentation(EObject obj, boolean readOnly){
+		if(!(obj.eContainer() instanceof UseCase)) return "error";
+		
 		UseCase useCase = (UseCase) obj.eContainer();
 		inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
-		System.out.println("Is write? " + editingDomain.isReadOnly(obj.eResource()));
-		inferrer.startInferenceProcess(useCase, editingDomain.isReadOnly(obj.eResource())); // Container is the use case itself
+		inferrer.startInferenceProcess(useCase, readOnly); // Container is the use case itself
 		
 		if(obj instanceof ProcessFlowElement){
 			DataTypeLiteral type = inferrer.getType((ProcessFlowElement) obj);
