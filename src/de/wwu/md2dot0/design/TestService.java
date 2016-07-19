@@ -26,6 +26,7 @@ import md2dot0.Transform;
 import md2dot0.UpdateEntity;
 import md2dot0.UseCaseTrigger;
 import md2dot0.Webservice;
+import md2dot0gui.Attribute;
 import md2dot0gui.AvgFunc;
 import md2dot0gui.MaxFunc;
 import md2dot0gui.MinFunc;
@@ -66,11 +67,15 @@ public class TestService {
 			if(connector.getDescription() != null && connector.getDescription().length() > 0) {
 				labelText += connector.getDescription();
 			} else if(connector.getTargetElement() != null && connector.getTargetElement().getDescription() != null){
-				labelText += Md2dot0Helper.toFirstUpper(connector.getTargetElement().getDescription());
+				// Alternative default representation
+				if(connector.getTargetElement() instanceof Attribute){
+					labelText += Md2dot0Helper.toFirstUpper(connector.getTargetElement().getDescription());
+				}
+				// Computed attributes or Labels without default
 			}
 			labelText += "\"";
 			
-			return labelText.equals("\"\"") ? "" : labelText;
+			return labelText.equals("\"\"") ? "<no caption>" : labelText;
 		}
 		return "error";
 	}
