@@ -16,6 +16,7 @@ import md2dot0.Transform;
 import md2dot0data.CustomType;
 import md2dot0data.DataTypeLiteral;
 import md2dot0gui.Attribute;
+import md2dot0gui.ComputationOperator;
 
 public class ModelInferenceDataTypeHelper {
 	
@@ -127,24 +128,49 @@ public class ModelInferenceDataTypeHelper {
 		return DynamicTypeLiteral.from(lastOccuredTypeName);
 	}
 	
+	/**
+	 * Infer additional data types from the graph of linked attributes.
+	 * 
+	 * @param source
+	 */
 	public void inferAttributes(ParameterSource source){
+		// Pass to real inference method that can handle transitive attributes without 
+		// direct connection such as (ProcessFlowElement)->(Sum)->(Attribute).  
+		inferTransitiveAttributes(source, source);
+	}
+	
+	/**
+	 * Main method to infer attribute types. In addition to the ParameterSource to which the
+	 * detected attributes should be related a second parameter specifies the current position 
+	 * from which to find new attributes from.
+	 * This is especially relevant for computed attributes that have no element in the type
+	 * structure but potentially connect to further attributes.
+	 * 
+	 * @param source
+	 * @param transitiveSource
+	 */
+	public void inferTransitiveAttributes(ParameterSource source, ParameterSource transitiveSource){
 		// Process all connected attributes
-		for(ParameterConnector connector : source.getParameters()){
+		for(ParameterConnector connector : transitiveSource.getParameters()){
 			// Check that target is a concrete Attribute
-			if(!(connector.getTargetElement() instanceof Attribute)) continue;
+			if(connector.getTargetElement() instanceof Attribute){
 			
-			Attribute target = (Attribute) connector.getTargetElement();
-			
-			// Check that target has a non-anonymous type
-			if(!DynamicTypeLiteral.isAllowedTypeName(target.getType())) continue;
-			
-			// Process current connection
-			TypeStructureNode node = new TypeStructureNode(target.getDescription(), DynamicTypeLiteral.from(target.getType()), target.getMultiplicity(), source);
-			typeGraph.add(node);
-			
-			// Process attached attributes if current source is not a primitive type
-			if(!DynamicTypeLiteral.from(target.getType()).isPrimitive()){
-				inferAttributes(target);
+				Attribute target = (Attribute) connector.getTargetElement();
+				
+				// Check that target has a non-anonymous type
+				if(!DynamicTypeLiteral.isAllowedTypeName(target.getType())) continue;
+				
+				// Process current connection
+				TypeStructureNode node = new TypeStructureNode(target.getDescription(), DynamicTypeLiteral.from(target.getType()), target.getMultiplicity(), source);
+				typeGraph.add(node);
+				
+				// Process attached attributes if current source is not a primitive type
+				if(!DynamicTypeLiteral.from(target.getType()).isPrimitive()){
+					inferAttributes(target);
+				}
+			} else if(connector.getTargetElement() instanceof ComputationOperator){
+				// Infer attribute for Operator but relate to original source in type structure 
+				inferTransitiveAttributes(transitiveSource, connector.getTargetElement());
 			}
 		}
 	}
