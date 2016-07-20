@@ -31,7 +31,6 @@ import md2dot0.ShowEntity;
 import md2dot0.SingletonDataSource;
 import md2dot0.Transform;
 import md2dot0.UpdateEntity;
-import md2dot0.UseCase;
 import md2dot0.UseCaseTrigger;
 import md2dot0.Webservice;
 import md2dot0gui.ArithmeticOperator;
@@ -314,24 +313,36 @@ public class TestService {
 		return isConnectionEndAllowed(elem, edge.getSourceProcessFlowElement(), preTarget);
 	}
 	
-	public String getRoleImage(EObject obj){
+	public String getRoleImageBitmap(EObject obj){
+		return getRoleImage(obj, false);
+	}
+	
+	public String getRoleImageVector(EObject obj){
+		return getRoleImage(obj, true);
+	}
+	
+	public String getRoleImage(EObject obj, boolean vector){
 		if(!(obj instanceof Role)) return null;
-		
 		Role role = (Role) obj;
-		//UseCase useCase = (UseCase) ((Role) obj).eContainer();
 		
 		// Return role icon if known
-		if(roleIconMapping.get(role) != null) return roleIconMapping.get(role);
+		if(roleIconMapping.get(role) == null) {
+			// Add role mapping 
+			ArrayList<String> roleIcons = new ArrayList<String>();
+			roleIcons.add("/de.wwu.md2dot0.design/icons/woman");
+			roleIcons.add("/de.wwu.md2dot0.design/icons/man");
+			roleIcons.add("/de.wwu.md2dot0.design/icons/woman_green");
+			roleIcons.add("/de.wwu.md2dot0.design/icons/man_orange");
+			
+			// Modulo to cycle through icons if not enough
+			roleIconMapping.put(role, roleIcons.get(roleIconMapping.size() % roleIcons.size()));
+		}
 		
-		// Add role mapping 
-		ArrayList<String> roleIcons = new ArrayList<String>();
-		roleIcons.add("/de.wwu.md2dot0.design/icons/man.svg");
-		roleIcons.add("/de.wwu.md2dot0.design/icons/woman.svg");
-		
-		// Modulo to cycle through icons if not enough
-		roleIconMapping.put(role, roleIcons.get(roleIconMapping.size() % roleIcons.size()));
-		
-		return roleIconMapping.get(role);
+		if(vector){
+			return roleIconMapping.get(role) + ".svg";
+		} else {
+			return roleIconMapping.get(role) + ".png";
+		}
 	}
 	
 	/**
