@@ -1,5 +1,9 @@
 package de.wwu.md2dot0.design;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.emf.ecore.EObject;
 
 import md2dot0.AutomatedProcessElement;
@@ -21,11 +25,13 @@ import md2dot0.ProcessEndEvent;
 import md2dot0.ProcessFlowElement;
 import md2dot0.RemoteDataSource;
 import md2dot0.RetrieveLocation;
+import md2dot0.Role;
 import md2dot0.SelectEntity;
 import md2dot0.ShowEntity;
 import md2dot0.SingletonDataSource;
 import md2dot0.Transform;
 import md2dot0.UpdateEntity;
+import md2dot0.UseCase;
 import md2dot0.UseCaseTrigger;
 import md2dot0.Webservice;
 import md2dot0gui.ArithmeticOperator;
@@ -43,6 +49,8 @@ import md2dot0gui.Label;
 import md2dot0gui.SumFunc;
 
 public class TestService {
+	
+	public static Map<Role,String> roleIconMapping = new HashMap<Role,String>();
 
 	public boolean debugTrue(EObject elem) {
 		System.out.println(elem);
@@ -304,6 +312,26 @@ public class TestService {
 		ProcessConnector edge = (ProcessConnector) elem;
 		
 		return isConnectionEndAllowed(elem, edge.getSourceProcessFlowElement(), preTarget);
+	}
+	
+	public String getRoleImage(EObject obj){
+		if(!(obj instanceof Role)) return null;
+		
+		Role role = (Role) obj;
+		//UseCase useCase = (UseCase) ((Role) obj).eContainer();
+		
+		// Return role icon if known
+		if(roleIconMapping.get(role) != null) return roleIconMapping.get(role);
+		
+		// Add role mapping 
+		ArrayList<String> roleIcons = new ArrayList<String>();
+		roleIcons.add("/de.wwu.md2dot0.design/icons/man.svg");
+		roleIcons.add("/de.wwu.md2dot0.design/icons/woman.svg");
+		
+		// Modulo to cycle through icons if not enough
+		roleIconMapping.put(role, roleIcons.get(roleIconMapping.size() % roleIcons.size()));
+		
+		return roleIconMapping.get(role);
 	}
 	
 	/**
