@@ -20,11 +20,7 @@ import md2dot0gui.ComputationOperator;
 
 public class ModelInferenceDataTypeHelper {
 	
-	public ArrayList<TypeStructureNode> getTypeGraph() {
-		return typeGraph;
-	}
-
-	protected Map<ProcessFlowElement, DataTypeLiteral> elementTypes = new HashMap<ProcessFlowElement, DataTypeLiteral>(); // TODO bidirectional map?
+	protected Map<ParameterSource, DataTypeLiteral> elementTypes = new HashMap<ParameterSource, DataTypeLiteral>(); // TODO bidirectional map?
 	protected ArrayList<TypeStructureNode> typeGraph = new ArrayList<TypeStructureNode>();
 
 	/**
@@ -67,6 +63,9 @@ public class ModelInferenceDataTypeHelper {
 		lastOccurredType = inferSingleItem(currentElement, lastOccurredType);
 		processed.add(currentElement);
 		
+		// Process attributes of current item
+		inferAttributes(currentElement);
+		
 		// Process subsequent connected items
 		if(currentElement.getNextElements() != null && currentElement.getNextElements().size() > 0){
 			// Control flow elements: may have >1 outgoing connections!
@@ -107,7 +106,7 @@ public class ModelInferenceDataTypeHelper {
 			// Special case for Transform elements because type changes, MUST BE BEFORE upcoming ProcessElement superclass type
 			
 			// Check existing types for valid attributes
-			DataTypeLiteral targetType = ModelInferenceTextInputHelper.getTypeForTransform(((Transform) processing).getDescription(), lastOccurredType, typeGraph);
+			DataTypeLiteral targetType = ModelInferenceTextInputHelper.getTypeForTransform(((Transform) processing).getDescription(), lastOccurredType, typeGraph, elementTypes);
 
 			if(targetType != null && targetType.getIdentifier() != lastOccuredTypeName){
 				lastOccuredTypeName = targetType.getIdentifier();
@@ -167,7 +166,12 @@ public class ModelInferenceDataTypeHelper {
 				if(!DynamicTypeLiteral.isAllowedTypeName(target.getType())) continue;
 				
 				// Process current connection
-				TypeStructureNode node = new TypeStructureNode(target.getDescription(), DynamicTypeLiteral.from(target.getType()), target.getMultiplicity(), source);
+				DataTypeLiteral targetType = DynamicTypeLiteral.from(target.getType());
+				TypeStructureNode node = new TypeStructureNode(target.getDescription(), targetType, target.getMultiplicity(), source);
+				if(!(source instanceof ProcessElement)){
+					// Keep track of source data types (only for non-PE as they are already tracked
+					elementTypes.put(target, targetType);
+				}
 				typeGraph.add(node);
 				
 				// Process attached attributes if current source is not a primitive type

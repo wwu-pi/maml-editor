@@ -41,7 +41,7 @@ public class ModelInferrer {
 		DynamicTypeLiteral.setReadOnly(readOnly);
 		
 		// ------------------------------------------------------------------
-		// Select main process (using start event) and infer for following elements
+		// Select main process (using start event) and infer for following elements (and attributes)
 		// ------------------------------------------------------------------
 		Optional<ProcessStartEvent> start = toProcess.stream()
 				.filter(elem -> elem instanceof ProcessStartEvent)
@@ -65,9 +65,7 @@ public class ModelInferrer {
 		// ------------------------------------------------------------------
 		// Infer attributes
 		// ------------------------------------------------------------------
-		for(ProcessFlowElement elem : useCase.getProcessFlowElements()){
-			inferenceDataTypeHelper.inferAttributes(elem);
-		}
+		// Attributes attached to process flow elements have already been inferred
 
 		// Process remaining tangling attributes
 		Set<Attribute> connectedAttributes = useCase.eContents().stream()
