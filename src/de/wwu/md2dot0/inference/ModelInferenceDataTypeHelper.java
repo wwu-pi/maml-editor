@@ -20,6 +20,10 @@ import md2dot0gui.ComputationOperator;
 
 public class ModelInferenceDataTypeHelper {
 	
+	public ArrayList<TypeStructureNode> getTypeGraph() {
+		return typeGraph;
+	}
+
 	protected Map<ProcessFlowElement, DataTypeLiteral> elementTypes = new HashMap<ProcessFlowElement, DataTypeLiteral>(); // TODO bidirectional map?
 	protected ArrayList<TypeStructureNode> typeGraph = new ArrayList<TypeStructureNode>();
 
@@ -99,14 +103,16 @@ public class ModelInferenceDataTypeHelper {
 			// In case no value is given, it must be the last known type
 			elementTypes.put(processing, DynamicTypeLiteral.from(lastOccuredTypeName));
 			
-		} else if(processing instanceof Transform){
-			// Special case because type changes
-			String typeName = ((Transform) processing).getDataType() != null ? ((CustomType) ((Transform) processing).getDataType()).getName() : null;
-			if(typeName != null){
-				// TODO
-				lastOccuredTypeName = typeName;
+		} else if(processing instanceof Transform){ 
+			// Special case for Transform elements because type changes, MUST BE BEFORE upcoming ProcessElement superclass type
+			
+			// Check existing types for valid attributes
+			DataTypeLiteral targetType = ModelInferenceTextInputHelper.getTypeForTransform(((Transform) processing).getDescription(), lastOccurredType, typeGraph);
+
+			if(targetType != null && targetType.getIdentifier() != lastOccuredTypeName){
+				lastOccuredTypeName = targetType.getIdentifier();
 			}
-			// In case no type is given, we cannot infer anything
+			// In case no value is given, it must be the last known type
 			elementTypes.put(processing, DynamicTypeLiteral.from(lastOccuredTypeName));
 			
 		} else if(processing instanceof ProcessElement){
