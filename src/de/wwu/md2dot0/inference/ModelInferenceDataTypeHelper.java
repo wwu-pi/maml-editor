@@ -108,11 +108,13 @@ public class ModelInferenceDataTypeHelper {
 			// Check existing types for valid attributes
 			DataTypeLiteral targetType = ModelInferenceTextInputHelper.getTypeForTransform(((Transform) processing).getDescription(), lastOccurredType, typeGraph, elementTypes);
 
-			if(targetType != null && targetType.getIdentifier() != lastOccuredTypeName){
+			if(targetType != null){
+				elementTypes.put(processing, targetType);
 				lastOccuredTypeName = targetType.getIdentifier();
-			}
-			// In case no value is given, it must be the last known type
-			elementTypes.put(processing, DynamicTypeLiteral.from(lastOccuredTypeName));
+			} else {
+				// Else inference failed -> no type information possible
+				lastOccuredTypeName = null;
+			} 
 			
 		} else if(processing instanceof ProcessElement){
 			// If a type is explicitly set (anonymous or not) then use it, else use previous known type
