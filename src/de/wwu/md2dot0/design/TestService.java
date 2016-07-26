@@ -71,12 +71,12 @@ public class TestService {
 		return "Test";
 	}
 	
-	// Label representation for Parameter Connectors
-	public String getParameterConnectorLabelText(EObject obj){
+	// Label field (direct edit!) representation for Parameter Connectors
+	public String getParameterConnectorLabelEditText(EObject obj){
 		if(obj != null && obj instanceof ParameterConnector){
 			ParameterConnector connector = (ParameterConnector) obj;
 			
-			String labelText = connector.getOrder() + ": \"";
+			String labelText = "";
 			if(connector.getDescription() != null && connector.getDescription().length() > 0) {
 				labelText += connector.getDescription();
 			} else if(connector.getTargetElement() != null && connector.getTargetElement().getDescription() != null){
@@ -86,7 +86,17 @@ public class TestService {
 				}
 				// Computed attributes or Labels without default
 			}
-			labelText += "\"";
+			return labelText;
+		}
+		return "";
+	}
+	
+	// Label representation for Parameter Connectors
+	public String getParameterConnectorLabelText(EObject obj){
+		if(obj != null && obj instanceof ParameterConnector){
+			ParameterConnector connector = (ParameterConnector) obj;
+			
+			String labelText = connector.getOrder() + ": \"" + getParameterConnectorLabelEditText(obj) + "\"";
 			
 			// Special cases
 			if(connector.getSourceElement() instanceof ControlFlowElement){
