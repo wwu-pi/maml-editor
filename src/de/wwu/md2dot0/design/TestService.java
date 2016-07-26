@@ -5,7 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
+import de.wwu.md2dot0.dialog.ReorderItemsDialog;
 import md2dot0.AutomatedProcessElement;
 import md2dot0.Call;
 import md2dot0.Camera;
@@ -369,4 +376,28 @@ public class TestService {
 //		System.out.println(width);
 //		return width;
 //	}
+	
+	/**
+	 * Reorder elements
+	 */
+	public EObject openReorderAttributeWizard(EObject object){
+		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		shell.setLayout(new GridLayout(1, true));
+		
+		ReorderItemsDialog dialog = new ReorderItemsDialog(shell);
+		
+		dialog.setElements(new String[] { "Linux", "Mac", "Windows" });
+//		dialog.setTitle("Select desired data type");
+		
+		// user pressed cancel
+		if (dialog.open() != Window.OK) {
+			// Return previous value
+			System.out.println("Cancel");
+			//if(object instanceof Attribute) return ((Attribute) object).getType();
+		}
+		Object[] result = dialog.getResult();
+		System.out.println(result);
+		
+		return object;
+	}
 }
