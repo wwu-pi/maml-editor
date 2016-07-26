@@ -278,7 +278,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditProcessElementConnector" elementsToSelect="service:startInferenceProcess()">
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditProcessElementConnector" elementsToSelect="service:startInferenceProcess()" inputLabelExpression="feature:description">
             <mask mask="{0}"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0"/>
