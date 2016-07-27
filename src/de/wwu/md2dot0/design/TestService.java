@@ -13,6 +13,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 import de.wwu.md2dot0.dialog.ReorderItemsDialog;
+import de.wwu.md2dot0.dialog.ReorderListComponent;
+import de.wwu.md2dot0.dialog.ReorderListDialog;
 import md2dot0.AutomatedProcessElement;
 import md2dot0.Call;
 import md2dot0.Camera;
@@ -382,8 +384,9 @@ public class TestService {
 	 */
 	public EObject openReorderAttributeWizard(EObject object){
 		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-		shell.setLayout(new GridLayout(1, true));
+		//shell.setLayout(new GridLayout(1, true));
 		
+		//ReorderItemsDialog dialog = new ReorderItemsDialog(shell);
 		ReorderItemsDialog dialog = new ReorderItemsDialog(shell);
 		
 		dialog.setElements(new String[] { "Linux", "Mac", "Windows" });
