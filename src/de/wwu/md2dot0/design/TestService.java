@@ -1,7 +1,6 @@
 package de.wwu.md2dot0.design;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -398,7 +397,7 @@ public class TestService {
 				}).collect(Collectors.toList());
 		
 		Function<Object, String> itemHumanDescription = elem -> getParameterConnectorLabelEditText((ParameterConnector) elem);
-		dialog.setElements(parameters, itemHumanDescription);//new ArrayList<Object>(Arrays.asList("Linux", "Mac", "Windows")));
+		dialog.setElements(parameters, itemHumanDescription);
 		dialog.setTitle("Reorder attributes");
 		dialog.setLabelText("Please bring the attached GUI elements into the desired order or appearance on the screen:\n\n");
 		
@@ -407,7 +406,7 @@ public class TestService {
 			return object; // Do nothing
 		}
 		
-		// Reorder elements
+		// Reorder parameters
 		Object[] result = dialog.getResult();
 		for(int i=0; i < result.length; i++){
 			((ParameterConnector) result[i]).setOrder(i+1); 

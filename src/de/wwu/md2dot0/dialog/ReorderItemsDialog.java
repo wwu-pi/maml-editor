@@ -5,11 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import javax.swing.JList;
-
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -20,34 +16,20 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Device;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-
-import md2dot0.ParameterConnector;
 
 public class ReorderItemsDialog extends Dialog {
 
 	private Table list;
-	private Shell shell;
 	private String title;
 	private String labelText;
-	public void setLabelText(String labelText) {
-		this.labelText = labelText;
-	}
-
 	private java.util.List<Object> fElements = new ArrayList<Object>();
 	
 	// Map Object to human readable String (not necessarily unique)
@@ -57,12 +39,11 @@ public class ReorderItemsDialog extends Dialog {
 	private Map<String, Object> mapper = new HashMap<String, Object>();
 
 	public Object[] getResult() {
-		return mapper.values().toArray();
+		return fElements.toArray();
 	}
 
 	public ReorderItemsDialog(Shell parentShell) {
 		super(parentShell);
-		shell = parentShell;
 	}
 	
 	@Override
@@ -87,63 +68,24 @@ public class ReorderItemsDialog extends Dialog {
 		label.setText(labelText);
 		GridData data = new GridData();
 		data.widthHint = convertWidthInCharsToPixels(60);
-		// data.heightHint = convertHeightInCharsToPixels(3);
 		data.horizontalAlignment = GridData.FILL;
 		data.grabExcessHorizontalSpace = true;
-		// data.horizontalIndent = 5;
 		label.setLayoutData(data);
 
-		// list = new JList(parent);//, SWT.V_SCROLL | SWT.H_SCROLL |
-		// SWT.SINGLE);
-		// list.add(fElements);
-		//
-		// list.setDragEnabled(true);
-		// list.setTransferHandler(new ListTransferHandler());
 		list = createTable(parent);
-
 		fillTable();
-
-		//
-		// data = new GridData();
-		//// data.widthHint = convertWidthInCharsToPixels(fWidth);
-		// data.heightHint = convertHeightInCharsToPixels(10);
-		// data.grabExcessVerticalSpace = true;
-		// data.grabExcessHorizontalSpace = true;
-		// data.horizontalAlignment = GridData.FILL;
-		// data.verticalAlignment = GridData.FILL;
-		// list.getControl().setLayoutData(data);
 
 		return parent;
 	}
 
 	private Table createTable(Composite parent) {
-		final Table table = new Table(parent, SWT.V_SCROLL
-																		 |
-																		 SWT.H_SCROLL
-																		 |
-																		 SWT.SINGLE
-																		 |
-																		 SWT.FULL_SELECTION);
+		final Table table = new Table(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.SINGLE | SWT.FULL_SELECTION);
 		table.setLinesVisible(false);
 		table.setHeaderVisible(false);
-
-		// Device device = Display.getCurrent ();
-		//
-		// Color red = new Color (device, 255, 0, 0);
-		// table.setBackground(red);
-		// Color black = new Color (device, 0, 0, 0);
-		// table.setForeground(black);
-		// table.setFont(device.getSystemFont());
-
 		final GridData gd = new GridData(GridData.FILL, GridData.FILL, true, true, 1, 4);
 		gd.widthHint = convertWidthInCharsToPixels(60);
 		gd.heightHint = convertHeightInCharsToPixels(10);
 		table.setLayoutData(gd);
-		// TableColumn one = new TableColumn(table, SWT.LEFT);
-		// one.setText("One");
-		// table.setHeaderVisible(true);
-		// table.setData(-1);
-		table.setDragDetect(true);
 
 		// Initialize drag and drop
 		Transfer[] types = new Transfer[] { TextTransfer.getInstance() };
@@ -158,15 +100,9 @@ public class ReorderItemsDialog extends Dialog {
 				Table table = (Table) ds.getControl();
 				TableItem[] selection = table.getSelection();
 
-				// Create a buffer to hold the selected items and fill it
-//				StringBuffer buff = new StringBuffer();
-//				for (int i = 0, n = selection.length; i < n; i++) {
-//					buff.append(selection[i].getText());
-//				}
-
-				// Put the data into the event
+				// Put the data into the event (only single item can be moved)
 				if(selection.length == 1){
-					event.data = selection[0].getData();//buff.toString();
+					event.data = selection[0].getData();
 				}
 			}
 		});
@@ -194,20 +130,13 @@ public class ReorderItemsDialog extends Dialog {
 			}
 
 			public void drop(DropTargetEvent event) {
-				// If any text was dropped . . .
 				if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) {
-					// Get the dropped data
+					// Get the dropped data and drop position
 					Object target = ((TableItem) event.item).getData();
-
-					// DropTarget target = (DropTarget) event.widget;
-					// Table table = (Table) target.getControl();
 					Object data = event.data;
 
+					// Move opjects and redraw table
 					moveItem(mapper.get(data), mapper.get(target));
-//					// Create a new item in the table to hold the dropped data
-//					TableItem item = new TableItem(table, SWT.NONE);
-//					item.setText(new String[] { data });
-//					table.redraw();
 				}
 			}
 		});
@@ -225,7 +154,7 @@ public class ReorderItemsDialog extends Dialog {
 		}
 		this.function = function;
 	}
-
+	
 	protected void fillTable() {
 		if (list == null)
 			return;
@@ -268,6 +197,10 @@ public class ReorderItemsDialog extends Dialog {
 		fElements.add(newIndex, itemToMove);
 		
 		fillTable();
+	}
+	
+	public void setLabelText(String labelText) {
+		this.labelText = labelText;
 	}
 	
 	public void setTitle(String title){
