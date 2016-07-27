@@ -2,17 +2,17 @@ package de.wwu.md2dot0.design;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.ElementListSelectionDialog;
-
 import de.wwu.md2dot0.dialog.ReorderItemsDialog;
 import md2dot0.AutomatedProcessElement;
 import md2dot0.Call;
@@ -382,23 +382,35 @@ public class TestService {
 	 * Reorder elements
 	 */
 	public EObject openReorderAttributeWizard(EObject object){
-		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-		//shell.setLayout(new GridLayout(1, true));
+		if(!(object instanceof ParameterConnector)) return object;
 		
-		//ReorderItemsDialog dialog = new ReorderItemsDialog(shell);
+		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		
 		ReorderItemsDialog dialog = new ReorderItemsDialog(shell);
 		
-		dialog.setElements(new ArrayList<Object>(Arrays.asList("Linux", "Mac", "Windows")));
-//		dialog.setTitle("Select desired data type");
+		List<Object> parameters = ((ParameterConnector) object).getSourceElement().getParameters()
+				.stream().sorted(new Comparator<ParameterConnector>(){
+					@Override
+					public int compare(ParameterConnector arg0, ParameterConnector arg1) {
+						return arg0.getOrder() - arg1.getOrder();
+					}
+					
+				}).collect(Collectors.toList());
 		
-		// user pressed cancel
+		Function<Object, String> itemHumanDescription = elem -> getParameterConnectorLabelEditText((ParameterConnector) elem);
+		dialog.setElements(parameters, itemHumanDescription);//new ArrayList<Object>(Arrays.asList("Linux", "Mac", "Windows")));
+		dialog.setTitle("Reorder attributes");
+		
+		// User pressed cancel
 		if (dialog.open() != Window.OK) {
-			// Return previous value
-			System.out.println("Cancel");
-			//if(object instanceof Attribute) return ((Attribute) object).getType();
+			return object; // Do nothing
 		}
+		
+		// Reorder elements
 		Object[] result = dialog.getResult();
-		System.out.println(result);
+		for(int i=0; i < result.length; i++){
+			((ParameterConnector) result[i]).setOrder(i); 
+		}
 		
 		return object;
 	}

@@ -1,6 +1,7 @@
 package de.wwu.md2dot0.dialog;
 
 import java.util.ArrayList;
+import java.util.function.Function;
 
 import javax.swing.JList;
 
@@ -33,19 +34,31 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import md2dot0.ParameterConnector;
+
 public class ReorderItemsDialog extends Dialog {
 
 	private Table list;
-	private ArrayList<Object> fElements = new ArrayList<Object>();
+	private java.util.List<Object> fElements = new ArrayList<Object>();
 	private Shell shell;
+	private String title;
+	private Function<Object, String> function = elem -> elem.toString();
 
 	public Object[] getResult() {
-		return null;// list.getSelection();
+		return fElements.toArray();
 	}
 
 	public ReorderItemsDialog(Shell parentShell) {
 		super(parentShell);
 		shell = parentShell;
+	}
+	
+	@Override
+	protected void configureShell(Shell shell) {
+		super.configureShell(shell);
+		if (title != null) {
+			shell.setText(title);
+		}
 	}
 
 	@Override
@@ -92,13 +105,13 @@ public class ReorderItemsDialog extends Dialog {
 	}
 
 	private Table createTable(Composite parent) {
-		final Table table = new Table(parent, SWT.BORDER | SWT.MULTI);// SWT.V_SCROLL
-																		// |
-																		// SWT.H_SCROLL
-																		// |
-																		// SWT.SINGLE
-																		// |
-																		// SWT.FULL_SELECTION);
+		final Table table = new Table(parent, SWT.V_SCROLL
+																		 |
+																		 SWT.H_SCROLL
+																		 |
+																		 SWT.SINGLE
+																		 |
+																		 SWT.FULL_SELECTION);
 		table.setLinesVisible(false);
 		table.setHeaderVisible(false);
 
@@ -190,8 +203,9 @@ public class ReorderItemsDialog extends Dialog {
 		return table;
 	}
 
-	public void setElements(ArrayList<Object> elements) {
+	public void setElements(java.util.List<Object> elements, Function<Object, String> function) {
 		fElements = elements;
+		this.function = function;
 	}
 
 	protected void fillTable() {
@@ -208,12 +222,13 @@ public class ReorderItemsDialog extends Dialog {
 		// gc.fillRectangle (image.getBounds ());
 		// gc.dispose ();
 
-		if(fElements == null || fElements.size() == 0) return;
+		if(fElements == null || fElements.size() == 0 || function == null) return;
 		
 		for (int i = 0; i < fElements.size(); i++) {
 			TableItem item = new TableItem(list, SWT.NONE);
-			item.setData(fElements.get(i));
+			item.setData(fElements.get(i).toString());
 			item.setText((i+1) + ". " + fElements.get(i).toString());
+					//function.apply(fElements.get(i)));
 			// item.setImage(image);
 		}
 		
@@ -234,5 +249,9 @@ public class ReorderItemsDialog extends Dialog {
 		fElements.add(newIndex, itemToMove);
 		
 		fillTable();
+	}
+	
+	public void setTitle(String title){
+		this.title = title;
 	}
 }
