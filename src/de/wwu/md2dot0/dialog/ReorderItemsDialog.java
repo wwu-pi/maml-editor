@@ -257,13 +257,14 @@ public class ReorderItemsDialog extends Dialog {
 	
 	protected void moveItem(Object itemToMove, Object draggedOnItem){
 		// Drag on itself
-		if(itemToMove == null || draggedOnItem == null || itemToMove.equals(draggedOnItem)) return;
+		if(itemToMove == null || itemToMove.equals(draggedOnItem)) return;
 		
 		// remove old first
 		fElements.remove(itemToMove);
 		
 		// find new spot and insert
-		int newIndex = fElements.indexOf(draggedOnItem);
+		// End of list has no real element -> draggedOnItem is null
+		int newIndex = draggedOnItem != null ? fElements.indexOf(draggedOnItem) : fElements.size();
 		fElements.add(newIndex, itemToMove);
 		
 		fillTable();
