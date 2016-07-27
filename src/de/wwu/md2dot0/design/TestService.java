@@ -1,6 +1,7 @@
 package de.wwu.md2dot0.design;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,8 +14,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 import de.wwu.md2dot0.dialog.ReorderItemsDialog;
-import de.wwu.md2dot0.dialog.ReorderListComponent;
-import de.wwu.md2dot0.dialog.ReorderListDialog;
 import md2dot0.AutomatedProcessElement;
 import md2dot0.Call;
 import md2dot0.Camera;
@@ -389,7 +388,7 @@ public class TestService {
 		//ReorderItemsDialog dialog = new ReorderItemsDialog(shell);
 		ReorderItemsDialog dialog = new ReorderItemsDialog(shell);
 		
-		dialog.setElements(new String[] { "Linux", "Mac", "Windows" });
+		dialog.setElements(new ArrayList<Object>(Arrays.asList("Linux", "Mac", "Windows")));
 //		dialog.setTitle("Select desired data type");
 		
 		// user pressed cancel
