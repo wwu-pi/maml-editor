@@ -400,6 +400,7 @@ public class TestService {
 		Function<Object, String> itemHumanDescription = elem -> getParameterConnectorLabelEditText((ParameterConnector) elem);
 		dialog.setElements(parameters, itemHumanDescription);//new ArrayList<Object>(Arrays.asList("Linux", "Mac", "Windows")));
 		dialog.setTitle("Reorder attributes");
+		dialog.setLabelText("Please bring the attached GUI elements into the desired order or appearance on the screen:\n\n");
 		
 		// User pressed cancel
 		if (dialog.open() != Window.OK) {
@@ -409,7 +410,7 @@ public class TestService {
 		// Reorder elements
 		Object[] result = dialog.getResult();
 		for(int i=0; i < result.length; i++){
-			((ParameterConnector) result[i]).setOrder(i); 
+			((ParameterConnector) result[i]).setOrder(i+1); 
 		}
 		
 		return object;

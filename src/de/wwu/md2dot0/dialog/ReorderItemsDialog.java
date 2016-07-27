@@ -1,6 +1,8 @@
 package de.wwu.md2dot0.dialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import javax.swing.JList;
@@ -39,13 +41,23 @@ import md2dot0.ParameterConnector;
 public class ReorderItemsDialog extends Dialog {
 
 	private Table list;
-	private java.util.List<Object> fElements = new ArrayList<Object>();
 	private Shell shell;
 	private String title;
+	private String labelText;
+	public void setLabelText(String labelText) {
+		this.labelText = labelText;
+	}
+
+	private java.util.List<Object> fElements = new ArrayList<Object>();
+	
+	// Map Object to human readable String (not necessarily unique)
 	private Function<Object, String> function = elem -> elem.toString();
+	
+	// Mapper from object hash to object (cannot move generic objects directly)
+	private Map<String, Object> mapper = new HashMap<String, Object>();
 
 	public Object[] getResult() {
-		return fElements.toArray();
+		return mapper.values().toArray();
 	}
 
 	public ReorderItemsDialog(Shell parentShell) {
@@ -72,7 +84,7 @@ public class ReorderItemsDialog extends Dialog {
 		layout.horizontalSpacing = convertHorizontalDLUsToPixels(5);
 
 		Label label = new Label(parent, SWT.WRAP);
-		label.setText("Please bring the attached GUI elements into the desired order or appearance on the screen:\n\n");
+		label.setText(labelText);
 		GridData data = new GridData();
 		data.widthHint = convertWidthInCharsToPixels(60);
 		// data.heightHint = convertHeightInCharsToPixels(3);
@@ -191,7 +203,7 @@ public class ReorderItemsDialog extends Dialog {
 					// Table table = (Table) target.getControl();
 					Object data = event.data;
 
-					moveItem(data, target);
+					moveItem(mapper.get(data), mapper.get(target));
 //					// Create a new item in the table to hold the dropped data
 //					TableItem item = new TableItem(table, SWT.NONE);
 //					item.setText(new String[] { data });
@@ -205,6 +217,12 @@ public class ReorderItemsDialog extends Dialog {
 
 	public void setElements(java.util.List<Object> elements, Function<Object, String> function) {
 		fElements = elements;
+		
+		// Initialize mapping
+		mapper.clear();
+		for(Object element : elements){
+			mapper.put(element.toString(), element);
+		}
 		this.function = function;
 	}
 
@@ -226,20 +244,20 @@ public class ReorderItemsDialog extends Dialog {
 		
 		for (int i = 0; i < fElements.size(); i++) {
 			TableItem item = new TableItem(list, SWT.NONE);
-			item.setData(fElements.get(i).toString());
-			item.setText((i+1) + ". " + fElements.get(i).toString());
-					//function.apply(fElements.get(i)));
+			item.setData(fElements.get(i).toString()); // Set hash as data (cannot pass object)
+			item.setText((i+1) + ". " + function.apply(fElements.get(i)));
 			// item.setImage(image);
 		}
 		
 		// Add "to the end" item
 		TableItem item = new TableItem(list, SWT.NONE);
+		item.setData("EMPTY");
 		item.setText("<to the end>");
 	}
 	
 	protected void moveItem(Object itemToMove, Object draggedOnItem){
 		// Drag on itself
-		if(itemToMove.equals(draggedOnItem)) return;
+		if(itemToMove == null || draggedOnItem == null || itemToMove.equals(draggedOnItem)) return;
 		
 		// remove old first
 		fElements.remove(itemToMove);
