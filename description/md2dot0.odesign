@@ -542,8 +542,8 @@
         </customization>
       </additionalLayers>
       <additionalLayers name="AttributeLayer" label="Attribute Layer" activeByDefault="true">
-        <nodeMappings name="Attribute" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='directEditAttributeDescription']" semanticCandidatesExpression="aql:self.attributes->filter(md2dot0gui::Attribute)" domainClass="md2dot0gui.Attribute">
-          <borderedNodeMappings name="AttributeMultiplicity" semanticCandidatesExpression="var:self" doubleClickDescription="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='toggleAttributeMultiplicity']" domainClass="md2dot0gui.Attribute">
+        <nodeMappings name="Attribute" deletionDescription="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='deleteAttribute']" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='directEditAttributeDescription']" semanticCandidatesExpression="aql:self.attributes->filter(md2dot0gui::Attribute)" domainClass="md2dot0gui.Attribute">
+          <borderedNodeMappings name="AttributeMultiplicity" deletionDescription="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='deleteAttribute']" semanticCandidatesExpression="var:self" doubleClickDescription="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='toggleAttributeMultiplicity']" domainClass="md2dot0gui.Attribute">
             <style xsi:type="style:LozengeNodeDescription" showIcon="false" labelExpression="[if(self.multiplicity.toString()='MANY') then 'n' else '1' endif/]" labelPosition="node">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
               <labelFormat>bold</labelFormat>
@@ -551,7 +551,7 @@
               <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_orange']"/>
             </style>
           </borderedNodeMappings>
-          <borderedNodeMappings name="AttributeType" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='directEditAttributeDataType']" semanticCandidatesExpression="aql:self" doubleClickDescription="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='setAttributeDataType']" domainClass="md2dot0gui.Attribute">
+          <borderedNodeMappings name="AttributeType" deletionDescription="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='deleteAttribute']" labelDirectEdit="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='directEditAttributeDataType']" semanticCandidatesExpression="aql:self" doubleClickDescription="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='setAttributeDataType']" domainClass="md2dot0gui.Attribute">
             <style xsi:type="style:SquareDescription" showIcon="false" labelExpression="feature:type" sizeComputationExpression="-1" labelPosition="node" resizeKind="EAST_WEST" width="7" height="3">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
               <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
@@ -564,14 +564,14 @@
             <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_orange']"/>
           </style>
         </nodeMappings>
-        <nodeMappings name="ComputedAttribute" semanticCandidatesExpression="aql:self.attributes->filter(md2dot0gui::ComputedAttribute)" domainClass="md2dot0gui.ComputedAttribute">
+        <nodeMappings name="ComputedAttribute" deletionDescription="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='deleteAttribute']" semanticCandidatesExpression="aql:self.attributes->filter(md2dot0gui::ComputedAttribute)" domainClass="md2dot0gui.ComputedAttribute">
           <style xsi:type="style:EllipseNodeDescription" showIcon="false" labelExpression="service:getComputationOperatorType()" labelPosition="node" resizeKind="NSEW" horizontalDiameterComputationExpression="3" verticalDiameterComputationExpression="3">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_gray']"/>
           </style>
         </nodeMappings>
-        <nodeMappings name="ComputationOperator" semanticCandidatesExpression="aql:self.attributes->filter(md2dot0gui::ArithmeticOperator)" domainClass="md2dot0gui.ArithmeticOperator">
+        <nodeMappings name="ComputationOperator" deletionDescription="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='deleteAttribute']" semanticCandidatesExpression="aql:self.attributes->filter(md2dot0gui::ArithmeticOperator)" domainClass="md2dot0gui.ArithmeticOperator">
           <style xsi:type="style:EllipseNodeDescription" showIcon="false" labelExpression="service:getComputationOperatorType()" labelPosition="node" resizeKind="NSEW" horizontalDiameterComputationExpression="3" verticalDiameterComputationExpression="3">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
@@ -826,6 +826,31 @@
             <initialOperation>
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
                 <subModelOperations xsi:type="tool:ChangeContext" browseExpression="service:openReorderAttributeWizard()"/>
+              </firstModelOperations>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:DeleteElementDescription" name="deleteAttribute">
+            <element name="element"/>
+            <elementView name="elementView"/>
+            <containerView name="containerView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self">
+                <subModelOperations xsi:type="tool:For" expression="aql:self.parameters" iteratorName="parameter">
+                  <subModelOperations xsi:type="tool:ChangeContext" browseExpression="var:parameter">
+                    <subModelOperations xsi:type="tool:RemoveElement"/>
+                  </subModelOperations>
+                </subModelOperations>
+                <subModelOperations xsi:type="tool:For" expression="aql:element.eContainer(md2dot0::UseCase).processFlowConnections->select(conn | conn.oclIsKindOf(md2dot0::AssignConnector) and conn.oclAsType(md2dot0::AssignConnector).targetElement = element)" iteratorName="incomingAssignConnector">
+                  <subModelOperations xsi:type="tool:ChangeContext" browseExpression="var:incomingAssignConnector">
+                    <subModelOperations xsi:type="tool:RemoveElement"/>
+                  </subModelOperations>
+                </subModelOperations>
+                <subModelOperations xsi:type="tool:For" expression="aql:element.eContainer(md2dot0::UseCase).processFlowConnections->select(conn | conn.oclIsKindOf(md2dot0::ParameterConnector) and conn.oclAsType(md2dot0::ParameterConnector).targetElement = element)" iteratorName="incomingParameterConnector">
+                  <subModelOperations xsi:type="tool:ChangeContext" browseExpression="var:incomingParameterConnector">
+                    <subModelOperations xsi:type="tool:RemoveElement"/>
+                  </subModelOperations>
+                </subModelOperations>
+                <subModelOperations xsi:type="tool:RemoveElement"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
