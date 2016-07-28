@@ -23,15 +23,19 @@ public class ModelInferenceTextInputHelper {
 				currentType = inputType;
 			} else {
 				// Get first type node in existing graph that matches type and attribute 
+				boolean found = false;
 				for(TypeStructureNode node : typeGraph){
 					if(elementTypes.get(node.getSource()) != null && elementTypes.get(node.getSource()).equals(currentType) 
 							&& node.getAttributeName() != null && node.getAttributeName().equalsIgnoreCase(part)){
 						currentType = node.getType();
+						found = true;
 						break;
-					} else {
-						// Nothing found -> inference error
-						return null;
 					}
+				}
+				
+				if(!found) {
+					// Nothing found in this step -> inference error
+					return null;
 				}
 			}
 			// TODO functions such as first()...
