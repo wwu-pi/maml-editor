@@ -245,7 +245,7 @@ public class TestService {
 		// For certain elements there is only one connection allowed. For reconnection we need to 
 		// allow a second temporary connection. The old connector is passed as elem in this case.
 		int maxConnections = 1;
-		if(elem instanceof ProcessConnector){
+		if(elem instanceof ProcessConnector && ((ProcessFlowElement) preSource).getNextElements().contains(elem)){
 			maxConnections++;
 		}
 		
