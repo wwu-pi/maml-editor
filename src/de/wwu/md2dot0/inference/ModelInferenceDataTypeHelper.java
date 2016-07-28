@@ -170,14 +170,14 @@ public class ModelInferenceDataTypeHelper {
 				// Process current connection
 				DataTypeLiteral targetType = DynamicTypeLiteral.from(target.getType());
 				TypeStructureNode node = new TypeStructureNode(target.getDescription(), targetType, target.getMultiplicity(), source);
-				if(!(source instanceof ProcessElement)){
-					// Keep track of source data types (only for non-PE as they are already tracked
-					elementTypes.put(target, targetType);
+				if(source instanceof Attribute){
+					// Keep track of source data types (only for non-PE as they are already tracked)
+					elementTypes.put(source, DynamicTypeLiteral.from(((Attribute) source).getType()));
 				}
 				typeGraph.add(node);
 				
 				// Process attached attributes if current source is not a primitive type
-				if(!DynamicTypeLiteral.from(target.getType()).isPrimitive()){
+				if(!targetType.isPrimitive()){
 					inferAttributes(target);
 				}
 			} else if(connector.getTargetElement() instanceof ComputationOperator){
