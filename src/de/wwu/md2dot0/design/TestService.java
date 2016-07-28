@@ -161,7 +161,7 @@ public class TestService {
 		} else {
 			// Try to retrieve inferred type from incoming elements
 			ModelInferenceService service = new ModelInferenceService();
-			String result = service.getDataTypeRepresentation(obj, true);
+			String result = service.getDataTypeRepresentation(obj);
 			if(result != null && result != "??") labelText += result;
 		}
 		

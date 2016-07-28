@@ -55,7 +55,7 @@ public class InteractionProcessElementEditPart extends AbstractNotSelectableShap
 				getPrimaryShape().setProcessElementType(TestService.getProcessElementType(modelElement));
 
 				// Update data type
-				String dataTypeName = new ModelInferenceService().getDataTypeRepresentation(modelElement, true);
+				String dataTypeName = new ModelInferenceService().getDataTypeRepresentation(modelElement);
 				getPrimaryShape().setProcessElementDataType(dataTypeName);
 			}
 		}

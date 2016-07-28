@@ -20,8 +20,6 @@ import md2dot0data.DataTypeLiteral;
 import md2dot0gui.Attribute;
 
 public class ModelInferenceService {
-	// Central inference component
-	ModelInferrer inferrer;
 	
 	/**
 	 * Trigger inference process and visual update of elements.
@@ -43,16 +41,17 @@ public class ModelInferenceService {
 		Session session = SessionManager.INSTANCE.getSession(useCase);
 		TransactionalEditingDomain editingDomain = session.getTransactionalEditingDomain();
 		
-		inferrer = ModelInferrerManager.getInstance().getModelInferrer(useCase);
+		ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer(useCase);
 		inferrer.startInferenceProcess(useCase, editingDomain.isReadOnly(useCase.eResource())); // Container is the use case itself
 		
-		// TODO better logic: Diff for changed elements only
-
+		// No problem of resetting everything: View elements are only updated for actually changed types
 		Collection<ProcessFlowElement> pfes = useCase.getProcessFlowElements();
 		for(ProcessFlowElement pfe : pfes){
 			pfe.setDataType(inferrer.getType(pfe));
 		}
 
+//		initialInference = true;
+		
 		return useCase;
 	}
 	
@@ -64,20 +63,8 @@ public class ModelInferenceService {
 	public String getDataTypeRepresentation(EObject obj){
 		if(!(obj.eContainer() instanceof UseCase)) return "error";
 		
-		// Check if we are in read-only mode
-		Session session = SessionManager.INSTANCE.getSession(obj);
-		TransactionalEditingDomain editingDomain = session.getTransactionalEditingDomain();
-		
-		return getDataTypeRepresentation(obj, editingDomain.isReadOnly(obj.eResource()));
-	}
+		ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
 	
-	public String getDataTypeRepresentation(EObject obj, boolean readOnly){
-		if(!(obj.eContainer() instanceof UseCase)) return "error";
-		
-		UseCase useCase = (UseCase) obj.eContainer();
-		inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
-		inferrer.startInferenceProcess(useCase, readOnly); // Container is the use case itself
-		
 		if(obj instanceof ProcessFlowElement){
 			DataTypeLiteral type = inferrer.getType((ProcessFlowElement) obj);
 			return type != null ? type.getName() : "??";
@@ -95,29 +82,6 @@ public class ModelInferenceService {
 	public void startInferenceProcess(EObject obj){
 		getDataTypeRepresentation(obj);
 	}
-	
-	/**
-	 * Polymorphism helper in case multiple use cases are passed to infer.
-	 * TODO: Currently only first use case is considered, needs to be extended to infer multiple UC and merge them
-	 * @param obj
-	 */
-//	public void startInferenceProcess(Collection<? extends EObject> obj){
-//		Optional<UseCase> useCase = obj.stream()
-//				.filter(elem -> elem instanceof UseCase)
-//				.map(elem -> (UseCase) elem)
-//				.findFirst();
-//		
-//		if(!useCase.isPresent()){
-//			return;
-//		}
-//		
-//		// Check if we are in read-only mode
-//		Session session = SessionManager.INSTANCE.getSession(useCase);
-//		TransactionalEditingDomain editingDomain = session.getTransactionalEditingDomain();
-//				
-//		inferrer = ModelInferrerManager.getInstance().getModelInferrer(useCase.get());
-//		inferrer.startInferenceProcess((UseCase) useCase.get(), editingDomain.isReadOnly(useCase.eResource()));
-//	}
 	
 	public String[] getDataTypeList(EObject object){
 		// Refresh inferred model types

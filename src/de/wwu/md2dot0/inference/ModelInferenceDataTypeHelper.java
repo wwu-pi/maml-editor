@@ -28,7 +28,7 @@ public class ModelInferenceDataTypeHelper {
 	 * @param obj
 	 * @return
 	 */
-	public DataTypeLiteral getType(ProcessFlowElement obj) {
+	public DataTypeLiteral getType(ParameterSource obj) {
 		return elementTypes.get(obj);
 	}
 	

@@ -1,5 +1,6 @@
 package de.wwu.md2dot0.inference;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -19,6 +20,9 @@ import md2dot0gui.Attribute;
  *
  */
 public class ModelInferrer {
+	
+	// Track last inference
+	private Date lastInference = null;
 	
 	// Manages data types
 	protected ModelInferenceDataTypeHelper inferenceDataTypeHelper = new ModelInferenceDataTypeHelper(); 
@@ -88,6 +92,10 @@ public class ModelInferrer {
 		// ------------------------------------------------------------------
 		inferenceMergeHelper.mergeProcessElements(useCase.getProcessFlowElements(), inferenceDataTypeHelper);
 		
+		// Track the last time of inference for eventual throttling
+		setLastInference(new Date());
+		System.out.println(this + " NEW INFERENCE at " + getLastInference().getTime());
+		
 		// TODO remove unused data types from UseCase dataType list
 		
 		// Output Helper
@@ -104,6 +112,14 @@ public class ModelInferrer {
 		// Pass to data type helper
 		DataTypeLiteral type = inferenceDataTypeHelper.getType(obj);
 		return type;
+	}
+	
+	public Date getLastInference() {
+		return lastInference;
+	}
+
+	public void setLastInference(Date lastInference) {
+		this.lastInference = lastInference;
 	}
 	
 	// TODO validate model (no dangling, ...)
