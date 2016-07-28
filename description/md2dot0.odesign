@@ -371,6 +371,7 @@
             <initialOperation>
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
                 <subModelOperations xsi:type="tool:SetValue" featureName="sourceProcessFlowElement" valueExpression="var:target"/>
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
               </firstModelOperations>
             </initialOperation>
             <edgeView name="edgeView"/>
@@ -383,7 +384,9 @@
             <element name="element"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
-                <subModelOperations xsi:type="tool:SetValue" featureName="targetProcessFlowElement" valueExpression="var:target"/>
+                <subModelOperations xsi:type="tool:SetValue" featureName="targetProcessFlowElement" valueExpression="var:target">
+                  <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
+                </subModelOperations>
               </firstModelOperations>
             </initialOperation>
             <edgeView name="edgeView"/>
@@ -393,10 +396,14 @@
             <elementView name="elementView"/>
             <containerView name="containerView"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
-                <subModelOperations xsi:type="tool:RemoveElement"/>
-                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:element.eContainer()">
-                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:self.getDataTypeRepresentation()"/>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:element.sourceProcessFlowElement">
+                <subModelOperations xsi:type="tool:Unset" featureName="nextElements" elementExpression="aql:element"/>
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:element.targetProcessFlowElement">
+                  <subModelOperations xsi:type="tool:Unset" featureName="previousElements" elementExpression="aql:element"/>
+                </subModelOperations>
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:element">
+                  <subModelOperations xsi:type="tool:RemoveElement"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
@@ -711,7 +718,7 @@
             <initialOperation>
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
                 <subModelOperations xsi:type="tool:SetValue" featureName="targetElement" valueExpression="var:target"/>
-                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateDataTypeInvisible()"/>
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
               </firstModelOperations>
             </initialOperation>
             <edgeView name="edgeView"/>

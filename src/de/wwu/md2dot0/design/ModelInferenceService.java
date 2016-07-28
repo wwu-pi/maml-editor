@@ -28,25 +28,32 @@ public class ModelInferenceService {
 	 * @param obj
 	 */
 	public EObject updateAllDataTypes(EObject obj){
-		if(!(obj.eContainer() instanceof UseCase)) return null;
+		if(obj instanceof UseCase){
+			return updateAllDataTypes(obj);
+		} else if(obj.eContainer() instanceof UseCase){
+			return updateAllDataTypes((UseCase) obj.eContainer());
+		}
+		return null;
+	}
+	
+	public EObject updateAllDataTypes(UseCase useCase){
+		if(useCase == null) return null;
 		
 		// Check if we are in read-only mode
-		Session session = SessionManager.INSTANCE.getSession(obj);
+		Session session = SessionManager.INSTANCE.getSession(useCase);
 		TransactionalEditingDomain editingDomain = session.getTransactionalEditingDomain();
 		
-		UseCase useCase = (UseCase) obj.eContainer();
-		inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
-		inferrer.startInferenceProcess(useCase, editingDomain.isReadOnly(obj.eResource())); // Container is the use case itself
+		inferrer = ModelInferrerManager.getInstance().getModelInferrer(useCase);
+		inferrer.startInferenceProcess(useCase, editingDomain.isReadOnly(useCase.eResource())); // Container is the use case itself
 		
 		// TODO better logic: Diff for changed elements only
 
-		Collection<ProcessFlowElement> pfes = ((UseCase) obj.eContainer()).getProcessFlowElements();
+		Collection<ProcessFlowElement> pfes = useCase.getProcessFlowElements();
 		for(ProcessFlowElement pfe : pfes){
-		//	pfe.setChanged(!pfe.isChanged()); // Artificial update that triggers redraw
 			pfe.setDataType(inferrer.getType(pfe));
 		}
 
-		return obj;
+		return useCase;
 	}
 	
 	/**

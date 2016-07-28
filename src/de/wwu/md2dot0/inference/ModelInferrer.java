@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.sun.org.apache.xml.internal.serializer.ElemDesc;
+
 import md2dot0.ParameterConnector;
 import md2dot0.ParameterSource;
 import md2dot0.ProcessFlowElement;
@@ -55,7 +57,7 @@ public class ModelInferrer {
 		
 		// Process remaining tangling element chains and infer subsequent elements
 		Set<ProcessFlowElement> tanglingElementStarts = toProcess.stream()
-				.filter(elem -> !(elem instanceof ProcessStartEvent) && elem.getPreviousElements().size() == 0)
+				.filter(elem -> !elem.equals(start.get()) && elem.getPreviousElements().size() == 0)
 				.collect(Collectors.toSet());
 		
 		for(ProcessFlowElement elem : tanglingElementStarts){
