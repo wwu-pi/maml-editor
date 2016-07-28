@@ -182,7 +182,9 @@
           <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditProcessElement" inputLabelExpression="feature:description">
             <mask mask="{0}"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0"/>
+              <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0">
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
+              </firstModelOperations>
             </initialOperation>
           </ownedTools>
           <ownedTools xsi:type="tool_1:DeleteElementDescription" name="deleteRole">
@@ -305,7 +307,7 @@
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0.ProcessConnector" referenceName="processFlowConnections">
                   <subModelOperations xsi:type="tool:SetValue" featureName="sourceProcessFlowElement" valueExpression="var:source"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="targetProcessFlowElement" valueExpression="var:target"/>
-                  <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:source.getDataTypeRepresentation()"/>
+                  <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:source.updateAllDataTypes()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
@@ -329,7 +331,7 @@
             <mask mask="{0}"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:SetValue" featureName="typeName" valueExpression="var:0">
-                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="service:updateDataType()"/>
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="service:updateAllDataTypes()"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
@@ -627,6 +629,7 @@
                   <subModelOperations xsi:type="tool:SetValue" featureName="targetElement" valueExpression="var:target"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="sourceElement" valueExpression="var:source"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="order" valueExpression="aql:source.parameters->size()"/>
+                  <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
@@ -643,6 +646,7 @@
                   <subModelOperations xsi:type="tool:SetValue" featureName="sourceElement" valueExpression="var:source"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="targetElement" valueExpression="var:target"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="order" valueExpression="aql:source.parameters->size()"/>
+                  <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
@@ -693,6 +697,7 @@
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
                 <subModelOperations xsi:type="tool:SetValue" featureName="sourceElement" valueExpression="var:target"/>
                 <subModelOperations xsi:type="tool:SetValue" featureName="order" valueExpression="aql:target.parameters->size()"/>
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
               </firstModelOperations>
             </initialOperation>
             <edgeView name="edgeView"/>
@@ -706,6 +711,7 @@
             <initialOperation>
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
                 <subModelOperations xsi:type="tool:SetValue" featureName="targetElement" valueExpression="var:target"/>
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateDataTypeInvisible()"/>
               </firstModelOperations>
             </initialOperation>
             <edgeView name="edgeView"/>
@@ -804,14 +810,16 @@
             <mask mask="{0}"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0">
-                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="service:startInferenceProcess()"/>
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
           <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttributeDataType" elementsToSelect="service:startInferenceProcess()" inputLabelExpression="feature:type">
             <mask mask="{0}"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="var:0"/>
+              <firstModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="var:0">
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
+              </firstModelOperations>
             </initialOperation>
           </ownedTools>
           <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditLabelDescription" inputLabelExpression="feature:description">
@@ -851,6 +859,7 @@
                   </subModelOperations>
                 </subModelOperations>
                 <subModelOperations xsi:type="tool:RemoveElement"/>
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:containerView.target.updateAllDataTypes()"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>

@@ -27,7 +27,7 @@ public class ModelInferenceService {
 	 * Trigger inference process and visual update of elements.
 	 * @param obj
 	 */
-	public EObject updateDataType(EObject obj){
+	public EObject updateAllDataTypes(EObject obj){
 		if(!(obj.eContainer() instanceof UseCase)) return null;
 		
 		// Check if we are in read-only mode
@@ -38,10 +38,8 @@ public class ModelInferenceService {
 		inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
 		inferrer.startInferenceProcess(useCase, editingDomain.isReadOnly(obj.eResource())); // Container is the use case itself
 		
-		
-		//getDataTypeRepresentation(obj);
-		
 		// TODO better logic: Diff for changed elements only
+
 		Collection<ProcessFlowElement> pfes = ((UseCase) obj.eContainer()).getProcessFlowElements();
 		for(ProcessFlowElement pfe : pfes){
 		//	pfe.setChanged(!pfe.isChanged()); // Artificial update that triggers redraw
