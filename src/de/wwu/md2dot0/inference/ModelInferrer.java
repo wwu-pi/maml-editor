@@ -5,8 +5,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.sun.org.apache.xml.internal.serializer.ElemDesc;
-
 import md2dot0.ParameterConnector;
 import md2dot0.ParameterSource;
 import md2dot0.ProcessFlowElement;
@@ -55,12 +53,12 @@ public class ModelInferrer {
 			toProcess.removeAll(processed);
 		}
 		
-		// Process remaining tangling element chains and infer subsequent elements
-		Set<ProcessFlowElement> tanglingElementStarts = toProcess.stream()
+		// Process remaining dangling element chains and infer subsequent elements
+		Set<ProcessFlowElement> danglingElementStarts = toProcess.stream()
 				.filter(elem -> !elem.equals(start.get()) && elem.getPreviousElements().size() == 0)
 				.collect(Collectors.toSet());
 		
-		for(ProcessFlowElement elem : tanglingElementStarts){
+		for(ProcessFlowElement elem : danglingElementStarts){
 			inferenceDataTypeHelper.inferProcessFlowChain(elem);
 		}
 		
@@ -69,19 +67,19 @@ public class ModelInferrer {
 		// ------------------------------------------------------------------
 		// Attributes attached to process flow elements have already been inferred
 
-		// Process remaining tangling attributes
+		// Process remaining dangling attributes
 		Set<Attribute> connectedAttributes = useCase.eContents().stream()
 				.filter(elem -> (elem instanceof ParameterConnector) && ((ParameterConnector) elem).getTargetElement() instanceof Attribute)
 				.map(elem -> (Attribute) ((ParameterConnector) elem).getTargetElement())
 				.collect(Collectors.toSet());
 		
-		Set<Attribute> tanglingAttributes = useCase.eContents().stream()
+		Set<Attribute> danglingAttributes = useCase.eContents().stream()
 				.filter(elem -> (elem instanceof Attribute))
 				.map(elem -> (Attribute) elem)
 				.collect(Collectors.toSet());
-		tanglingAttributes.removeAll(connectedAttributes);
+		danglingAttributes.removeAll(connectedAttributes);
 		
-		for(ParameterSource elem : tanglingAttributes){
+		for(ParameterSource elem : danglingAttributes){
 			inferenceDataTypeHelper.inferAttributes(elem);
 		}
 				
@@ -108,6 +106,6 @@ public class ModelInferrer {
 		return type;
 	}
 	
-	// TODO validate model (no tangling, ...)
+	// TODO validate model (no dangling, ...)
 	// TODO build data model and validate data types
 }
