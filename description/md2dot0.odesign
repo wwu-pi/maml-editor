@@ -297,7 +297,7 @@
           </ownedTools>
         </toolSections>
         <toolSections name="ConnectorSection" label="Data flow">
-          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createProcessConnector" label="Connect process steps" precondition="service:isConnectionEndAllowed(preSource, preTarget)" elementsToSelect="service:startInferenceProcess()" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@edgeMappings[name='ProcessElementConnector']" iconPath="/de.wwu.md2dot0.design/icons/connector_process.png" connectionStartPrecondition="service: isConnectionStartAllowed(preSource)">
+          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createProcessConnector" label="Connect process steps" precondition="service:isConnectionEndAllowed(preSource, preTarget)" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@edgeMappings[name='ProcessElementConnector']" iconPath="/de.wwu.md2dot0.design/icons/connector_process.png" connectionStartPrecondition="service: isConnectionStartAllowed(preSource)">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
@@ -312,7 +312,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditProcessElementConnector" elementsToSelect="service:startInferenceProcess()" inputLabelExpression="feature:description">
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditProcessElementConnector" inputLabelExpression="feature:description">
             <mask mask="{0}"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0"/>
@@ -327,7 +327,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditDataSource" elementsToSelect="service:startInferenceProcess()" inputLabelExpression="aql:self.typeName">
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditDataSource" inputLabelExpression="aql:self.typeName">
             <mask mask="{0}"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:SetValue" featureName="typeName" valueExpression="var:0">
@@ -362,7 +362,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:ReconnectEdgeDescription" name="reconnectProcessConnectorSource" precondition="service:isProcessSourceReconnectionAllowed(target)" elementsToSelect="service:startInferenceProcess()" reconnectionKind="RECONNECT_SOURCE">
+          <ownedTools xsi:type="tool_1:ReconnectEdgeDescription" name="reconnectProcessConnectorSource" precondition="service:isProcessSourceReconnectionAllowed(target)" reconnectionKind="RECONNECT_SOURCE">
             <source name="source"/>
             <target name="target"/>
             <sourceView name="sourceView"/>
@@ -376,7 +376,7 @@
             </initialOperation>
             <edgeView name="edgeView"/>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:ReconnectEdgeDescription" name="reconnectProcessConnectorTarget" precondition="service:isProcessTargetReconnectionAllowed(target)" elementsToSelect="service:startInferenceProcess()">
+          <ownedTools xsi:type="tool_1:ReconnectEdgeDescription" name="reconnectProcessConnectorTarget" precondition="service:isProcessTargetReconnectionAllowed(target)">
             <source name="source"/>
             <target name="target"/>
             <sourceView name="sourceView"/>
@@ -384,9 +384,8 @@
             <element name="element"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
-                <subModelOperations xsi:type="tool:SetValue" featureName="targetProcessFlowElement" valueExpression="var:target">
-                  <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
-                </subModelOperations>
+                <subModelOperations xsi:type="tool:SetValue" featureName="targetProcessFlowElement" valueExpression="var:target"/>
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
               </firstModelOperations>
             </initialOperation>
             <edgeView name="edgeView"/>
@@ -624,7 +623,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createParameterConnectorRead" label="Read attribute" elementsToSelect="service:startInferenceProcess()" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@edgeMappings[name='ProcessParameterConnectorRead']" iconPath="/de.wwu.md2dot0.design/icons/connector_attribute_read.png">
+          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createParameterConnectorRead" label="Read attribute" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@edgeMappings[name='ProcessParameterConnectorRead']" iconPath="/de.wwu.md2dot0.design/icons/connector_attribute_read.png">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
@@ -641,7 +640,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createParameterConnectorWrite" label="Write attribute" elementsToSelect="service:startInferenceProcess()" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@edgeMappings[name='ProcessParameterConnectorWrite']" iconPath="/de.wwu.md2dot0.design/icons/connector_attribute_write.png">
+          <ownedTools xsi:type="tool_1:EdgeCreationDescription" name="createParameterConnectorWrite" label="Write attribute" edgeMappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@edgeMappings[name='ProcessParameterConnectorWrite']" iconPath="/de.wwu.md2dot0.design/icons/connector_attribute_write.png">
             <sourceVariable name="source"/>
             <targetVariable name="target"/>
             <sourceViewVariable name="sourceView"/>
@@ -670,7 +669,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttributeConnector" elementsToSelect="service:startInferenceProcess()" inputLabelExpression="service:getParameterConnectorLabelEditText()">
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttributeConnector" inputLabelExpression="service:getParameterConnectorLabelEditText()">
             <mask mask="{0}"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0"/>
@@ -690,11 +689,11 @@
                   </cases>
                   <default/>
                 </subModelOperations>
-                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="service:startInferenceProcess()"/>
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="service:updateAllDataTypes()"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:ReconnectEdgeDescription" name="reconnectParameterConnectorSource" elementsToSelect="service:startInferenceProcess()" reconnectionKind="RECONNECT_SOURCE">
+          <ownedTools xsi:type="tool_1:ReconnectEdgeDescription" name="reconnectParameterConnectorSource" reconnectionKind="RECONNECT_SOURCE">
             <source name="source"/>
             <target name="target"/>
             <sourceView name="sourceView"/>
@@ -709,7 +708,7 @@
             </initialOperation>
             <edgeView name="edgeView"/>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:ReconnectEdgeDescription" name="reconnectParameterConnectorTarget" elementsToSelect="service:startInferenceProcess()">
+          <ownedTools xsi:type="tool_1:ReconnectEdgeDescription" name="reconnectParameterConnectorTarget">
             <source name="source"/>
             <target name="target"/>
             <sourceView name="sourceView"/>
@@ -804,12 +803,13 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:DoubleClickDescription" name="setAttributeDataType" elementsToSelect="service:startInferenceProcess()" mappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']/@borderedNodeMappings[name='AttributeType']">
+          <ownedTools xsi:type="tool_1:DoubleClickDescription" name="setAttributeDataType" mappings="//@ownedViewpoints[name='processEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@nodeMappings[name='Attribute']/@borderedNodeMappings[name='AttributeType']">
             <element name="element"/>
             <elementView name="elementView"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
                 <subModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="service:openDataTypeSelectionWizard()"/>
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
@@ -821,7 +821,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttributeDataType" elementsToSelect="service:startInferenceProcess()" inputLabelExpression="feature:type">
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttributeDataType" inputLabelExpression="feature:type">
             <mask mask="{0}"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="var:0">
