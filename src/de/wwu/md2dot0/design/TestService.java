@@ -281,8 +281,8 @@ public class TestService {
 		}
 		
 		if(preTarget instanceof ProcessEndEvent){
-			// Only end event have an incoming edge
-			return ((ProcessEndEvent) preTarget).getPreviousElements().size() < maxConnections;
+			// Only end event have incoming edges (no limit to facilitate modeling)
+			return true;
 		} else if(preTarget instanceof Event){
 			// Other events have no incoming edge
 			return false;
