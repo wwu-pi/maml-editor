@@ -1,5 +1,6 @@
 package de.wwu.md2dot0.inference;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import md2dot0.ParameterSource;
 import md2dot0.ProcessFlowElement;
 import md2dot0.ProcessStartEvent;
 import md2dot0.UseCase;
+import md2dot0data.DataType;
 import md2dot0data.DataTypeLiteral;
 import md2dot0gui.Attribute;
 
@@ -120,6 +122,18 @@ public class ModelInferrer {
 
 	public void setLastInference(Date lastInference) {
 		this.lastInference = lastInference;
+	}
+	
+	public Collection<TypeStructureNode> getAttributesForType(DataType type){
+		return inferenceDataTypeHelper.getAttributesForType(type);
+	}
+	
+	public DataType getDataTypeFromParameterSource(ParameterSource source){
+		return inferenceDataTypeHelper.getDataTypeFromParameterSource(source);
+	}
+	
+	public DataType getDataTypeForAttributeName(DataType sourceType, String attributeName){
+		return inferenceDataTypeHelper.getDataTypeForAttributeName(sourceType, attributeName);
 	}
 	
 	// TODO validate model (no dangling, ...)

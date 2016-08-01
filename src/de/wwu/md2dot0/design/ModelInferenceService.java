@@ -2,6 +2,8 @@ package de.wwu.md2dot0.design;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -13,9 +15,14 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import de.wwu.md2dot0.inference.ModelInferrer;
 import de.wwu.md2dot0.inference.ModelInferrerManager;
+import de.wwu.md2dot0.inference.TypeStructureNode;
 import de.wwu.md2dot0.inference.DynamicTypeLiteral;
+import md2dot0.Connector;
+import md2dot0.ParameterConnector;
+import md2dot0.ParameterSource;
 import md2dot0.ProcessFlowElement;
 import md2dot0.UseCase;
+import md2dot0data.DataType;
 import md2dot0data.DataTypeLiteral;
 import md2dot0gui.Attribute;
 
@@ -83,7 +90,7 @@ public class ModelInferenceService {
 		getDataTypeRepresentation(obj);
 	}
 	
-	public String[] getDataTypeList(EObject object){
+	private String[] getDataTypeList(EObject object){
 		// Refresh inferred model types
 		startInferenceProcess(object);
 		
@@ -110,12 +117,67 @@ public class ModelInferenceService {
 		
 		// Value given and does not start with invalid character?
 		if(result.length > 0 && !((String) result[0]).startsWith("__")){
-			System.out.println(result[0]);
 			return (String) result[0];
 		}
 		
 		// Return previous value
 		if(object instanceof Attribute) return ((Attribute) object).getType();
 		return null; // Unknown error
+	}
+	
+	private Object[] getAttributeList(ParameterSource source){
+		// Refresh inferred model types
+		startInferenceProcess(source);
+		
+		ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) source.eContainer());
+		DataType type = inferrer.getDataTypeFromParameterSource(source);
+		Collection<TypeStructureNode> nodes = inferrer.getAttributesForType(type);
+		
+		System.out.println(nodes);
+		
+		return nodes.stream().filter(Md2dot0Helper.distinctByKey(elem -> ((TypeStructureNode) elem).getAttributeName())).toArray();
+	}
+	
+	public String openAttributeSelectionWizard(EObject object){
+		if(!(object instanceof Attribute)) return null;
+		Attribute attribute = (Attribute) object;
+		
+		// Get source element
+		Optional<Connector> connector = ((UseCase) ((Attribute) object).eContainer()).getProcessFlowConnections().stream()
+			.filter(elem -> elem instanceof ParameterConnector && ((ParameterConnector) elem).getTargetElement().equals(object)).findFirst();
+		if(!connector.isPresent()) {
+			// No source -> impossible to set
+			return attribute.getDescription();
+		}
+		
+		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		ElementListSelectionDialog dialog = new ElementListSelectionDialog(shell, new LabelProvider());
+		
+		Object[] attributeList = getAttributeList(((ParameterConnector) connector.get()).getSourceElement());
+		if(attributeList.length == 0) return (attribute.getDescription()); // Skip, nothing to select
+		
+		dialog.setElements(attributeList);
+		dialog.setTitle("Select desired attribute name for the given type '" + attribute.getType() + "'");
+		
+		// user pressed cancel
+		if (dialog.open() != Window.OK) {
+			// Return previous value
+			return attribute.getDescription();
+		}
+		Object[] result = dialog.getResult();
+		
+		// Value given?
+		if(result.length > 0 && result[0] instanceof TypeStructureNode){
+			for(Object o: attributeList){
+				if(((TypeStructureNode) o).getAttributeName().equals(((TypeStructureNode) result[0]).getAttributeName())){
+					attribute.setType(((TypeStructureNode) o).getType().getName());
+				}
+			}
+			// Return attributeName
+			return ((TypeStructureNode) result[0]).getAttributeName();
+		}
+		
+		// Return previous value
+		return attribute.getDescription();
 	}
 }

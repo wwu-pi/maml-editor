@@ -1,5 +1,10 @@
 package de.wwu.md2dot0.design;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 public class Md2dot0Helper {
 
 	public static String toFirstUpper(String input){
@@ -75,5 +80,10 @@ public class Md2dot0Helper {
 	public static String getAllowedDataTypeName(String text){
 		// Basically the same as for attributes but with first uppercase letter
 		return toFirstUpper(getAllowedAttributeName(text));
+	}
+	
+	public static <T> Predicate<T> distinctByKey(Function<? super T,Object> keyExtractor) {
+	    Map<Object,Boolean> seen = new ConcurrentHashMap<>();
+	    return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
 	}
 }

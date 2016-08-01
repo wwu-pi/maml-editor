@@ -1,10 +1,14 @@
 package de.wwu.md2dot0.inference;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import md2dot0.DataSource;
 import md2dot0.Event;
 import md2dot0.ParameterConnector;
@@ -14,9 +18,11 @@ import md2dot0.ProcessElement;
 import md2dot0.ProcessFlowElement;
 import md2dot0.Transform;
 import md2dot0data.CustomType;
+import md2dot0data.DataType;
 import md2dot0data.DataTypeLiteral;
 import md2dot0gui.Attribute;
 import md2dot0gui.ComputationOperator;
+import md2dot0gui.GUIElement;
 
 public class ModelInferenceDataTypeHelper {
 	
@@ -193,6 +199,35 @@ public class ModelInferenceDataTypeHelper {
 	public void clearDataModel(){
 		this.elementTypes.clear();
 		this.typeGraph.clear();
+	}
+	
+	/**
+	 * Retrieve all attributes for a specific data type
+	 */
+	public Collection<TypeStructureNode> getAttributesForType(DataType type){
+		// Either ProcessFlowElement -> compare type with target type
+		// Or GUIElement -> get type from String and compare
+		return this.typeGraph.stream().filter(elem -> ((elem.getSource() instanceof ProcessFlowElement) && ((ProcessFlowElement) elem.getSource()).getDataType().equals(type)) 
+				|| ((elem.getSource() instanceof GUIElement) && DynamicTypeLiteral.from(((GUIElement) elem.getSource()).getType()).equals(type)))
+		.collect(Collectors.toList());
+	}
+	
+	public DataType getDataTypeFromParameterSource(ParameterSource source){
+		if(source instanceof ProcessFlowElement) {
+			return ((ProcessFlowElement) source).getDataType();
+		} else if(source instanceof GUIElement) {
+			return DynamicTypeLiteral.from(((GUIElement) source).getType());
+		}
+		return null;
+	}
+	
+	public DataType getDataTypeForAttributeName(DataType sourceType, String attributeName){
+		Optional<TypeStructureNode> node = this.typeGraph.stream().filter(elem -> elem.getAttributeName().equals(attributeName))
+				.filter(elem -> ((elem.getSource() instanceof ProcessFlowElement) && ((ProcessFlowElement) elem.getSource()).getDataType().equals(sourceType)) 
+				|| ((elem.getSource() instanceof GUIElement) && DynamicTypeLiteral.from(((GUIElement) elem.getSource()).getType()).equals(sourceType)))
+				.findFirst();
+		
+		return node.isPresent() ? node.get().getType() : null;
 	}
 	
 //	public DataType getDataTypeFromString(String type){ // TODO Overhead beim mergen auf neue Struktur?
