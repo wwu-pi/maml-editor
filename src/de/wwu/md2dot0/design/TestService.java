@@ -420,7 +420,7 @@ public class TestService {
 		return Md2dot0Helper.getAllowedAttributeName(input);
 	}
 	
-	public String getDataTypeForInput(String input){
-		return input;
+	public String getDataTypeNameForInput(EObject obj, String input){
+		return Md2dot0Helper.getAllowedDataTypeName(input);
 	}
 }

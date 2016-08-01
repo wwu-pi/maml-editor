@@ -51,4 +51,48 @@ public class UtilTest {
 		testText = "attribute!#$%^&*+=name";
 		assertEquals("attributeName", Md2dot0Helper.getAllowedAttributeName(testText));
 	}
+	
+	@Test
+	public void testAllowedDataTypeName(){
+		// Should work
+		String testText = "TypeName";
+		assertEquals(testText, Md2dot0Helper.getAllowedDataTypeName(testText));
+		
+		testText = "Type-name";
+		assertEquals(testText, Md2dot0Helper.getAllowedDataTypeName(testText));
+		
+		testText = "Type_Name";
+		assertEquals(testText, Md2dot0Helper.getAllowedDataTypeName(testText));
+		
+		// Default first upper
+		testText = "typeName";
+		assertEquals("TypeName", Md2dot0Helper.getAllowedDataTypeName(testText));
+		
+		// a-zA-Z first character
+		testText = "_typeName";
+		assertEquals("TypeName", Md2dot0Helper.getAllowedDataTypeName(testText));
+		
+		testText = "-typeName";
+		assertEquals("TypeName", Md2dot0Helper.getAllowedDataTypeName(testText));
+		
+		// Spaces in name
+		testText = " typeName";
+		assertEquals("TypeName", Md2dot0Helper.getAllowedDataTypeName(testText));
+		
+		testText = "typeName ";
+		assertEquals("TypeName", Md2dot0Helper.getAllowedDataTypeName(testText));
+		
+		testText = " typeName ";
+		assertEquals("TypeName", Md2dot0Helper.getAllowedDataTypeName(testText));
+		
+		testText = "type name";
+		assertEquals("TypeName", Md2dot0Helper.getAllowedDataTypeName(testText));
+		
+		// Filter invalid characters
+		testText = "type.name";
+		assertEquals("TypeName", Md2dot0Helper.getAllowedDataTypeName(testText));
+		
+		testText = "type!#$%^&*+=name";
+		assertEquals("TypeName", Md2dot0Helper.getAllowedDataTypeName(testText));
+	}
 }

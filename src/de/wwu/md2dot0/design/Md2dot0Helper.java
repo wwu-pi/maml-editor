@@ -27,8 +27,8 @@ public class Md2dot0Helper {
 	}
 	
 	/**
-	 * Allowed attribute names consist of an initial alphabetic character followed 
-	 * by arbitraty alphanumeric characters as well as '-' and '_' 
+	 * Allowed attribute names consist of an initial lowercase alphabetic character followed 
+	 * by arbitrary alphanumeric characters as well as '-' and '_' 
 	 *   
 	 * @param text
 	 * @return
@@ -63,5 +63,17 @@ public class Md2dot0Helper {
 		
 		// First character lowercase
 		return toFirstLower(filteredText);
+	}
+	
+	/**
+	 * Allowed data type names consist of an initial uppercase alphabetic character followed 
+	 * by arbitrary alphanumeric characters as well as '-' and '_' 
+	 *   
+	 * @param text
+	 * @return
+	 */
+	public static String getAllowedDataTypeName(String text){
+		// Basically the same as for attributes but with first uppercase letter
+		return toFirstUpper(getAllowedAttributeName(text));
 	}
 }

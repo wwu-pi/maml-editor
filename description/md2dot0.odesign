@@ -330,7 +330,7 @@
           <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditDataSource" inputLabelExpression="aql:self.typeName">
             <mask mask="{0}"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool:SetValue" featureName="typeName" valueExpression="var:0">
+              <firstModelOperations xsi:type="tool:SetValue" featureName="typeName" valueExpression="service:getDataTypeNameForInput(0)">
                 <subModelOperations xsi:type="tool:ChangeContext" browseExpression="service:updateAllDataTypes()"/>
               </firstModelOperations>
             </initialOperation>
@@ -616,7 +616,7 @@
             <initialOperation>
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="md2dot0gui.Attribute" referenceName="attributes">
-                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'Attribute'+container.attributes->filter(md2dot0gui::Attribute)->size()"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'attribute'+container.attributes->filter(md2dot0gui::Attribute)->size()"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:md2dot0data::Multiplicity::ONE"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="aql:'String'"/>
                 </subModelOperations>
@@ -822,9 +822,9 @@
             </initialOperation>
           </ownedTools>
           <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttributeDataType" inputLabelExpression="feature:type">
-            <mask mask="{typeName}"/>
+            <mask mask="{0}"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="aql:getDataTypeForInput(type)">
+              <firstModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="service:getDataTypeNameForInput(0)">
                 <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
               </firstModelOperations>
             </initialOperation>
