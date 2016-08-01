@@ -415,4 +415,12 @@ public class TestService {
 		
 		return object;
 	}
+	
+	public String getAttributeNameForInput(EObject obj, String input){
+		return Md2dot0Helper.getAllowedAttributeName(input);
+	}
+	
+	public String getDataTypeForInput(String input){
+		return input;
+	}
 }

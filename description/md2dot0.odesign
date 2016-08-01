@@ -816,15 +816,15 @@
           <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttributeDescription" inputLabelExpression="feature:description">
             <mask mask="{0}"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="var:0">
+              <firstModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="service:getAttributeNameForInput(0)">
                 <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
           <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttributeDataType" inputLabelExpression="feature:type">
-            <mask mask="{0}"/>
+            <mask mask="{typeName}"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="var:0">
+              <firstModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="aql:getDataTypeForInput(type)">
                 <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
               </firstModelOperations>
             </initialOperation>
