@@ -59,7 +59,7 @@ public class ModelInferrer {
 		
 		// Process remaining dangling element chains and infer subsequent elements
 		Set<ProcessFlowElement> danglingElementStarts = toProcess.stream()
-				.filter(elem -> !elem.equals(start.get()) && elem.getPreviousElements().size() == 0)
+				.filter(elem -> (!start.isPresent() || !elem.equals(start.get())) && elem.getPreviousElements().size() == 0)
 				.collect(Collectors.toSet());
 		
 		for(ProcessFlowElement elem : danglingElementStarts){
