@@ -1,6 +1,5 @@
 package de.wwu.md2dot0.dialog;
 
-import java.util.Arrays;
 import java.util.function.Function;
 
 import org.eclipse.core.runtime.Assert;

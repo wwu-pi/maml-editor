@@ -124,8 +124,8 @@ public class ModelInferrer {
 		this.lastInference = lastInference;
 	}
 	
-	public Collection<TypeStructureNode> getAttributesForType(DataType type){
-		return inferenceDataTypeHelper.getAttributesForType(type);
+	public Collection<TypeStructureNode> getAttributesForType(DataType type, TypeStructureNode skipNode){
+		return inferenceDataTypeHelper.getAttributesForType(type, skipNode);
 	}
 	
 	public DataType getDataTypeFromParameterSource(ParameterSource source){

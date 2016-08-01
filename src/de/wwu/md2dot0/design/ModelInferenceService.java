@@ -3,8 +3,6 @@ package de.wwu.md2dot0.design;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.function.Function;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -127,13 +125,15 @@ public class ModelInferenceService {
 		return null; // Unknown error
 	}
 	
-	private Object[] getAttributeList(ParameterSource source){
+	private Object[] getAttributeList(ParameterSource source, Attribute skipMe){
 		// Refresh inferred model types
 		//startInferenceProcess(source);
 		
 		ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) source.eContainer());
 		DataType type = inferrer.getDataTypeFromParameterSource(source);
-		Collection<TypeStructureNode> nodes = inferrer.getAttributesForType(type);
+		
+		TypeStructureNode skipNode = new TypeStructureNode(skipMe.getDescription(), DynamicTypeLiteral.from(skipMe.getType()), skipMe.getMultiplicity(), source);
+		Collection<TypeStructureNode> nodes = inferrer.getAttributesForType(type, skipNode);
 		
 		System.out.println(nodes);
 		
@@ -155,10 +155,10 @@ public class ModelInferenceService {
 		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 		ObjectListSelectionDialog dialog = new ObjectListSelectionDialog(shell, new LabelProvider());
 		
-		Object[] attributeList = getAttributeList(((ParameterConnector) connector.get()).getSourceElement());
+		Object[] attributeList = getAttributeList(((ParameterConnector) connector.get()).getSourceElement(), attribute);
 		if(attributeList.length == 0) return (attribute.getDescription()); // Skip, nothing to select
 		
-		dialog.setElements(attributeList, elem -> ((TypeStructureNode) elem).getAttributeName());
+		dialog.setElements(attributeList, elem -> ((TypeStructureNode) elem).getAttributeName() + " (" + ((TypeStructureNode) elem).getType().getName() + ")");
 		dialog.setTitle("Select from known attribute names");
 		
 		// user pressed cancel
@@ -170,12 +170,10 @@ public class ModelInferenceService {
 		
 		// Value given?
 		if(result.length > 0 && result[0] instanceof TypeStructureNode){
-			// Set type
-			for(Object o: attributeList){
-				if(((TypeStructureNode) o).getAttributeName().equals(((TypeStructureNode) result[0]).getAttributeName())){
-					attribute.setType(((TypeStructureNode) o).getType().getName());
-				}
-			}
+			// Set type and multiplicity
+			attribute.setType(((TypeStructureNode) result[0]).getType().getName());
+			attribute.setMultiplicity(((TypeStructureNode) result[0]).getMultiplicity());
+			
 			// Return attributeName
 			return ((TypeStructureNode) result[0]).getAttributeName();
 		}

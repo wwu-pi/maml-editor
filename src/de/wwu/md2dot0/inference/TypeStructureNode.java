@@ -68,4 +68,13 @@ public class TypeStructureNode {
 	public void removeChild(TypeStructureNode child){
 		this.children.remove(child);
 	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(!(obj instanceof TypeStructureNode)) return false;
+		TypeStructureNode node = (TypeStructureNode) obj;
+		
+		return this.attributeName.equals(node.getAttributeName()) && this.multiplicity.equals(node.getMultiplicity())
+				&& this.getSource().equals(node.getSource()) && this.getType().equals(node.getType()); // ignore children
+	}
 }

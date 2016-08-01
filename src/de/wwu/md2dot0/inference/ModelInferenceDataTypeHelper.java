@@ -204,10 +204,11 @@ public class ModelInferenceDataTypeHelper {
 	/**
 	 * Retrieve all attributes for a specific data type
 	 */
-	public Collection<TypeStructureNode> getAttributesForType(DataType type){
+	public Collection<TypeStructureNode> getAttributesForType(DataType type, TypeStructureNode skipNode){
 		// Either ProcessFlowElement -> compare type with target type
 		// Or GUIElement -> get type from String and compare
-		return this.typeGraph.stream().filter(elem -> ((elem.getSource() instanceof ProcessFlowElement) && ((ProcessFlowElement) elem.getSource()).getDataType().equals(type)) 
+		return this.typeGraph.stream().filter(elem -> !elem.equals(skipNode))
+				.filter(elem -> ((elem.getSource() instanceof ProcessFlowElement) && ((ProcessFlowElement) elem.getSource()).getDataType().equals(type)) 
 				|| ((elem.getSource() instanceof GUIElement) && DynamicTypeLiteral.from(((GUIElement) elem.getSource()).getType()).equals(type)))
 		.collect(Collectors.toList());
 	}
