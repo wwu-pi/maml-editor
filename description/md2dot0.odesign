@@ -867,6 +867,7 @@
                   <subModelOperations xsi:type="tool:ChangeContext" browseExpression="var:incomingParameterConnector">
                     <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:incomingParameterConnector.oclAsType(md2dot0::ParameterConnector).sourceElement">
                       <subModelOperations xsi:type="tool:Unset" featureName="parameters" elementExpression="aql:incomingParameterConnector"/>
+                      <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.recalculateAttributeOrder()"/>
                     </subModelOperations>
                     <subModelOperations xsi:type="tool:RemoveElement"/>
                   </subModelOperations>
@@ -884,6 +885,7 @@
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self">
                 <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:element.sourceElement">
                   <subModelOperations xsi:type="tool:Unset" featureName="parameters" elementExpression="aql:element"/>
+                  <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.recalculateAttributeOrder()"/>
                 </subModelOperations>
                 <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
                 <subModelOperations xsi:type="tool:RemoveElement"/>

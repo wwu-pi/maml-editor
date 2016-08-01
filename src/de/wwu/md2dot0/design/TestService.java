@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,7 @@ import md2dot0.Event;
 import md2dot0.Include;
 import md2dot0.LocalDataSource;
 import md2dot0.ParameterConnector;
+import md2dot0.ParameterSource;
 import md2dot0.ProcessConnector;
 import md2dot0.ProcessElement;
 import md2dot0.ProcessEndEvent;
@@ -422,5 +424,21 @@ public class TestService {
 	
 	public String getDataTypeNameForInput(EObject obj, String input){
 		return Md2dot0Helper.getAllowedDataTypeName(input);
+	}
+	
+	public EObject recalculateAttributeOrder(EObject obj){
+		// Starting from a connector only source element needs to be recalculated
+		if(obj instanceof ParameterSource){
+			AtomicInteger atomicInteger = new AtomicInteger(1);
+		
+			((ParameterSource) obj).getParameters().stream().sorted(new Comparator<ParameterConnector>(){
+				@Override
+				public int compare(ParameterConnector o1, ParameterConnector o2) {
+					return o1.getOrder() - o2.getOrder();
+				}			
+			}).forEach(elem -> elem.setOrder(atomicInteger.getAndIncrement()));
+		}
+		
+		return obj;
 	}
 }
