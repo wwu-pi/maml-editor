@@ -9,4 +9,12 @@ public class Md2dot0Helper {
 		
 		return Character.toUpperCase(input.charAt(0)) + input.substring(1);
 	}
+	
+	public static String getEllipsis(String text, int maxLength){
+		if(text.length() <= maxLength){
+			return text;
+		} else {
+			return text.substring(0, maxLength - 2) + "...";
+		}
+	}
 }

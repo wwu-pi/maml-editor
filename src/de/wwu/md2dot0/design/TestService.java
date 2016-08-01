@@ -396,7 +396,8 @@ public class TestService {
 					
 				}).collect(Collectors.toList());
 		
-		Function<Object, String> itemHumanDescription = elem -> getParameterConnectorLabelEditText((ParameterConnector) elem);
+		// Show shortened version of Label content or regular caption of other attributes
+		Function<Object, String> itemHumanDescription = elem -> ((ParameterConnector) elem).getTargetElement() instanceof Label ? Md2dot0Helper.getEllipsis(((Label) ((ParameterConnector) elem).getTargetElement()).getDescription(), 50) : getParameterConnectorLabelEditText((ParameterConnector) elem);
 		dialog.setElements(parameters, itemHumanDescription);
 		dialog.setTitle("Reorder attributes");
 		dialog.setLabelText("Please bring the attached GUI elements into the desired order or appearance on the screen:\n\n");
