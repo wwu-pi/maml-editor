@@ -56,7 +56,7 @@ import md2dot0gui.SumFunc;
 
 public class TestService {
 	
-	public static Map<Role,String> roleIconMapping = new HashMap<Role,String>();
+	public static Map<String,String> roleIconMapping = new HashMap<String,String>();
 
 	public boolean debugTrue(EObject elem) {
 		System.out.println(elem);
@@ -343,7 +343,7 @@ public class TestService {
 		Role role = (Role) obj;
 		
 		// Return role icon if known
-		if(roleIconMapping.get(role) == null) {
+		if(roleIconMapping.get(role.getName()) == null) {
 			// Add role mapping 
 			ArrayList<String> roleIcons = new ArrayList<String>();
 			roleIcons.add("/de.wwu.md2dot0.design/icons/woman");
@@ -352,13 +352,13 @@ public class TestService {
 			roleIcons.add("/de.wwu.md2dot0.design/icons/man_orange");
 			
 			// Modulo to cycle through icons if not enough
-			roleIconMapping.put(role, roleIcons.get(roleIconMapping.size() % roleIcons.size()));
+			roleIconMapping.put(role.getName(), roleIcons.get(roleIconMapping.size() % roleIcons.size()));
 		}
 		
 		if(vector){
-			return roleIconMapping.get(role) + ".svg";
+			return roleIconMapping.get(role.getName()) + ".svg";
 		} else {
-			return roleIconMapping.get(role) + ".png";
+			return roleIconMapping.get(role.getName()) + ".png";
 		}
 	}
 	
