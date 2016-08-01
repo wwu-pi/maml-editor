@@ -3,6 +3,7 @@ package de.wwu.md2dot0.design;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
@@ -16,6 +17,7 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import de.wwu.md2dot0.inference.ModelInferrer;
 import de.wwu.md2dot0.inference.ModelInferrerManager;
 import de.wwu.md2dot0.inference.TypeStructureNode;
+import de.wwu.md2dot0.dialog.ObjectListSelectionDialog;
 import de.wwu.md2dot0.inference.DynamicTypeLiteral;
 import md2dot0.Connector;
 import md2dot0.ParameterConnector;
@@ -92,7 +94,7 @@ public class ModelInferenceService {
 	
 	private String[] getDataTypeList(EObject object){
 		// Refresh inferred model types
-		startInferenceProcess(object);
+		//startInferenceProcess(object);
 		
 		ArrayList<String> list = new ArrayList<String>();
 		list.addAll(DynamicTypeLiteral.getPrimitiveDataTypesAsString());
@@ -127,7 +129,7 @@ public class ModelInferenceService {
 	
 	private Object[] getAttributeList(ParameterSource source){
 		// Refresh inferred model types
-		startInferenceProcess(source);
+		//startInferenceProcess(source);
 		
 		ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) source.eContainer());
 		DataType type = inferrer.getDataTypeFromParameterSource(source);
@@ -151,13 +153,13 @@ public class ModelInferenceService {
 		}
 		
 		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-		ElementListSelectionDialog dialog = new ElementListSelectionDialog(shell, new LabelProvider());
+		ObjectListSelectionDialog dialog = new ObjectListSelectionDialog(shell, new LabelProvider());
 		
 		Object[] attributeList = getAttributeList(((ParameterConnector) connector.get()).getSourceElement());
 		if(attributeList.length == 0) return (attribute.getDescription()); // Skip, nothing to select
 		
-		dialog.setElements(attributeList);
-		dialog.setTitle("Select desired attribute name for the given type '" + attribute.getType() + "'");
+		dialog.setElements(attributeList, elem -> ((TypeStructureNode) elem).getAttributeName());
+		dialog.setTitle("Select from known attribute names");
 		
 		// user pressed cancel
 		if (dialog.open() != Window.OK) {
@@ -168,6 +170,7 @@ public class ModelInferenceService {
 		
 		// Value given?
 		if(result.length > 0 && result[0] instanceof TypeStructureNode){
+			// Set type
 			for(Object o: attributeList){
 				if(((TypeStructureNode) o).getAttributeName().equals(((TypeStructureNode) result[0]).getAttributeName())){
 					attribute.setType(((TypeStructureNode) o).getType().getName());
