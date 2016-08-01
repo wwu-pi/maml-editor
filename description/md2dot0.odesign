@@ -26,7 +26,7 @@
         <ownedRules xsi:type="validation:SemanticValidationRule" name="validateMinimumOneIncomingEdge" level="WARNING" message="The element has no incoming edge and is thus not included in the process!" targetClass="md2dot0.ProcessFlowElement">
           <audits auditExpression="aql:not self.previousElements->isEmpty() or (self.oclIsKindOf(md2dot0::Event) and not self.oclIsKindOf(md2dot0::ProcessEndEvent))"/>
         </ownedRules>
-        <ownedRules xsi:type="validation:SemanticValidationRule" name="validateRoleAssignment" level="WARNING" message="The element has no role assigned!" targetClass="md2dot0.ProcessElement">
+        <ownedRules xsi:type="validation:SemanticValidationRule" name="validateRoleAssignment" level="WARNING" message="The element has no role assigned!" targetClass="md2dot0.InteractionProcessElement">
           <audits auditExpression="aql:self.roles->size() > 0"/>
         </ownedRules>
         <ownedRules xsi:type="validation:SemanticValidationRule" name="validateStartConnection" level="WARNING" message="The start event has no outgoing edge to proceed!" targetClass="md2dot0.ProcessStartEvent">
