@@ -402,7 +402,7 @@ public class TestService {
 		Function<Object, String> itemHumanDescription = elem -> ((ParameterConnector) elem).getTargetElement() instanceof Label ? Md2dot0Helper.getEllipsis(((Label) ((ParameterConnector) elem).getTargetElement()).getDescription(), 50) : getParameterConnectorLabelEditText((ParameterConnector) elem);
 		dialog.setElements(parameters, itemHumanDescription);
 		dialog.setTitle("Reorder attributes");
-		dialog.setLabelText("Please bring the attached GUI elements into the desired order or appearance on the screen:\n\n");
+		dialog.setLabelText("Please drag and drop the following elements into the desired order of appearance on the app screen:\n\n");
 		
 		// User pressed cancel
 		if (dialog.open() != Window.OK) {
