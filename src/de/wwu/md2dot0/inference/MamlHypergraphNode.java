@@ -11,4 +11,13 @@ public class MamlHypergraphNode<T> {
 	protected void setValue(T value) {
 		this.value = value;
 	}
+	
+	public T getValue(){
+		return this.value;
+	}
+	
+	@Override
+	public String toString() {
+		return value != null ? value.toString() : null;
+	}
 }

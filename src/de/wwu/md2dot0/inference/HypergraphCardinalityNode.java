@@ -23,7 +23,7 @@ public class HypergraphCardinalityNode extends MamlHypergraphNode<Multiplicity> 
 		if (cardinality.equals(Multiplicity.ONE)) {
 			return getCardinalityOneNode();
 		} else if (cardinality.equals(Multiplicity.MANY)) {
-			return getCardinalityMultiNode();
+			return getCardinalityManyNode();
 		}
 		return null;
 		// TODO others
@@ -37,7 +37,7 @@ public class HypergraphCardinalityNode extends MamlHypergraphNode<Multiplicity> 
 		return one;
 	}
 
-	protected static HypergraphCardinalityNode getCardinalityMultiNode() {
+	protected static HypergraphCardinalityNode getCardinalityManyNode() {
 		if (many == null) {
 			many = new HypergraphCardinalityNode();
 			many.setValue(Multiplicity.MANY);

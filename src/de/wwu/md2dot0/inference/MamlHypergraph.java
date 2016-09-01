@@ -21,7 +21,11 @@ public class MamlHypergraph<V, E> extends SetHypergraph<V, E> {
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<E> findEdgeSet(V v1, V v2, V... vMore) {
-		Set<E> intermediateSet = new HashSet<E>(findEdgeSet(v1, v2));
+		Collection<E> edges = findEdgeSet(v1, v2);
+		
+		if(edges == null) return new HashSet<E>();
+		
+		Set<E> intermediateSet = new HashSet<E>(edges);
 		
 		for(V v : vMore){
 			intermediateSet = intersect(intermediateSet, findEdgeSet(v1, v));
@@ -38,6 +42,15 @@ public class MamlHypergraph<V, E> extends SetHypergraph<V, E> {
 		HashSet<Collection<V>> contents = new HashSet<Collection<V>>();  
 		for(E edge : findEdgeSet(v1, v2, vMore)){
 			contents.add(getEdge(edge));
+		}
+		return contents;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<V> findEdgeSetFlatContent(V v1, V v2, V... vMore) {
+		Collection<V> contents = new HashSet<V>();  
+		for(E edge : findEdgeSet(v1, v2, vMore)){
+			contents.addAll(getEdge(edge));
 		}
 		return contents;
 	}
