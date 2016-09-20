@@ -19,3 +19,7 @@ Require-Bundle: org.eclipse.ui,
  de.wwu.md2.framework
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: .,
+ resources/guava-19.0.jar,
+ resources/jung-graph-impl-2.1.jar,
+ resources/jung-api-2.1.jar

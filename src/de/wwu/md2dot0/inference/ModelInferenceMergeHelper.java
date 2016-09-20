@@ -33,12 +33,13 @@ public class ModelInferenceMergeHelper {
 	
 	ArrayList<MamlValidationError> errorList = new ArrayList<MamlValidationError>();
 
+	@SuppressWarnings("rawtypes")
 	public void mergeProcessElements(EList<ProcessFlowElement> processFlowElements,
 			ModelInferenceDataTypeHelper inferenceDataTypeHelper) {
 		this.inferenceDataTypeHelper = inferenceDataTypeHelper;
 
-		// TODO merge individual process flow elements
-
+		graph = new MamlHypergraph<MamlHypergraphNode, String>();
+		
 		// 1) Setup graph
 		// Data types
 		for (DataTypeLiteral literal : DynamicTypeLiteral.getTypes().values()) {
@@ -56,7 +57,6 @@ public class ModelInferenceMergeHelper {
 		cardinalityTypes.add(HypergraphCardinalityNode.getCardinalityOneNode());
 		cardinalityTypes.add(HypergraphCardinalityNode.getCardinalityManyNode()); // TODO
 																					// others
-
 		//// Process element connections -> edges
 		for (ProcessFlowElement pfe : processFlowElements) {
 			// Get attributes (recursive)
@@ -64,6 +64,7 @@ public class ModelInferenceMergeHelper {
 		}
 
 		// 2) Validate
+		// TODO validate bidirectional relationship
 		for(MamlHypergraphNode<DataTypeLiteral> dataTypeNode : sourceTypes){
 			for(MamlHypergraphNode<String> attribute :attributes) { // TODO all combinations not nice for performance
 				// System.out.println("Check " + dataTypeNode.toString() + " + " + attribute.toString() + ": " + (graph.findEdgeSet(dataTypeNode, attribute) != null ? graph.findEdgeSet(dataTypeNode, attribute).size() : 0) + " edge(s)");
@@ -98,6 +99,7 @@ public class ModelInferenceMergeHelper {
 	}
 
 	protected void addAttributesRecursive(ParameterSource source){
+		// TODO add bidirectional relationship
 		for(ParameterConnector conn : source.getParameters()){
 			if(conn.getTargetElement() instanceof Attribute) {
 				
@@ -105,6 +107,10 @@ public class ModelInferenceMergeHelper {
 				ArrayList<MamlHypergraphNode> nodes = new ArrayList<MamlHypergraphNode>();
 				
 				// data types
+				if(inferenceDataTypeHelper.getType(conn.getSourceElement()) == null){
+					System.out.println("ERROR unknown type");
+					continue;
+				}
 				nodes.add(getDataTypeNode(inferenceDataTypeHelper.getType(conn.getSourceElement())));
 				nodes.add(getDataTypeTargetNode((DataTypeLiteral) inferenceDataTypeHelper.getDataTypeFromParameterSource(conn.getTargetElement())));
 				// attribute
@@ -127,7 +133,12 @@ public class ModelInferenceMergeHelper {
 				
 				// Add edge to graph
 				// System.out.println("Edge " + conn.toString() + ": " + nodes.toString());
-				graph.addEdge(conn.toString(), nodes);
+				try {
+					graph.addEdge(conn.toString(), nodes);
+				} catch(Exception e){
+					// TODO maybe add connector to edge set in order to allow "multi-edge" scenario
+					System.out.println("Multiple connections between the same elements detected. Ignored > 1.");
+				}
 			}
 			
 			// Recursive call
@@ -136,6 +147,10 @@ public class ModelInferenceMergeHelper {
 	}
 	
 	public MamlHypergraphNode<DataTypeLiteral> getDataTypeNode(DataTypeLiteral type){
+		if(type == null) {
+			return null;
+		}
+		
 		for(MamlHypergraphNode<DataTypeLiteral> node : sourceTypes){
 			if(node.value.getIdentifier().equals(type.getIdentifier())){
 				return node;
@@ -149,6 +164,10 @@ public class ModelInferenceMergeHelper {
 	}
 	
 	public MamlHypergraphTargetNode<DataTypeLiteral> getDataTypeTargetNode(DataTypeLiteral type){
+		if(type == null) {
+			return null;
+		}
+		
 		for(MamlHypergraphTargetNode<DataTypeLiteral> node : targetTypes){
 			if(node.value.getIdentifier().equals(type.getIdentifier())){
 				return node;

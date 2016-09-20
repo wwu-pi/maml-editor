@@ -90,7 +90,7 @@ public class TestService {
 				labelText += connector.getDescription();
 			} else if(connector.getTargetElement() != null && connector.getTargetElement().getDescription() != null){
 				// Alternative default representation
-				if(connector.getTargetElement() instanceof Attribute){
+				if(connector.getTargetElement() instanceof Attribute){ // TODO split from camelcase to words
 					labelText += Md2dot0Helper.toFirstUpper(connector.getTargetElement().getDescription());
 				}
 				// Computed attributes or Labels without default
