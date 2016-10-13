@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.wwu.md20.design
-Bundle-SymbolicName: de.wwu.md2dot0.design;singleton:=true
+Bundle-SymbolicName: de.wwu.maml.editor;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: de.wwu.md2dot0.design.Activator
 Require-Bundle: org.eclipse.ui,
