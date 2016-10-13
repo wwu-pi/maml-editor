@@ -23,8 +23,8 @@ import org.eclipse.sirius.diagram.ui.tools.api.policies.LayoutEditPolicy;
 import org.eclipse.sirius.ui.tools.api.color.VisualBindingManager;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
-import de.wwu.md2dot0.design.ModelInferenceService;
-import de.wwu.md2dot0.design.TestService;
+import de.wwu.maml.editor.service.ModelInferenceService;
+import de.wwu.maml.editor.service.TestService;
 import de.wwu.maml.dsl.maml.ProcessElement;
 
 @SuppressWarnings("restriction")

@@ -8,9 +8,9 @@ import java.util.HashMap;
 
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
-import de.wwu.md2dot0.inference.DynamicTypeLiteral;
-import de.wwu.md2dot0.inference.ModelInferrer;
-import de.wwu.maml.dsl.maml.Md2dot0Package;
+import de.wwu.maml.inference.DynamicTypeLiteral;
+import de.wwu.maml.inference.ModelInferrer;
+import de.wwu.maml.dsl.maml.MamlPackage;
 import de.wwu.maml.dsl.maml.UseCase;
 
 public class Main {
@@ -18,7 +18,7 @@ public class Main {
 	public static void main(String[] args) {
 		// Register md2dot0 package, otherwise error when loading
 		@SuppressWarnings("unused")
-		Md2dot0Package packageInstance = Md2dot0Package.eINSTANCE;
+		MamlPackage packageInstance = MamlPackage.eINSTANCE;
 
 		XMIResourceImpl resource = new XMIResourceImpl();
 		File source = new File("C:/Users/c_rieg01/workspaceSirius/de.wwu.md2dot0.design/resources/UseCase2.md2dot0");

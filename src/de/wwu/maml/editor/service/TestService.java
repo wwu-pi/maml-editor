@@ -1,4 +1,4 @@
-package de.wwu.maml.editor;
+package de.wwu.maml.editor.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,7 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import de.wwu.md2dot0.dialog.ReorderItemsDialog;
+import de.wwu.maml.editor.dialog.ReorderItemsDialog;
 import de.wwu.maml.dsl.maml.AutomatedProcessElement;
 import de.wwu.maml.dsl.maml.Call;
 import de.wwu.maml.dsl.maml.Camera;
@@ -91,7 +91,7 @@ public class TestService {
 			} else if(connector.getTargetElement() != null && connector.getTargetElement().getDescription() != null){
 				// Alternative default representation
 				if(connector.getTargetElement() instanceof Attribute){ // TODO split from camelcase to words
-					labelText += Md2dot0Helper.toFirstUpper(connector.getTargetElement().getDescription());
+					labelText += MamlHelper.toFirstUpper(connector.getTargetElement().getDescription());
 				}
 				// Computed attributes or Labels without default
 			}
@@ -399,7 +399,7 @@ public class TestService {
 				}).collect(Collectors.toList());
 		
 		// Show shortened version of Label content or regular caption of other attributes
-		Function<Object, String> itemHumanDescription = elem -> ((ParameterConnector) elem).getTargetElement() instanceof Label ? Md2dot0Helper.getEllipsis(((Label) ((ParameterConnector) elem).getTargetElement()).getDescription(), 50) : getParameterConnectorLabelEditText((ParameterConnector) elem);
+		Function<Object, String> itemHumanDescription = elem -> ((ParameterConnector) elem).getTargetElement() instanceof Label ? MamlHelper.getEllipsis(((Label) ((ParameterConnector) elem).getTargetElement()).getDescription(), 50) : getParameterConnectorLabelEditText((ParameterConnector) elem);
 		dialog.setElements(parameters, itemHumanDescription);
 		dialog.setTitle("Reorder attributes");
 		dialog.setLabelText("Please drag and drop the following elements into the desired order of appearance on the app screen:\n\n");
@@ -419,11 +419,11 @@ public class TestService {
 	}
 	
 	public String getAttributeNameForInput(EObject obj, String input){
-		return Md2dot0Helper.getAllowedAttributeName(input);
+		return MamlHelper.getAllowedAttributeName(input);
 	}
 	
 	public String getDataTypeNameForInput(EObject obj, String input){
-		return Md2dot0Helper.getAllowedDataTypeName(input);
+		return MamlHelper.getAllowedDataTypeName(input);
 	}
 	
 	public EObject recalculateAttributeOrder(EObject obj){

@@ -1,11 +1,11 @@
-package de.wwu.maml.editor;
+package de.wwu.maml.editor.service;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class Md2dot0Helper {
+public class MamlHelper {
 
 	public static String toFirstUpper(String input){
 		if(input == null || input.length() == 0){

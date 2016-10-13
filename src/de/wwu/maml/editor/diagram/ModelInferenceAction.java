@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.sirius.tools.api.ui.IExternalJavaAction;
 
-import de.wwu.md2dot0.design.ModelInferenceService;
+import de.wwu.maml.editor.service.ModelInferenceService;
 import de.wwu.maml.dsl.maml.UseCase;
 
 public class ModelInferenceAction implements IExternalJavaAction {

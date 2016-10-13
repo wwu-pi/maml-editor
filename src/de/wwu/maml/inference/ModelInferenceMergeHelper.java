@@ -5,9 +5,9 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.util.EList;
 
-import de.wwu.md2dot0.inference.error.CardinalityValidationError;
-import de.wwu.md2dot0.inference.error.MamlValidationError;
-import de.wwu.md2dot0.inference.error.TypeValidationError;
+import de.wwu.maml.inference.error.CardinalityValidationError;
+import de.wwu.maml.inference.error.MamlValidationError;
+import de.wwu.maml.inference.error.TypeValidationError;
 import de.wwu.maml.dsl.maml.ParameterConnector;
 import de.wwu.maml.dsl.maml.ParameterSource;
 import de.wwu.maml.dsl.maml.ProcessFlowElement;

@@ -1,4 +1,4 @@
-package de.wwu.maml.editor;
+package de.wwu.maml.editor.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -137,7 +137,7 @@ public class ModelInferenceService {
 		
 		System.out.println(nodes);
 		
-		return nodes.stream().filter(Md2dot0Helper.distinctByKey(elem -> ((TypeStructureNode) elem).getAttributeName())).toArray();
+		return nodes.stream().filter(MamlHelper.distinctByKey(elem -> ((TypeStructureNode) elem).getAttributeName())).toArray();
 	}
 	
 	public String openAttributeSelectionWizard(EObject object){
