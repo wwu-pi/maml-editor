@@ -233,40 +233,40 @@ public class ModelInferenceDataTypeHelper {
 	
 //	public DataType getDataTypeFromString(String type){ // TODO Overhead beim mergen auf neue Struktur?
 //		if(anonymousTypes.containsKey(type)){
-//			AnonymousType instance =  Md2dot0dataFactory.eINSTANCE.createAnonymousType();
+//			AnonymousType instance =  MamldataFactory.eINSTANCE.createAnonymousType();
 //			instance.setName(type);
 //			return instance;
 //		} else if(customTypes.containsKey(type)){
 //			// Anonymous types are also contained here but are treated differently in first clause
 //			return customTypes.get(type);
 //		} else if (type.equalsIgnoreCase("String")){
-//			return Md2dot0dataFactory.eINSTANCE.createString();
+//			return MamldataFactory.eINSTANCE.createString();
 //		} else if (type.equalsIgnoreCase("Boolean")){
-//			return Md2dot0dataFactory.eINSTANCE.createBoolean();
+//			return MamldataFactory.eINSTANCE.createBoolean();
 //		} else if (type.equalsIgnoreCase("PhoneNumber")){
-//			return Md2dot0dataFactory.eINSTANCE.createPhoneNumber();
+//			return MamldataFactory.eINSTANCE.createPhoneNumber();
 //		} else if (type.equalsIgnoreCase("Url")){
-//			return Md2dot0dataFactory.eINSTANCE.createUrl();
+//			return MamldataFactory.eINSTANCE.createUrl();
 //		} else if (type.equalsIgnoreCase("Email")){
-//			return Md2dot0dataFactory.eINSTANCE.createEmail();
+//			return MamldataFactory.eINSTANCE.createEmail();
 //		} else if (type.equalsIgnoreCase("File")){
-//			return Md2dot0dataFactory.eINSTANCE.createFile();
+//			return MamldataFactory.eINSTANCE.createFile();
 //		} else if (type.equalsIgnoreCase("Image")){
-//			return Md2dot0dataFactory.eINSTANCE.createImage();
+//			return MamldataFactory.eINSTANCE.createImage();
 //		} else if (type.equalsIgnoreCase("Location")){
-//			return Md2dot0dataFactory.eINSTANCE.createLocation();
+//			return MamldataFactory.eINSTANCE.createLocation();
 //		} else if (type.equalsIgnoreCase("Integer")){
-//			return Md2dot0dataFactory.eINSTANCE.createInteger();
+//			return MamldataFactory.eINSTANCE.createInteger();
 //		} else if (type.equalsIgnoreCase("Float")){
-//			return Md2dot0dataFactory.eINSTANCE.createFloat();
+//			return MamldataFactory.eINSTANCE.createFloat();
 //		} else if (type.equalsIgnoreCase("Date")){
-//			return Md2dot0dataFactory.eINSTANCE.createDate();
+//			return MamldataFactory.eINSTANCE.createDate();
 //		} else if (type.equalsIgnoreCase("Time")){
-//			return Md2dot0dataFactory.eINSTANCE.createTime();
+//			return MamldataFactory.eINSTANCE.createTime();
 //		} else if (type.equalsIgnoreCase("DateTime")){
-//			return Md2dot0dataFactory.eINSTANCE.createDateTime();
+//			return MamldataFactory.eINSTANCE.createDateTime();
 //		}
 //		
-//		return Md2dot0dataFactory.eINSTANCE.createString(); // Default
+//		return MamldataFactory.eINSTANCE.createString(); // Default
 //	}
 }

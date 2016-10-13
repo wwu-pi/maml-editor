@@ -17,7 +17,7 @@ import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
 import de.wwu.maml.dsl.mamlgui.Attribute;
 
 /**
- * Main component for inferring data models from .md2dot0 models 
+ * Main component for inferring data models from .maml models 
  * @author c_rieg01
  *
  */

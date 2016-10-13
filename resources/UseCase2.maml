@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<de.wwu.md2dot0:UseCase xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:de.wwu.maml.dsl.maml="http://de/wwu/maml/dsl/maml" xmlns:de.wwu.maml.dsl.mamlgui="http://de/wwu/maml/dsl/mamlgui" title="Versicherung berechnen">
+  <processFlowElements xsi:type="de.wwu.maml.dsl.maml:ProcessStartEvent" nextElements="//@processFlowConnections.0"/>
+  <processFlowElements xsi:type="de.wwu.maml.dsl.maml:ShowEntity" parameters="//@processFlowConnections.4" nextElements="//@processFlowConnections.2" previousElements="//@processFlowConnections.1" description="Show element2"/>
+  <processFlowElements xsi:type="de.wwu.maml.dsl.maml:UpdateEntity" parameters="//@processFlowConnections.5" nextElements="//@processFlowConnections.3" previousElements="//@processFlowConnections.2" description="Select element3"/>
+  <processFlowElements xsi:type="de.wwu.maml.dsl.maml:RemoteDataSource" nextElements="//@processFlowConnections.1" previousElements="//@processFlowConnections.0" typeName="Buch"/>
+  <processFlowElements xsi:type="de.wwu.maml.dsl.maml:ProcessEndEvent" previousElements="//@processFlowConnections.3"/>
+  <processFlowConnections xsi:type="de.wwu.maml.dsl.maml:ProcessConnector" sourceProcessFlowElement="//@processFlowElements.0" targetProcessFlowElement="//@processFlowElements.3"/>
+  <processFlowConnections xsi:type="de.wwu.maml.dsl.maml:ProcessConnector" sourceProcessFlowElement="//@processFlowElements.3" targetProcessFlowElement="//@processFlowElements.1"/>
+  <processFlowConnections xsi:type="de.wwu.maml.dsl.maml:ProcessConnector" sourceProcessFlowElement="//@processFlowElements.1" targetProcessFlowElement="//@processFlowElements.2"/>
+  <processFlowConnections xsi:type="de.wwu.maml.dsl.maml:ProcessConnector" sourceProcessFlowElement="//@processFlowElements.2" targetProcessFlowElement="//@processFlowElements.4"/>
+  <processFlowConnections xsi:type="de.wwu.maml.dsl.maml:ParameterConnector" targetElement="//@attributes.0" sourceElement="//@processFlowElements.1"/>
+  <processFlowConnections xsi:type="de.wwu.maml.dsl.maml:ParameterConnector" targetElement="//@attributes.1" accessType="WRITE" order="1" sourceElement="//@processFlowElements.2"/>
+  <roles name="Role1"/>
+  <roles name="Role2"/>
+  <roles name="Role3"/>
+  <attributes xsi:type="de.wwu.maml.dsl.mamlgui:Attribute" description="Attribute1" type="Buch" multiplicity="ONE"/>
+  <attributes xsi:type="de.wwu.maml.dsl.mamlgui:Attribute" description="Attribute1" type="Buch2" multiplicity="MANY"/>
+</de.wwu.maml.dsl.maml:UseCase>
