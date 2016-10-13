@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.sirius.tools.api.ui.IExternalJavaAction;
 
-import de.wwu.maml.editor.service.ModelInferenceService;
+//import de.wwu.maml.editor.service.ModelInferenceService;
 import de.wwu.maml.dsl.maml.UseCase;
 
 public class ModelInferenceAction implements IExternalJavaAction {
@@ -27,7 +27,7 @@ public class ModelInferenceAction implements IExternalJavaAction {
 
 	@Override
 	public void execute(Collection<? extends EObject> arg0, Map<String, Object> arg1) {
-		ModelInferenceService inferenceService = new ModelInferenceService();
+		//ModelInferenceService inferenceService = new ModelInferenceService();
 		//inferenceService.startInferenceProcess(arg0);
 		System.out.println("HALLO TEST");
 	}

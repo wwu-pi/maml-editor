@@ -47,7 +47,7 @@
               <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             </style>
           </borderedNodeMappings>
-          <style xsi:type="style:CustomStyleDescription" showIcon="false" labelExpression="feature:description" sizeComputationExpression="12" labelPosition="node" resizeKind="NSEW" id="de.wwu.maml.diagram.InteractionProcessElement">
+          <style xsi:type="style:CustomStyleDescription" showIcon="false" labelExpression="feature:description" sizeComputationExpression="12" labelPosition="node" resizeKind="NSEW" id="de.wwu.maml.editor.diagram.InteractionProcessElement">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           </style>
@@ -77,7 +77,7 @@
               <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             </style>
           </borderedNodeMappings>
-          <style xsi:type="style:CustomStyleDescription" showIcon="false" labelExpression="feature:description" sizeComputationExpression="12" labelPosition="node" resizeKind="NSEW" id="de.wwu.maml.diagram.AutomatedProcessElement">
+          <style xsi:type="style:CustomStyleDescription" showIcon="false" labelExpression="feature:description" sizeComputationExpression="12" labelPosition="node" resizeKind="NSEW" id="de.wwu.maml.editor.diagram.AutomatedProcessElement">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           </style>

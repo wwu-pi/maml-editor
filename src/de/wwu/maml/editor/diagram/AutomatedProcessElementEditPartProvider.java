@@ -10,7 +10,7 @@ public class AutomatedProcessElementEditPartProvider extends AbstractEditPartPro
 	protected Class<?> getNodeEditPartClass(View view) {
 		if (view.getElement() instanceof CustomStyle) {
 			CustomStyle customStyle = (CustomStyle) view.getElement();
-			if (customStyle.getId().equals("de.wwu.md2dot0.diagram.AutomatedProcessElement")) {
+			if (customStyle.getId().equals("de.wwu.maml.editor.diagram.AutomatedProcessElement")) {
 				return AutomatedProcessElementEditPart.class;
 			}
 		}

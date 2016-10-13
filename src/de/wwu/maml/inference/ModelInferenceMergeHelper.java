@@ -67,9 +67,6 @@ public class ModelInferenceMergeHelper {
 		// TODO validate bidirectional relationship
 		for(MamlHypergraphNode<DataTypeLiteral> dataTypeNode : sourceTypes){
 			for(MamlHypergraphNode<String> attribute :attributes) { // TODO all combinations not nice for performance
-				// System.out.println("Check " + dataTypeNode.toString() + " + " + attribute.toString() + ": " + (graph.findEdgeSet(dataTypeNode, attribute) != null ? graph.findEdgeSet(dataTypeNode, attribute).size() : 0) + " edge(s)");
-
-				@SuppressWarnings("rawtypes")
 				Collection<MamlHypergraphNode> edgeContent = graph.findEdgeSetFlatContent(dataTypeNode, attribute);
 				
 				Object[] cardinalities = edgeContent.stream().filter(node -> node instanceof HypergraphCardinalityNode).toArray();

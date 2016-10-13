@@ -10,7 +10,7 @@ public class InteractionProcessElementEditPartProvider extends AbstractEditPartP
 	protected Class<?> getNodeEditPartClass(View view) {
 		if (view.getElement() instanceof CustomStyle) {
 			CustomStyle customStyle = (CustomStyle) view.getElement();
-			if (customStyle.getId().equals("de.wwu.md2dot0.diagram.InteractionProcessElement")) {
+			if (customStyle.getId().equals("de.wwu.maml.editor.diagram.InteractionProcessElement")) {
 				return InteractionProcessElementEditPart.class;
 			}
 		}

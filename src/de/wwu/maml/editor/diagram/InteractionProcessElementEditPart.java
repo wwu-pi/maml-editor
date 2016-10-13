@@ -132,12 +132,6 @@ public class InteractionProcessElementEditPart extends AbstractNotSelectableShap
 		InteractionProcessElementFigure arrowShape = new InteractionProcessElementFigure(
 				(CustomStyle) this.resolveSemanticElement());
 
-		// EditPart parent = this.getParent();
-		// if (parent instanceof IDiagramBorderNodeEditPart) {
-		// DiagramBorderNodeEditPartOperation.updateTransparencyMode((IDiagramBorderNodeEditPart)
-		// parent, square);
-		// }
-
 		return primaryShape = arrowShape;
 	}
 
