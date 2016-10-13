@@ -56,7 +56,7 @@ import de.wwu.maml.dsl.mamlgui.DivisionOperator;
 import de.wwu.maml.dsl.mamlgui.Label;
 import de.wwu.maml.dsl.mamlgui.SumFunc;
 
-public class TestService {
+public class DiagramService {
 	
 	public static Map<String,String> roleIconMapping = new HashMap<String,String>();
 

@@ -24,7 +24,7 @@ import org.eclipse.sirius.ui.tools.api.color.VisualBindingManager;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import de.wwu.maml.editor.service.ModelInferenceService;
-import de.wwu.maml.editor.service.TestService;
+import de.wwu.maml.editor.service.DiagramService;
 import de.wwu.maml.dsl.maml.ProcessElement;
 
 @SuppressWarnings("restriction")
@@ -52,7 +52,7 @@ public class InteractionProcessElementEditPart extends AbstractNotSelectableShap
 				ProcessElement modelElement = (ProcessElement) node.getTarget();
 
 				// Update process element subtype
-				getPrimaryShape().setProcessElementType(TestService.getProcessElementType(modelElement));
+				getPrimaryShape().setProcessElementType(DiagramService.getProcessElementType(modelElement));
 
 				// Update data type
 				String dataTypeName = new ModelInferenceService().getDataTypeRepresentation(modelElement);

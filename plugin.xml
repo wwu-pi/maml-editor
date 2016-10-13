@@ -2,15 +2,15 @@
 <?eclipse version="3.0"?>
 <plugin>
   <extension point="org.eclipse.sirius.componentization">
-    <component class="de.wwu.md2dot0.design.Activator"
-               id="de.wwu.md2dot0.design"
-	       name="md2dot0">
+    <component class="de.wwu.maml.editor.Activator"
+               id="de.wwu.maml.editor"
+	       name="maml">
     </component>
   </extension>
   <extension
         point="org.eclipse.gmf.runtime.diagram.ui.editpartProviders">
      <editpartProvider
-           class="de.wwu.md2dot0.diagram.InteractionProcessElementEditPartProvider">
+           class="de.wwu.maml.editor.diagram.InteractionProcessElementEditPartProvider">
         <Priority
               name="Highest">
         </Priority>
@@ -19,7 +19,7 @@
   <extension
         point="org.eclipse.gmf.runtime.diagram.ui.editpolicyProviders">
      <editpolicyProvider
-           class="de.wwu.md2dot0.diagram.InteractionProcessElementEditPartProvider">
+           class="de.wwu.maml.editor.diagram.InteractionProcessElementEditPartProvider">
         <Priority
               name="Highest">
         </Priority>
@@ -28,7 +28,7 @@
   <extension
         point="org.eclipse.gmf.runtime.diagram.ui.editpartProviders">
      <editpartProvider
-           class="de.wwu.md2dot0.diagram.AutomatedProcessElementEditPartProvider">
+           class="de.wwu.maml.editor.diagram.AutomatedProcessElementEditPartProvider">
         <Priority
               name="Highest">
         </Priority>
@@ -37,8 +37,8 @@
   <extension
         point="org.eclipse.sirius.externalJavaAction">
      <javaActions
-           actionClass="de.wwu.md2dot0.diagram.ModelInferenceAction"
-           id="de.wwu.md2dot0.diagram.ModelInferenceAction">
+           actionClass="de.wwu.maml.editor.diagram.ModelInferenceAction"
+           id="de.wwu.maml.editor.diagram.ModelInferenceAction">
      </javaActions>
   </extension>
 </plugin>
