@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<de.wwu.md2dot0:UseCase xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:de.wwu.maml.dsl.maml="http://de/wwu/maml/dsl/maml" xmlns:de.wwu.maml.dsl.mamlgui="http://de/wwu/maml/dsl/mamlgui" title="Versicherung berechnen">
+<de.wwu.maml.dsl.maml:UseCase xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:de.wwu.maml.dsl.maml="http://de/wwu/maml/dsl/maml" xmlns:de.wwu.maml.dsl.mamlgui="http://de/wwu/maml/dsl/mamlgui" title="Versicherung berechnen">
   <processFlowElements xsi:type="de.wwu.maml.dsl.maml:ProcessStartEvent" nextElements="//@processFlowConnections.0"/>
   <processFlowElements xsi:type="de.wwu.maml.dsl.maml:ShowEntity" parameters="//@processFlowConnections.4" nextElements="//@processFlowConnections.2" previousElements="//@processFlowConnections.1" description="Show element2"/>
   <processFlowElements xsi:type="de.wwu.maml.dsl.maml:UpdateEntity" parameters="//@processFlowConnections.5" nextElements="//@processFlowConnections.3" previousElements="//@processFlowConnections.2" description="Select element3"/>
