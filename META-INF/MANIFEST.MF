@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.wwu.maml.editor
 Bundle-SymbolicName: de.wwu.maml.editor;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 0.1
 Bundle-Activator: de.wwu.maml.editor.Activator
 Require-Bundle: 
  org.eclipse.emf.ecore,
