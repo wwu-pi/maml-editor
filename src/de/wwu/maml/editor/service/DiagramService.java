@@ -348,10 +348,10 @@ public class DiagramService {
 		if(roleIconMapping.get(role.getName()) == null) {
 			// Add role mapping 
 			ArrayList<String> roleIcons = new ArrayList<String>();
-			roleIcons.add("/de.wwu.md2dot0.design/icons/woman");
-			roleIcons.add("/de.wwu.md2dot0.design/icons/man");
-			roleIcons.add("/de.wwu.md2dot0.design/icons/woman_green");
-			roleIcons.add("/de.wwu.md2dot0.design/icons/man_orange");
+			roleIcons.add("/de.wwu.maml.editor/icons/woman");
+			roleIcons.add("/de.wwu.maml.editor/icons/man");
+			roleIcons.add("/de.wwu.maml.editor/icons/woman_green");
+			roleIcons.add("/de.wwu.maml.editor/icons/man_orange");
 			
 			// Modulo to cycle through icons if not enough
 			roleIconMapping.put(role.getName(), roleIcons.get(roleIconMapping.size() % roleIcons.size()));
