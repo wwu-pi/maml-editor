@@ -17,12 +17,19 @@ import de.wwu.maml.dsl.maml.ProcessConnector;
 import de.wwu.maml.dsl.maml.ProcessElement;
 import de.wwu.maml.dsl.maml.ProcessFlowElement;
 import de.wwu.maml.dsl.maml.Transform;
+import de.wwu.maml.dsl.maml.UseCase;
 import de.wwu.maml.dsl.mamldata.CustomType;
 import de.wwu.maml.dsl.mamldata.DataType;
 import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
+import de.wwu.maml.dsl.mamldata.Enum;
+import de.wwu.maml.dsl.mamldata.MamldataFactory;
+import de.wwu.maml.dsl.mamldata.Multiplicity;
+import de.wwu.maml.dsl.mamldata.Property;
+import de.wwu.maml.dsl.mamldata.impl.CustomTypeImpl;
 import de.wwu.maml.dsl.mamlgui.Attribute;
 import de.wwu.maml.dsl.mamlgui.ComputationOperator;
 import de.wwu.maml.dsl.mamlgui.GUIElement;
+import edu.uci.ics.jung.graph.event.GraphEvent.Vertex;
 
 public class ModelInferenceDataTypeHelper {
 	
@@ -183,7 +190,7 @@ public class ModelInferenceDataTypeHelper {
 				typeGraph.add(node);
 				
 				// Process attached attributes if current source is not a primitive type
-				if(!targetType.isPrimitive()){
+				if(targetType != null && !targetType.isPrimitive()){
 					inferAttributes(target);
 				}
 			} else if(connector.getTargetElement() instanceof ComputationOperator){
@@ -269,4 +276,59 @@ public class ModelInferenceDataTypeHelper {
 //		
 //		return MamldataFactory.eINSTANCE.createString(); // Default
 //	}
+	
+	public void createDataStructureInUseCase(UseCase useCase){
+		// Transform type structure to items
+		
+		// First create all raw types
+		ArrayList<CustomType> typesToAdd = new ArrayList<CustomType>();
+		for(DataTypeLiteral type : DynamicTypeLiteral.getCustomDataTypes()){
+			CustomType dt = MamldataFactory.eINSTANCE.createCustomType();
+			dt.setName(type.getIdentifier());
+			typesToAdd.add(dt);
+		}
+		
+		for(DataTypeLiteral type : DynamicTypeLiteral.getAnonymousDataTypes()){
+			CustomType dt = MamldataFactory.eINSTANCE.createCustomType();
+			dt.setName(type.getIdentifier());
+			typesToAdd.add(dt);
+		}
+		
+		// Now add all attributes
+		for(CustomType type : typesToAdd){
+			filterGraphBySourceDataType(DynamicTypeLiteral.from(type.getName()))
+				.forEach(node -> convertNodeToProperty(node, type, typesToAdd));
+		}
+		
+		// Reset use case datatypes (except explicitly modeled enums)
+		Collection<DataType> typesToRemove = useCase.getDataTypes().stream().filter(elem -> !(elem instanceof Enum)).collect(Collectors.toList());
+		//useCase.getDataTypes().removeAll(typesToRemove);
+				
+		// Add all types
+		useCase.getDataTypes().addAll(typesToAdd);
+	}
+	
+	private Collection<TypeStructureNode> filterGraphBySourceDataType(DataTypeLiteral sourceType){
+		// Get matching source elements
+		Collection<ParameterSource> sources = elementTypes.entrySet().stream().filter(entry -> entry.getValue().equals(sourceType)).map(entry -> entry.getKey()).collect(Collectors.toList());
+		// Filter
+		return typeGraph.stream().filter(t -> sources.contains(t.source)).collect(Collectors.toList());
+	}
+	
+	private void convertNodeToProperty(TypeStructureNode node, CustomType targetType, ArrayList<CustomType> allTypes){
+		CustomType ct = allTypes.stream().filter(dt -> dt.getName().equals(node.getType().getIdentifier())).collect(Collectors.toList()).get(0);
+		
+		Property prop = MamldataFactory.eINSTANCE.createProperty();
+		prop.setName(node.getAttributeName());
+		
+		if(node.getMultiplicity().equals(Multiplicity.MANY)){
+			de.wwu.maml.dsl.mamldata.Collection collection = MamldataFactory.eINSTANCE.createCollection();
+			collection.setType(ct);
+			prop.setType(collection);
+		} else {
+			prop.setType(ct);	
+		}
+		
+		targetType.getAttributes().add(prop);
+	}
 }

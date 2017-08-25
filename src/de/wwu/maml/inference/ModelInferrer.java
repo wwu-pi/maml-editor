@@ -99,6 +99,9 @@ public class ModelInferrer {
 		System.out.println(this + " NEW INFERENCE at " + getLastInference().getTime());
 		
 		// TODO remove unused data types from UseCase dataType list
+		if(!readOnly){
+			inferenceDataTypeHelper.createDataStructureInUseCase(useCase);
+		}
 		
 		// Output Helper
 		System.out.println("Custom data types:" + DynamicTypeLiteral.getCustomDataTypesAsString().toString());

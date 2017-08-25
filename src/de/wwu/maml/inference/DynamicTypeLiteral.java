@@ -22,8 +22,10 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 		this.name = name;
 		this.primitive = isPrimitive;
 		
-		if(container != null){
+		if(container != null && !readOnly){
 			container.getDataTypes().add(this);
+		} else if(readOnly){
+			System.out.println("Read-only");
 		} else {
 			System.out.println("no container exists");
 		}
@@ -124,14 +126,23 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 	}
 	
 	/**
+	 * Custom data types.
+	 * @return
+	 */
+	public static Collection<DataTypeLiteral> getCustomDataTypes(){
+		return getTypes().values().stream()
+				.filter(elem -> !elem.isPrimitive())
+				.filter(elem -> !elem.getName().startsWith(ANONYMOUS_PREFIX))
+				.collect(Collectors.toList());
+	}
+	
+	/**
 	 * String representation of custom data getTypes().
 	 * @return
 	 */
 	public static Collection<String> getCustomDataTypesAsString(){
-		return getTypes().values().stream()
-				.filter(elem -> !elem.isPrimitive())
+		return getCustomDataTypes().stream()
 				.map(elem -> elem.getName())
-				.filter(elem -> !elem.startsWith(ANONYMOUS_PREFIX))
 				.collect(Collectors.toList());
 	}
 
@@ -152,15 +163,24 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 	public static boolean isAllowedTypeName(String typeName){
 		return typeName != null && !typeName.equals("") && !typeName.startsWith("_") && !typeName.equals(ANONYMOUS_TYPE_UI);
 	}
+	
+	/**
+	 * Anonymous data types.
+	 * @return
+	 */
+	public static Collection<DataTypeLiteral> getAnonymousDataTypes() {
+		return getTypes().values().stream()
+				.filter(elem -> elem.getName().startsWith(ANONYMOUS_PREFIX))
+				.collect(Collectors.toList());
+	}
 
 	/**
 	 * String representation of anonymous data getTypes().
 	 * @return
 	 */
 	public static Collection<String> getAnonymousDataTypesAsString() {
-		return getTypes().values().stream()
+		return getAnonymousDataTypes().stream()
 				.map(elem -> elem.getName())
-				.filter(elem -> elem.startsWith(ANONYMOUS_PREFIX))
 				.collect(Collectors.toList());
 	}
 	
