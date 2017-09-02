@@ -255,7 +255,10 @@ public class DiagramService {
 			// Events hav max 1 outgoing edge
 			return ((Event) preSource).getNextElements().size() < maxConnections;
 		} else if (preSource instanceof ControlFlowElement){
-			// Control flow elements can have multiple outgoing edges
+			// Control flow elements can have multiple outgoing edges if they have at most one incoming edge
+			if(((ControlFlowElement) preSource).getPreviousElements().size() > 1 && ((ControlFlowElement) preSource).getNextElements().size() > 0){
+				return false;
+			}
 			return true;
 		} else if (preSource instanceof ProcessElement){
 			// Process elements can have max 1 outgoing edge
@@ -289,7 +292,10 @@ public class DiagramService {
 			// Other events have no incoming edge
 			return false;
 		} else if (preTarget instanceof ControlFlowElement){
-			// Control flow elements can have multiple incoming edges
+			// Control flow elements can have multiple incoming edges if they have at most one outgoing edge
+			if(((ControlFlowElement) preTarget).getNextElements().size() > 1 && ((ControlFlowElement) preSource).getPreviousElements().size() > 0){
+				return false;
+			}
 			return true;
 		} else if (preTarget instanceof ProcessElement){
 			// Process elements may not link on themselves
