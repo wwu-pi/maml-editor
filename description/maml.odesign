@@ -157,7 +157,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createCallProcessElement" label="Call" nodeMappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']" iconPath="/de.wwu.maml.editor/icons/icon_processelement_interaction.png">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createCallProcessElement" label="Phone call" nodeMappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']" iconPath="/de.wwu.maml.editor/icons/icon_processelement_interaction.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -197,7 +197,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createTransformProcessElement" label="Transform" nodeMappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']" iconPath="/de.wwu.maml.editor/icons/icon_processelement_automated.png">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createTransformProcessElement" label="Navigate" nodeMappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']" iconPath="/de.wwu.maml.editor/icons/icon_processelement_automated.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -230,7 +230,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createIncludeProcessElement" label="Include" nodeMappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']" iconPath="/de.wwu.maml.editor/icons/icon_processelement_automated.png">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createIncludeProcessElement" label="Include subprocess" nodeMappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']" iconPath="/de.wwu.maml.editor/icons/icon_processelement_automated.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -241,7 +241,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createUseCaseTriggerProcessElement" label="Use Case Trigger" nodeMappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']" iconPath="/de.wwu.maml.editor/icons/icon_processelement_automated.png">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createUseCaseTriggerProcessElement" label="Use case trigger" nodeMappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']" iconPath="/de.wwu.maml.editor/icons/icon_processelement_automated.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
@@ -252,7 +252,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createRetrieveLocationProcessElement" label="Retrieve Location" nodeMappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']" iconPath="/de.wwu.maml.editor/icons/icon_processelement_automated.png">
+          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createRetrieveLocationProcessElement" label="Retrieve location" nodeMappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='AutomatedProcessElement']" iconPath="/de.wwu.maml.editor/icons/icon_processelement_automated.png">
             <variable name="container"/>
             <viewVariable name="containerView"/>
             <initialOperation>
