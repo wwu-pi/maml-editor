@@ -90,8 +90,8 @@ public class DiagramService {
 				labelText += connector.getDescription();
 			} else if(connector.getTargetElement() != null && connector.getTargetElement().getDescription() != null){
 				// Alternative default representation
-				if(connector.getTargetElement() instanceof Attribute){ // TODO split from camelcase to words
-					labelText += MamlHelper.toFirstUpper(connector.getTargetElement().getDescription());
+				if(connector.getTargetElement() instanceof Attribute){
+					labelText += MamlHelper.toFirstUpper(MamlHelper.camelCaseToSpacedString(connector.getTargetElement().getDescription()));
 				}
 				// Computed attributes or Labels without default
 			}

@@ -1,5 +1,7 @@
 package de.wwu.maml.editor.service;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -29,6 +31,11 @@ public class MamlHelper {
 		} else {
 			return text.substring(0, maxLength - 2) + "...";
 		}
+	}
+	
+	public static String camelCaseToSpacedString(String text){
+		List<String> words = Arrays.asList(text.split("(?<=[a-z])(?=[A-Z])"));
+		return String.join(" ", words.stream().map(word -> toFirstLower(word)).toArray(String[]::new));
 	}
 	
 	/**
