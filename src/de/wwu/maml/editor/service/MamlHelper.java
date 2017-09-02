@@ -39,6 +39,15 @@ public class MamlHelper {
 	 * @return
 	 */
 	public static String getAllowedAttributeName(String text){
+		// Replace umlauts
+		text = text.replaceAll("Ä", "Ae");
+		text = text.replaceAll("Ö", "Oe");
+		text = text.replaceAll("Ü", "Ue");
+		text = text.replaceAll("ä", "ae");
+		text = text.replaceAll("ö", "oe");
+		text = text.replaceAll("ü", "ue");
+		text = text.replaceAll("ß", "ss");
+		
 		// Only alphabetic characters in front
 		if(!text.matches("[a-zA-Z].*")){
 			return text.length() == 1 ? "" : getAllowedAttributeName(text.substring(1));
