@@ -310,7 +310,7 @@ public class ModelInferenceDataTypeHelper {
 	
 	private Collection<TypeStructureNode> filterGraphBySourceDataType(DataTypeLiteral sourceType){
 		// Get matching source elements
-		Collection<ParameterSource> sources = elementTypes.entrySet().stream().filter(entry -> entry.getValue().equals(sourceType)).map(entry -> entry.getKey()).collect(Collectors.toList());
+		Collection<ParameterSource> sources = elementTypes.entrySet().stream().filter(entry -> entry.getValue() != null && entry.getValue().equals(sourceType)).map(entry -> entry.getKey()).collect(Collectors.toList());
 		// Filter
 		return typeGraph.stream().filter(t -> sources.contains(t.source)).collect(Collectors.toList());
 	}

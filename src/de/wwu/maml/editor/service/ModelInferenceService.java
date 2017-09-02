@@ -106,7 +106,7 @@ public class ModelInferenceService {
 		return list.toArray(new String[list.size()]);
 	}
 	
-	public String openDataTypeSelectionWizard(EObject object){
+	public DataType openDataTypeSelectionWizard(EObject object){
 		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 
 		ElementListSelectionDialog dialog = new ElementListSelectionDialog(shell, new LabelProvider());
@@ -117,17 +117,17 @@ public class ModelInferenceService {
 		// user pressed cancel
 		if (dialog.open() != Window.OK) {
 			// Return previous value
-			if(object instanceof Attribute) return ((Attribute) object).getType().toString();
+			if(object instanceof Attribute) return ((Attribute) object).getType();
 		}
 		Object[] result = dialog.getResult();
 		
 		// Value given and does not start with invalid character?
 		if(result.length > 0 && !((String) result[0]).startsWith("__")){
-			return (String) result[0];
+			return getDataType(object, (String) result[0]);
 		}
 		
 		// Return previous value
-		if(object instanceof Attribute) return ((Attribute) object).getType().toString();
+		if(object instanceof Attribute) return ((Attribute) object).getType();
 		return null; // Unknown error
 	}
 	
@@ -187,21 +187,14 @@ public class ModelInferenceService {
 		// Return previous value
 		return attribute.getDescription();
 	}
-	
-	public DataType setDataType(EObject obj, String input){
-		try {
-			updateAllDataTypes(obj);
-			return getDataType(obj, input);
-		} catch(Exception e) {
-			return null;
-		}
-	}
-	
+
 	public DataType getDataType(EObject obj, String input){
 		try {
+			updateAllDataTypes(obj);
 			ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
 			return inferrer.getType(input);
 		} catch(Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}

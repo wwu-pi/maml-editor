@@ -566,7 +566,8 @@
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="mamlgui.Attribute" referenceName="attributes">
                   <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'attribute'+container.attributes->filter(mamlgui::Attribute)->size()"/>
                   <subModelOperations xsi:type="tool:SetValue" featureName="multiplicity" valueExpression="aql:mamldata::Multiplicity::ONE"/>
-                  <subModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="aql:'String'"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="aql:self.getDataType('String')"/>
+                  <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
@@ -806,7 +807,9 @@
           <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttributeDataType" inputLabelExpression="service:getDataTypeName()">
             <mask mask="{0}"/>
             <initialOperation>
-              <firstModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="service:setDataType(0)"/>
+              <firstModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="service:getDataType(0)">
+                <subModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self.updateAllDataTypes()"/>
+              </firstModelOperations>
             </initialOperation>
           </ownedTools>
           <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditLabelDescription" inputLabelExpression="feature:description">
