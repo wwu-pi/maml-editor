@@ -60,6 +60,7 @@ public class DynamicTypeLiteral extends DataTypeLiteralImpl {
 			primitiveTypes.put("DATE", new DynamicTypeLiteral("DATE", "Date", true));
 			primitiveTypes.put("TIME", new DynamicTypeLiteral("TIME", "Time", true));
 			primitiveTypes.put("DATETIME", new DynamicTypeLiteral("DATETIME", "DateTime", true));
+			primitiveTypes.put("CURRENCY", new DynamicTypeLiteral("CURRENCY", "Currency", true));
 			getTypes().putAll(primitiveTypes);
 		}
 	}
