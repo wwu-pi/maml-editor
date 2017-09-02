@@ -178,14 +178,14 @@ public class ModelInferenceDataTypeHelper {
 				Attribute target = (Attribute) connector.getTargetElement();
 				
 				// Check that target has a non-anonymous type
-				if(!DynamicTypeLiteral.isAllowedTypeName(target.getType())) continue;
+				if(!DynamicTypeLiteral.isAllowedTypeName(target.getType().toString())) continue;
 				
 				// Process current connection
-				DataTypeLiteral targetType = DynamicTypeLiteral.from(target.getType());
+				DataTypeLiteral targetType = DynamicTypeLiteral.from(target.getType().toString());
 				TypeStructureNode node = new TypeStructureNode(target.getDescription(), targetType, target.getMultiplicity(), source);
 				if(source instanceof Attribute){
 					// Keep track of source data types (only for non-PE as they are already tracked)
-					elementTypes.put(source, DynamicTypeLiteral.from(((Attribute) source).getType()));
+					elementTypes.put(source, DynamicTypeLiteral.from(((Attribute) source).getType().toString()));
 				}
 				typeGraph.add(node);
 				
@@ -216,7 +216,7 @@ public class ModelInferenceDataTypeHelper {
 		// Or GUIElement -> get type from String and compare
 		return this.typeGraph.stream().filter(elem -> !elem.equals(skipNode))
 				.filter(elem -> ((elem.getSource() instanceof ProcessFlowElement) && ((ProcessFlowElement) elem.getSource()).getDataType().equals(type)) 
-				|| ((elem.getSource() instanceof GUIElement) && DynamicTypeLiteral.from(((GUIElement) elem.getSource()).getType()).equals(type)))
+				|| ((elem.getSource() instanceof GUIElement) && DynamicTypeLiteral.from(((GUIElement) elem.getSource()).getType().toString()).equals(type)))
 		.collect(Collectors.toList());
 	}
 	
@@ -224,7 +224,7 @@ public class ModelInferenceDataTypeHelper {
 		if(source instanceof ProcessFlowElement) {
 			return ((ProcessFlowElement) source).getDataType();
 		} else if(source instanceof GUIElement) {
-			return DynamicTypeLiteral.from(((GUIElement) source).getType());
+			return DynamicTypeLiteral.from(((GUIElement) source).getType().toString());
 		}
 		return null;
 	}
@@ -232,7 +232,7 @@ public class ModelInferenceDataTypeHelper {
 	public DataType getDataTypeForAttributeName(DataType sourceType, String attributeName){
 		Optional<TypeStructureNode> node = this.typeGraph.stream().filter(elem -> elem.getAttributeName().equals(attributeName))
 				.filter(elem -> ((elem.getSource() instanceof ProcessFlowElement) && ((ProcessFlowElement) elem.getSource()).getDataType().equals(sourceType)) 
-				|| ((elem.getSource() instanceof GUIElement) && DynamicTypeLiteral.from(((GUIElement) elem.getSource()).getType()).equals(sourceType)))
+				|| ((elem.getSource() instanceof GUIElement) && DynamicTypeLiteral.from(((GUIElement) elem.getSource()).getType().toString()).equals(sourceType)))
 				.findFirst();
 		
 		return node.isPresent() ? node.get().getType() : null;

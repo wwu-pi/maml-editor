@@ -25,7 +25,13 @@ import de.wwu.maml.dsl.maml.UseCase;
 import de.wwu.maml.dsl.mamldata.DataType;
 import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
 import de.wwu.maml.dsl.mamlgui.Attribute;
+import de.wwu.maml.dsl.mamlgui.GUIElement;
 
+/**
+ * Service class for type-related editor methods.  
+ * @author Christoph
+ *
+ */
 public class ModelInferenceService {
 	
 	/**
@@ -76,7 +82,7 @@ public class ModelInferenceService {
 			DataTypeLiteral type = inferrer.getType((ProcessFlowElement) obj);
 			return type != null ? type.getName() : "??";
 		} else if(obj instanceof Attribute){
-			DataTypeLiteral type = DynamicTypeLiteral.from(((Attribute) obj).getType());
+			DataTypeLiteral type = DynamicTypeLiteral.from(((Attribute) obj).getType().toString());
 			return type != null ? type.getName() : "??";
 		} 
 		return "??";
@@ -111,7 +117,7 @@ public class ModelInferenceService {
 		// user pressed cancel
 		if (dialog.open() != Window.OK) {
 			// Return previous value
-			if(object instanceof Attribute) return ((Attribute) object).getType();
+			if(object instanceof Attribute) return ((Attribute) object).getType().toString();
 		}
 		Object[] result = dialog.getResult();
 		
@@ -121,7 +127,7 @@ public class ModelInferenceService {
 		}
 		
 		// Return previous value
-		if(object instanceof Attribute) return ((Attribute) object).getType();
+		if(object instanceof Attribute) return ((Attribute) object).getType().toString();
 		return null; // Unknown error
 	}
 	
@@ -132,7 +138,7 @@ public class ModelInferenceService {
 		ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) source.eContainer());
 		DataType type = inferrer.getDataTypeFromParameterSource(source);
 		
-		TypeStructureNode skipNode = new TypeStructureNode(skipMe.getDescription(), DynamicTypeLiteral.from(skipMe.getType()), skipMe.getMultiplicity(), source);
+		TypeStructureNode skipNode = new TypeStructureNode(skipMe.getDescription(), DynamicTypeLiteral.from(skipMe.getType().toString()), skipMe.getMultiplicity(), source);
 		Collection<TypeStructureNode> nodes = inferrer.getAttributesForType(type, skipNode);
 		
 		System.out.println(nodes);
@@ -171,7 +177,7 @@ public class ModelInferenceService {
 		// Value given?
 		if(result.length > 0 && result[0] instanceof TypeStructureNode){
 			// Set type and multiplicity
-			attribute.setType(((TypeStructureNode) result[0]).getType().getName());
+			attribute.setType(((TypeStructureNode) result[0]).getType());//.getName());
 			attribute.setMultiplicity(((TypeStructureNode) result[0]).getMultiplicity());
 			
 			// Return attributeName
@@ -180,5 +186,39 @@ public class ModelInferenceService {
 		
 		// Return previous value
 		return attribute.getDescription();
+	}
+	
+	public DataType setDataType(EObject obj, String input){
+		try {
+			updateAllDataTypes(obj);
+			return getDataType(obj, input);
+		} catch(Exception e) {
+			return null;
+		}
+	}
+	
+	public DataType getDataType(EObject obj, String input){
+		try {
+			ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
+			return inferrer.getType(input);
+		} catch(Exception e) {
+			return null;
+		}
+	}
+	
+	public String getDataTypeName(EObject obj){
+		DataType type = null;
+		if(obj instanceof GUIElement) {
+			type = ((GUIElement) obj).getType();
+		}
+		
+		if(type == null) return null;
+		if(type instanceof DataTypeLiteral){
+			return ((DataTypeLiteral) type).getName();
+		}
+		// TODO
+		//ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
+		//return inferrer.getDataTypeFromParameterSource(source)
+		return type.getClass().getSimpleName();
 	}
 }

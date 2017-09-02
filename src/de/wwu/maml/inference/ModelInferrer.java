@@ -15,6 +15,7 @@ import de.wwu.maml.dsl.maml.UseCase;
 import de.wwu.maml.dsl.mamldata.DataType;
 import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
 import de.wwu.maml.dsl.mamlgui.Attribute;
+import de.wwu.maml.editor.service.MamlHelper;
 
 /**
  * Main component for inferring data models from .maml models 
@@ -139,6 +140,10 @@ public class ModelInferrer {
 		return inferenceDataTypeHelper.getDataTypeForAttributeName(sourceType, attributeName);
 	}
 	
+	public DataType getType(String typeName){
+		DataType type =  DynamicTypeLiteral.from(MamlHelper.getAllowedDataTypeName(typeName));
+		return type;
+	}
 	// TODO validate model (no dangling, ...)
 	// TODO build data model and validate data types
 }

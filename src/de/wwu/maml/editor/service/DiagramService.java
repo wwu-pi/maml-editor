@@ -428,10 +428,6 @@ public class DiagramService {
 		return MamlHelper.getAllowedAttributeName(input);
 	}
 	
-	public String getDataTypeNameForInput(EObject obj, String input){
-		return MamlHelper.getAllowedDataTypeName(input);
-	}
-	
 	public EObject recalculateAttributeOrder(EObject obj){
 		// Starting from a connector only source element needs to be recalculated
 		if(obj instanceof ParameterSource){
