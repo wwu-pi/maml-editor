@@ -542,7 +542,7 @@
             </centerLabelStyleDescription>
           </style>
         </edgeMappings>
-        <containerMappings name="Enum" labelDirectEdit="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='directEditEnumContainer']" semanticCandidatesExpression="aql:self.dataTypes" domainClass="mamldata.Enum" childrenPresentation="List">
+        <containerMappings name="Enum" labelDirectEdit="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='directEditEnumContainer']" semanticCandidatesExpression="aql:self.dataTypes" doubleClickDescription="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='addEnumValue']" domainClass="mamldata.Enum" childrenPresentation="List">
           <subNodeMappings name="EnumValue" labelDirectEdit="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='directEditEnumOption']" semanticCandidatesExpression="aql:self.values" domainClass="mamldata.String">
             <style xsi:type="style:SquareDescription" labelExpression="feature:value" labelAlignment="LEFT" labelPosition="node" resizeKind="NSEW">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
@@ -550,7 +550,7 @@
               <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_orange']"/>
             </style>
           </subNodeMappings>
-          <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" showIcon="false">
+          <style xsi:type="style:FlatContainerStyleDescription" borderSizeComputationExpression="1" showIcon="false" widthComputationExpression="12" heightComputationExpression="10">
             <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
             <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='light_orange']"/>
@@ -676,18 +676,7 @@
             <initialOperation>
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="mamldata.Enum" referenceName="dataTypes">
-                  <subModelOperations xsi:type="tool:SetValue" featureName="name" valueExpression="aql:'EnumType'+container.dataTypes->filter(mamldata::Enum)->size()"/>
-                </subModelOperations>
-              </firstModelOperations>
-            </initialOperation>
-          </ownedTools>
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createEnumEntry" label="Option value" nodeMappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@containerMappings[name='Enum']/@subNodeMappings[name='EnumValue']" iconPath="/de.wwu.maml.editor/icons/icon_text.png">
-            <variable name="container"/>
-            <viewVariable name="containerView"/>
-            <initialOperation>
-              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
-                <subModelOperations xsi:type="tool:CreateInstance" typeName="mamldata.String" referenceName="values">
-                  <subModelOperations xsi:type="tool:SetValue" featureName="value" valueExpression="aql:'option'+container.values->size()"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="name" valueExpression="aql:'ListType'+container.dataTypes->filter(mamldata::Enum)->size()"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
@@ -696,6 +685,17 @@
             <mask mask="{0}"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:SetValue" featureName="name" valueExpression="var:0"/>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:DoubleClickDescription" name="addEnumValue" mappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@containerMappings[name='Enum']">
+            <element name="element"/>
+            <elementView name="elementView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:element">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="mamldata.String" referenceName="values">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="value" valueExpression="aql:'Option'+element.values->size()"/>
+                </subModelOperations>
+              </firstModelOperations>
             </initialOperation>
           </ownedTools>
           <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditEnumOption" inputLabelExpression="feature:value">
@@ -886,7 +886,7 @@
         </toolSections>
       </additionalLayers>
       <additionalLayers name="RoleLayer" label="Role Layer" activeByDefault="true" optional="false">
-        <containerMappings name="RoleContainer" deletionDescription="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@toolSections.0/@ownedTools[name='deleteUseCase']" labelDirectEdit="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@toolSections.0/@ownedTools[name='directEditUseCase']" semanticCandidatesExpression="aql:self" domainClass="maml.UseCase" childrenPresentation="List">
+        <containerMappings name="RoleContainer" deletionDescription="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@toolSections.0/@ownedTools[name='deleteUseCase']" labelDirectEdit="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@toolSections.0/@ownedTools[name='directEditUseCase']" semanticCandidatesExpression="aql:self" doubleClickDescription="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@toolSections.0/@ownedTools[name='createRole']" domainClass="maml.UseCase" childrenPresentation="List">
           <subNodeMappings name="RoleElement" labelDirectEdit="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@toolSections.0/@ownedTools[name='directEditRoleName']" semanticCandidatesExpression="aql:self.roles" domainClass="maml.Role">
             <style xsi:type="style:SquareDescription" iconPath="/de.wwu.maml.editor/icons/woman.png" labelAlignment="LEFT" labelPosition="node" resizeKind="NSEW">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
@@ -903,17 +903,6 @@
           </style>
         </containerMappings>
         <toolSections name="RoleSection" label="Roles">
-          <ownedTools xsi:type="tool_1:NodeCreationDescription" name="createRoleElement" label="Create role" precondition="aql:container.oclIsKindOf(maml::UseCase)" nodeMappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@containerMappings[name='RoleContainer']/@subNodeMappings[name='RoleElement']" iconPath="/de.wwu.maml.editor/icons/woman.png">
-            <variable name="container"/>
-            <viewVariable name="containerView"/>
-            <initialOperation>
-              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:container">
-                <subModelOperations xsi:type="tool:CreateInstance" typeName="maml.Role" referenceName="roles">
-                  <subModelOperations xsi:type="tool:SetValue" featureName="name" valueExpression="aql:'Role'+container.roles->size()"/>
-                </subModelOperations>
-              </firstModelOperations>
-            </initialOperation>
-          </ownedTools>
           <ownedTools xsi:type="tool_1:ContainerDropDescription" name="ApplyRole" precondition="aql:true" forceRefresh="true" elementsToSelect="aql:null" mappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@defaultLayer/@nodeMappings[name='InteractionProcessElement']/@borderedNodeMappings[name='ProcessElementRole'] //@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@containerMappings[name='RoleContainer']/@subNodeMappings[name='RoleElement']">
             <oldContainer name="oldSemanticContainer"/>
             <newContainer name="newSemanticContainer"/>
@@ -943,6 +932,17 @@
             <containerView name="containerView"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:self"/>
+            </initialOperation>
+          </ownedTools>
+          <ownedTools xsi:type="tool_1:DoubleClickDescription" name="createRole" mappings="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='RoleLayer']/@containerMappings[name='RoleContainer']">
+            <element name="element"/>
+            <elementView name="elementView"/>
+            <initialOperation>
+              <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="aql:element">
+                <subModelOperations xsi:type="tool:CreateInstance" typeName="maml.Role" referenceName="roles">
+                  <subModelOperations xsi:type="tool:SetValue" featureName="name" valueExpression="aql:'Role'+element.roles->size()"/>
+                </subModelOperations>
+              </firstModelOperations>
             </initialOperation>
           </ownedTools>
         </toolSections>
