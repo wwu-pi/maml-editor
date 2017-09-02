@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
 <plugin>
+     <extension point="org.eclipse.ui.newWizards">
+      <category
+            id="de.wwu.maml.category.ID"
+            name="MAML"/>
+      <wizard
+            id="de.wwu.maml.editor.MamlModelWizardID"
+            name="MAML use case"
+            class="de.wwu.maml.editor.MamlCreateGraphicalModelWizard"
+            category="de.wwu.maml.category.ID"
+            icon="icons/wizard/MamlModelFile.gif">
+         <description>Create new MAML use case model</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+   
   <extension point="org.eclipse.sirius.componentization">
     <component class="de.wwu.maml.editor.Activator"
                id="de.wwu.maml.editor"

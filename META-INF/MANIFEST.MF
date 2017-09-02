@@ -18,7 +18,8 @@ Require-Bundle:
  org.eclipse.draw2d;bundle-version="3.10.1",
  org.eclipse.gmf.runtime.diagram.ui;bundle-version="1.8.0",
  org.junit,
- org.eclipse.emf.ecore.xmi
+ org.eclipse.emf.ecore.xmi,
+ de.wwu.maml.dsl.editor
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .,
