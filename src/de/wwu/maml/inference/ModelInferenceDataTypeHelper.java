@@ -21,6 +21,7 @@ import de.wwu.maml.dsl.maml.UseCase;
 import de.wwu.maml.dsl.mamldata.CustomType;
 import de.wwu.maml.dsl.mamldata.DataType;
 import de.wwu.maml.dsl.mamldata.MamldataFactory;
+import de.wwu.maml.dsl.mamldata.PrimitiveType;
 import de.wwu.maml.dsl.mamlgui.AccessType;
 import de.wwu.maml.dsl.mamlgui.Attribute;
 import de.wwu.maml.dsl.mamlgui.ComputationOperator;
@@ -107,11 +108,14 @@ public class ModelInferenceDataTypeHelper {
 	}
 	
 	public boolean isPrimitive(DataType type){
-		// Explicitly compare using strings to avoid different object instances
+		if(type instanceof PrimitiveType) return true;
+		
+		// Fallback: Explicitly compare using type names as strings to avoid different object instances
 		String typeName = MamlHelper.getDataTypeName(type);
 		for(String s : primitiveTypes){
 			if(typeName.equals(s)) return true;
 		}
+		
 		return false;
 	}
 	
@@ -202,17 +206,14 @@ public class ModelInferenceDataTypeHelper {
 			// Special case for Transform elements because type changes, MUST BE HANDLED BEFORE upcoming ProcessElement superclass type
 			
 			// Check existing types for valid attributes
-//			DataType targetType = null; //tmp
-//			DataType targetType = ModelInferenceTextInputHelper.getTypeForTransform(((Transform) processing).getDescription(), lastOccurredType, typeGraph);
-//TODO check textinputhelper
-//			if(targetType != null){
-////				elementTypes.put(processing, targetType);
-//				lastOccurredType = targetType;
-//				setDataTypeInModel(processing, targetType);
-//			} else {
+			DataType targetType = ModelInferenceTextInputHelper.getTypeForTransform(((Transform) processing).getDescription(), lastOccurredType, typeGraph);
+			if(targetType != null){
+				lastOccurredType = targetType;
+				setDataTypeInModel(processing, targetType);
+			} else {
 				// Else inference failed -> no type information possible
 				lastOccurredType = null;
-//			} 
+			} 
 			
 		} else if(processing instanceof ProcessElement){
 			// TODO In future check if anonymous type was explicitly set 

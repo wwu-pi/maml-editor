@@ -12,6 +12,7 @@ import de.wwu.maml.dsl.maml.ProcessFlowElement;
 import de.wwu.maml.dsl.mamldata.CustomType;
 import de.wwu.maml.dsl.mamldata.DataType;
 import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
+import de.wwu.maml.dsl.mamldata.PrimitiveType;
 import de.wwu.maml.dsl.mamlgui.GUIElement;
 
 public class MamlHelper {
@@ -132,8 +133,8 @@ public class MamlHelper {
 	public static String getDataTypeName(DataType type){
 		if(type == null) return "";
 		
-		if(type instanceof DataTypeLiteral){
-			return ((DataTypeLiteral) type).getName();
+		if(type instanceof PrimitiveType){
+			return ((PrimitiveType) type).getClass().getSimpleName().replace("Impl", "");
 		} else if (type instanceof CustomType){
 			return ((CustomType) type).getName();
 		}
