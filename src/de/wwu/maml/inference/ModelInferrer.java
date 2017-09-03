@@ -32,7 +32,7 @@ public class ModelInferrer {
 	private Date lastInference = null;
 	
 	// Manages data types
-	protected ModelInferenceDataTypeHelper inferenceDataTypeHelper = new ModelInferenceDataTypeHelper(); 
+	protected ModelInferenceDataTypeHelper inferenceDataTypeHelper = ModelInferenceDataTypeHelper.getInstance(); 
 	protected ModelInferenceMergeHelper inferenceMergeHelper = new ModelInferenceMergeHelper();
 	
 	/**
@@ -116,8 +116,7 @@ public class ModelInferrer {
 		}
 		
 		// Output Helper
-		System.out.println("Custom data types:" + DynamicTypeLiteral.getCustomDataTypesAsString().toString());
-		System.out.println("Anonymous data types:" + DynamicTypeLiteral.getAnonymousDataTypesAsString().toString());
+		System.out.println("Custom data types:" + inferenceDataTypeHelper.getCustomDataTypesAsString().toString());
 	}
 
 	/**

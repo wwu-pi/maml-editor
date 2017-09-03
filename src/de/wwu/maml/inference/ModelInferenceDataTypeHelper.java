@@ -1,6 +1,7 @@
 package de.wwu.maml.inference;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,7 +41,10 @@ import edu.uci.ics.jung.graph.event.GraphEvent.Vertex;
 public class ModelInferenceDataTypeHelper {
 	
 	public static final String ANONYMOUS_PREFIX = "__ANONYMOUS__";
-	private static final String ANONYMOUS_TYPE_UI = "X";
+	public static final String ANONYMOUS_TYPE_UI = "X";
+	
+	private static final String[] primitiveTypes = { "Boolean", "String", "Currency", "Date", "DateTime", "Email", "File", "Float", 
+			"Image", "Integer", "Location", "PhoneNumber", "String", "Time", "Url"};
 	
 //	protected Map<ParameterSource, DataType> elementTypes = new HashMap<ParameterSource, DataType>();
 	protected Map<String, DataType> dataTypeNames = new HashMap<String, DataType>();
@@ -58,7 +62,21 @@ public class ModelInferenceDataTypeHelper {
 	ArrayList<MamlHypergraphNode<ParameterSource>> sourceModelElements = new ArrayList<MamlHypergraphNode<ParameterSource>>();
 	ArrayList<MamlHypergraphTargetNode<ParameterSource>> targetModelElements = new ArrayList<MamlHypergraphTargetNode<ParameterSource>>();
 //	protected ArrayList<TypeStructureNode> typeGraph = new ArrayList<TypeStructureNode>(); // TODO join with dataTypeNames?
+	
+	private static ModelInferenceDataTypeHelper instance = null;
+	
+	private ModelInferenceDataTypeHelper(){
+		// Singelton constructor
+	}
+	
+	public static ModelInferenceDataTypeHelper getInstance(){
+		if(instance == null){
+			instance = new ModelInferenceDataTypeHelper();
+		}
 
+		return instance;
+	}
+	
 	/**
 	 * Retrieve data type for given ProcessFlowElement
 	 * @param obj
@@ -112,9 +130,6 @@ public class ModelInferenceDataTypeHelper {
 	}
 	
 	public boolean isPrimitive(DataType type){
-		String[] primitiveTypes = { "Boolean", "String", "Currency", "Date", "DateTime", "Email", "File", "Float", 
-									"Image", "Integer", "Location", "PhoneNumber", "String", "Time", "Url"};
-		
 		// Explicitly compare using strings to avoid different object instances
 		String typeName = MamlHelper.getDataTypeName(type);
 		for(String s : primitiveTypes){
@@ -374,7 +389,7 @@ public class ModelInferenceDataTypeHelper {
 				Attribute target = (Attribute) connector.getTargetElement();
 				
 				// Check that target has a non-anonymous type
-				if(!DynamicTypeLiteral.isAllowedTypeName(target.getType().toString())) continue;
+				if(!ModelInferenceTextInputHelper.isAllowedTypeName(target.getType().toString())) continue;
 				
 				// Process current connection -----------------------
 				ArrayList<MamlHypergraphNode<?>> nodes = new ArrayList<MamlHypergraphNode<?>>();
@@ -428,22 +443,6 @@ public class ModelInferenceDataTypeHelper {
 	
 	
 	// TODO replace by hypergraph query
-//	/**
-//	 * Retrieve all attributes for a specific data type
-//	 */
-//	public Collection<Attribute> getAttributesForType(DataType type){
-//		return new ArrayList<Attribute>(); // TODO
-//	}
-//		// Either ProcessFlowElement -> compare type with target type
-//		// Or GUIElement -> get type from String and compare
-//		return this.typeGraph.stream().filter(elem -> !elem.equals(skipNode))
-//				.filter(elem -> ((elem.getSource() instanceof ProcessFlowElement) && ((ProcessFlowElement) elem.getSource()).getDataType().equals(type)) 
-//				|| ((elem.getSource() instanceof GUIElement) && DynamicTypeLiteral.from(((GUIElement) elem.getSource()).getType().toString()).equals(type)))
-//		.collect(Collectors.toList());
-//	}
-//	
-//	
-//	// TODO replace by hypergraph query
 //	public DataType getDataTypeForAttributeName(DataType sourceType, String attributeName){
 //		Optional<TypeStructureNode> node = this.typeGraph.stream().filter(elem -> elem.getAttributeName().equals(attributeName))
 //				.filter(elem -> ((elem.getSource() instanceof ProcessFlowElement) && ((ProcessFlowElement) elem.getSource()).getDataType().equals(sourceType)) 
@@ -511,4 +510,42 @@ public class ModelInferenceDataTypeHelper {
 		
 		targetType.getAttributes().add(prop);
 	}
+	
+	public static Collection<String> getPrimitiveDataTypesAsString(){
+		return Arrays.asList(primitiveTypes);
+	}
+	
+	public Collection<DataType> getCustomDataTypes(){
+		return dataTypeNames.values().stream()
+				.filter(elem -> !isPrimitive(elem))
+				.filter(elem -> !MamlHelper.getDataTypeName(elem).startsWith(ANONYMOUS_PREFIX))
+				.collect(Collectors.toList());
+	}
+	
+	public Collection<String> getCustomDataTypesAsString(){
+		return getCustomDataTypes().stream()
+				.map(elem -> MamlHelper.getDataTypeName(elem))
+				.collect(Collectors.toList());
+	}
+	
+	public Collection<DataType> getAllDataTypes(){
+		return dataTypeNames.values();
+	}
+	
+	public Collection<String> getAllDataTypesAsString(){
+		return dataTypeNames.keySet();
+	}
+	
+	public Collection<DataType> getAnonymousDataTypes() {
+		return dataTypeNames.values().stream()
+				.filter(elem -> MamlHelper.getDataTypeName(elem).startsWith(ANONYMOUS_PREFIX))
+				.collect(Collectors.toList());
+	}
+
+	public Collection<String> getAnonymousDataTypesAsString() {
+		return getAnonymousDataTypes().stream()
+				.map(elem -> MamlHelper.getDataTypeName(elem))
+				.collect(Collectors.toList());
+	}
+	
 }

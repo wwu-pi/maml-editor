@@ -7,15 +7,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import org.eclipse.emf.ecore.EObject;
-
 import de.wwu.maml.dsl.maml.ParameterSource;
 import de.wwu.maml.dsl.maml.ProcessFlowElement;
 import de.wwu.maml.dsl.mamldata.CustomType;
 import de.wwu.maml.dsl.mamldata.DataType;
 import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
 import de.wwu.maml.dsl.mamlgui.GUIElement;
-import de.wwu.maml.inference.DynamicTypeLiteral;
 
 public class MamlHelper {
 

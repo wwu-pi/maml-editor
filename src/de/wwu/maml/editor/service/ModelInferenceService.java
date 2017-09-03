@@ -16,7 +16,7 @@ import de.wwu.maml.inference.ModelInferrer;
 import de.wwu.maml.inference.ModelInferrerManager;
 import de.wwu.maml.inference.TypeStructureNode;
 import de.wwu.maml.editor.dialog.ObjectListSelectionDialog;
-import de.wwu.maml.inference.DynamicTypeLiteral;
+import de.wwu.maml.inference.ModelInferenceDataTypeHelper;
 import de.wwu.maml.dsl.maml.Connector;
 import de.wwu.maml.dsl.maml.ParameterConnector;
 import de.wwu.maml.dsl.maml.ParameterSource;
@@ -107,8 +107,8 @@ public class ModelInferenceService {
 		//startInferenceProcess(object);
 		
 		ArrayList<String> list = new ArrayList<String>();
-		list.addAll(DynamicTypeLiteral.getPrimitiveDataTypesAsString());
-		list.addAll(DynamicTypeLiteral.getCustomDataTypesAsString());
+		list.addAll(ModelInferenceDataTypeHelper.getPrimitiveDataTypesAsString());
+		list.addAll(ModelInferenceDataTypeHelper.getInstance().getCustomDataTypesAsString());
 		return list.toArray(new String[list.size()]);
 	}
 	

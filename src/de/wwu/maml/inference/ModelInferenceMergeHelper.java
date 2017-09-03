@@ -44,9 +44,9 @@ public class ModelInferenceMergeHelper {
 		
 		// 1) Setup graph
 		// Data types
-		for (DataTypeLiteral literal : DynamicTypeLiteral.getTypes().values()) {
+		for (DataType literal : inferenceDataTypeHelper.getAllDataTypes()) { // TODO no literals anymore
 			// As source
-			sourceTypes.add(new MamlHypergraphNode<DataType>(literal));
+			sourceTypes.add(new MamlHypergraphNode<DataType>(literal)); 
 			// As target
 			targetTypes.add(new MamlHypergraphTargetNode<DataType>(literal));
 		}

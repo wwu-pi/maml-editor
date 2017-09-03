@@ -38,7 +38,7 @@ public final class ModelInferrerManager {
 		// Create new if not exists for given use case
 		if(inferrers.get(useCase) == null){
 			inferrers.put(useCase, new ModelInferrer());
-			DynamicTypeLiteral.setDataTypeContainer(useCase);
+//			DynamicTypeLiteral.setDataTypeContainer(useCase);
 		}
 		
 		ModelInferrer inferrer = inferrers.get(useCase);

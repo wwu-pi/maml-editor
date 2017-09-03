@@ -44,4 +44,8 @@ public class ModelInferenceTextInputHelper {
 		
 		return currentType;
 	}
+	
+	public static boolean isAllowedTypeName(String typeName){
+		return typeName != null && !typeName.equals("") && !typeName.startsWith("_") && !typeName.equals(ModelInferenceDataTypeHelper.ANONYMOUS_TYPE_UI);
+	}
 }
