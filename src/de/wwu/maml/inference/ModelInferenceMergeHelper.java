@@ -70,15 +70,14 @@ public class ModelInferenceMergeHelper {
 		Collection<DataType> dataTypes = useCase.getDataTypes();
 		
 		for(CustomType type : dataTypes.stream().filter(elem -> elem instanceof CustomType).map(elem -> (CustomType) elem).collect(Collectors.toList())){
-			Collection<String> edges = typeGraph.getIncidentEdges(inferenceDataTypeHelper.getDataTypeNode(type));
+			// Relation edge
+			Collection<Collection<MamlHypergraphNode<?>>> edges = typeGraph.getIncidentEdgeContents(inferenceDataTypeHelper.getDataTypeNode(type));
 			
 			if(edges == null) continue;
 			
-			for(String identifier : edges){
-				Collection<MamlHypergraphNode<?>> edge = typeGraph.getEdge(identifier);
-				
+			for(Collection<MamlHypergraphNode<?>> edge : edges){
 				// Check for duplicates
-				if(type.getAttributes().stream().anyMatch(elem -> elem.getName().equals(identifier))) continue;
+				if(type.getAttributes().stream().anyMatch(elem -> elem.getName().equals(typeGraph.getEdgeAttributeName(edge)))) continue;
 				
 				// Convert relation to property and add to use case
 				Property prop = convertEdgeToProperty(type, edge, typeGraph);

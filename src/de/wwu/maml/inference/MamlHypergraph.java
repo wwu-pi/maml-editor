@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import de.wwu.maml.dsl.maml.ParameterSource;
 import de.wwu.maml.dsl.mamldata.DataType;
@@ -92,6 +93,10 @@ public class MamlHypergraph<V, E> extends SetHypergraph<V, E> {
 		HashSet<E> difference = new HashSet<E>(set1); // Copy input for immutability
 		difference.removeAll(set2);
 		return difference;
+	}
+	
+	protected Collection<Collection<V>> getIncidentEdgeContents(V v){
+		return this.getIncidentEdges(v).stream().map(elem -> this.getEdge(elem)).collect(Collectors.toList());
 	}
 	
 	// Convenience access methods

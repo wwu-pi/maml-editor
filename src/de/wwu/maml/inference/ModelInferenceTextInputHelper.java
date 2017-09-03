@@ -1,9 +1,7 @@
 package de.wwu.maml.inference;
 
 import java.util.regex.Pattern;
-
 import de.wwu.maml.dsl.mamldata.DataType;
-import de.wwu.maml.editor.service.MamlHelper;
 
 public class ModelInferenceTextInputHelper {
 
@@ -21,18 +19,16 @@ public class ModelInferenceTextInputHelper {
 				currentType = inputType;
 			} else {
 				// Get first type node in existing graph that matches type and attribute 
-				boolean found = false;
-//TODO
-//				for(TypeStructureNode node : typeGraph){
-//					if(MamlHelper.getDataType(node.getSource()) != null && MamlHelper.getDataType(node.getSource()).equals(currentType) 
-//							&& node.getAttributeName() != null && node.getAttributeName().equalsIgnoreCase(part)){
-//						currentType = node.getType();
-//						found = true;
-//						break;
-//					}
-//				}
+				DataType typeMatch = typeGraph.getIncidentEdgeContents(ModelInferenceDataTypeHelper.getInstance().getDataTypeNode(currentType)).stream()
+					.filter(edge -> typeGraph.getEdgeAttributeName(edge).equalsIgnoreCase(part))
+					.map(edge -> typeGraph.getEdgeTargetDataType(edge))
+					.findFirst().orElse(null);
 				
-				if(!found) {
+				System.out.println("ModelInferenceTextInputHelper:"+ typeMatch);
+				
+				if(typeMatch != null){
+					currentType = typeMatch;
+				} else  {
 					// Nothing found in this step -> inference error
 					return null;
 				}
