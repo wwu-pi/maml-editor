@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import de.wwu.maml.dsl.maml.ParameterSource;
 import de.wwu.maml.dsl.maml.ProcessFlowElement;
+import de.wwu.maml.dsl.mamldata.CustomType;
 import de.wwu.maml.dsl.mamldata.DataType;
 import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
 import de.wwu.maml.dsl.mamlgui.GUIElement;
@@ -136,10 +137,9 @@ public class MamlHelper {
 		
 		if(type instanceof DataTypeLiteral){
 			return ((DataTypeLiteral) type).getName();
+		} else if (type instanceof CustomType){
+			return ((CustomType) type).getName();
 		}
-		// TODO
-		//ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
-		//return inferrer.getDataTypeFromParameterSource(source)
 		return type.getClass().getSimpleName();
 	}
 }
