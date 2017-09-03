@@ -3,8 +3,13 @@ package de.wwu.maml.inference;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 
+import de.wwu.maml.dsl.maml.ParameterSource;
+import de.wwu.maml.dsl.mamldata.DataType;
+import de.wwu.maml.dsl.mamldata.Multiplicity;
+import de.wwu.maml.dsl.mamlgui.AccessType;
 import edu.uci.ics.jung.graph.SetHypergraph;
 
 public class MamlHypergraph<V, E> extends SetHypergraph<V, E> {
@@ -87,5 +92,40 @@ public class MamlHypergraph<V, E> extends SetHypergraph<V, E> {
 		HashSet<E> difference = new HashSet<E>(set1); // Copy input for immutability
 		difference.removeAll(set2);
 		return difference;
+	}
+	
+	// Convenience access methods
+	protected DataType getEdgeSourceDataType(Collection<MamlHypergraphNode<?>> edge){
+		return edge.stream().filter(elem -> elem instanceof MamlHypergraphNode && elem.getValue() instanceof DataType).map(elem -> (DataType) elem.getValue()).findFirst().orElse(null);
+	}
+	
+	protected DataType getEdgeTargetDataType(Collection<MamlHypergraphNode<?>> edge){
+		return edge.stream().filter(elem -> elem instanceof MamlHypergraphTargetNode && elem.getValue() instanceof DataType).map(elem -> (DataType) elem.getValue()).findFirst().orElse(null);
+	}
+	
+	protected Multiplicity getEdgeCardinality(Collection<MamlHypergraphNode<?>> edge){
+		return edge.stream().filter(elem -> elem instanceof HypergraphCardinalityNode).map(elem -> (Multiplicity) elem.getValue()).findFirst().orElse(null);
+	}
+	
+	protected AccessType getEdgeAccessType(Collection<MamlHypergraphNode<?>> edge){
+		return edge.stream().filter(elem -> elem instanceof HypergraphAccessNode).map(elem -> (AccessType) elem.getValue()).findFirst().orElse(null);
+	}
+	
+	protected ParameterSource getEdgeSourceModelElement(Collection<MamlHypergraphNode<?>> edge){
+		return edge.stream().filter(elem -> elem instanceof MamlHypergraphNode && elem.getValue() instanceof ParameterSource).map(elem -> (ParameterSource) elem.getValue()).findFirst().orElse(null);
+	}
+	
+	protected ParameterSource getEdgeTargetModelElement(Collection<MamlHypergraphNode<?>> edge){
+		return edge.stream().filter(elem -> elem instanceof MamlHypergraphTargetNode && elem.getValue() instanceof ParameterSource).map(elem -> (ParameterSource) elem.getValue()).findFirst().orElse(null);
+	}
+	
+	protected String getEdgeAttributeName(Collection<MamlHypergraphNode<?>> edge){
+		Optional<String> qualifiedName = edge.stream().filter(elem -> elem instanceof MamlHypergraphNode && elem.getValue() instanceof String).map(elem -> (String) elem.getValue()).findFirst();
+		
+		if(qualifiedName.isPresent() && qualifiedName.get().split("\\.").length > 0){
+			return qualifiedName.get().split("\\.")[qualifiedName.get().split("\\.").length - 1];
+		} else {
+			return null;
+		}
 	}
 }

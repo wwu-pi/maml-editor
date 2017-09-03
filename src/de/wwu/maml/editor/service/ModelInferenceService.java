@@ -1,7 +1,6 @@
 package de.wwu.maml.editor.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
@@ -14,19 +13,15 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import de.wwu.maml.inference.ModelInferrer;
 import de.wwu.maml.inference.ModelInferrerManager;
-import de.wwu.maml.inference.TypeStructureNode;
 import de.wwu.maml.editor.dialog.ObjectListSelectionDialog;
 import de.wwu.maml.inference.ModelInferenceDataTypeHelper;
 import de.wwu.maml.dsl.maml.Connector;
 import de.wwu.maml.dsl.maml.ParameterConnector;
 import de.wwu.maml.dsl.maml.ParameterSource;
-import de.wwu.maml.dsl.maml.ProcessFlowElement;
 import de.wwu.maml.dsl.maml.UseCase;
 import de.wwu.maml.dsl.mamldata.CustomType;
 import de.wwu.maml.dsl.mamldata.DataType;
-import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
 import de.wwu.maml.dsl.mamlgui.Attribute;
-import de.wwu.maml.dsl.mamlgui.GUIElement;
 
 /**
  * Service class for type-related editor methods.  
@@ -106,10 +101,10 @@ public class ModelInferenceService {
 		// Refresh inferred model types
 		//startInferenceProcess(object);
 		
-		ArrayList<String> list = new ArrayList<String>();
-		list.addAll(ModelInferenceDataTypeHelper.getPrimitiveDataTypesAsString());
-		list.addAll(ModelInferenceDataTypeHelper.getInstance().getCustomDataTypesAsString());
-		return list.toArray(new String[list.size()]);
+		HashSet<String> set = new HashSet<String>();
+		set.addAll(ModelInferenceDataTypeHelper.getPrimitiveDataTypesAsString());
+		set.addAll(ModelInferenceDataTypeHelper.getInstance().getCustomDataTypesAsString());
+		return set.toArray(new String[set.size()]);
 	}
 	
 	public DataType openDataTypeSelectionWizard(EObject object){
@@ -117,7 +112,7 @@ public class ModelInferenceService {
 
 		ElementListSelectionDialog dialog = new ElementListSelectionDialog(shell, new LabelProvider());
 		
-		dialog.setElements(getDataTypeList(object)); //new String[] { "Linux", "Mac", "Windows" });
+		dialog.setElements(getDataTypeList(object));
 		dialog.setTitle("Select desired data type");
 		
 		// user pressed cancel
@@ -176,25 +171,26 @@ public class ModelInferenceService {
 		Object[] attributeList = getAttributeList(((ParameterConnector) connector.get()).getSourceElement(), attribute);
 		if(attributeList.length == 0) return (attribute.getDescription()); // Skip, nothing to select
 		
-		dialog.setElements(attributeList, elem -> ((TypeStructureNode) elem).getAttributeName() + " (" + MamlHelper.getDataTypeName(((TypeStructureNode) elem).getType()) + ")");
-		dialog.setTitle("Select from known attribute names");
-		
-		// user pressed cancel
-		if (dialog.open() != Window.OK) {
-			// Return previous value
-			return attribute.getDescription();
-		}
-		Object[] result = dialog.getResult();
-		
-		// Value given?
-		if(result.length > 0 && result[0] instanceof TypeStructureNode){
-			// Set type and multiplicity
-			attribute.setType(((TypeStructureNode) result[0]).getType());//.getName());
-			attribute.setMultiplicity(((TypeStructureNode) result[0]).getMultiplicity());
-			
-			// Return attributeName
-			return ((TypeStructureNode) result[0]).getAttributeName();
-		}
+//TODO
+//		dialog.setElements(attributeList, elem -> ((TypeStructureNode) elem).getAttributeName() + " (" + MamlHelper.getDataTypeName(((TypeStructureNode) elem).getType()) + ")");
+//		dialog.setTitle("Select from known attribute names");
+//		
+//		// user pressed cancel
+//		if (dialog.open() != Window.OK) {
+//			// Return previous value
+//			return attribute.getDescription();
+//		}
+//		Object[] result = dialog.getResult();
+//		
+//		// Value given?
+//		if(result.length > 0 && result[0] instanceof TypeStructureNode){
+//			// Set type and multiplicity
+//			attribute.setType(((TypeStructureNode) result[0]).getType());//.getName());
+//			attribute.setMultiplicity(((TypeStructureNode) result[0]).getMultiplicity());
+//			
+//			// Return attributeName
+//			return ((TypeStructureNode) result[0]).getAttributeName();
+//		}
 		
 		// Return previous value
 		return attribute.getDescription();

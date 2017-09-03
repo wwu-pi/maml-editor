@@ -1,14 +1,10 @@
 package de.wwu.maml.inference;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.eclipse.emf.common.util.EList;
 
 import de.wwu.maml.dsl.maml.ParameterConnector;
 import de.wwu.maml.dsl.maml.ParameterSource;
@@ -16,10 +12,8 @@ import de.wwu.maml.dsl.maml.ProcessFlowElement;
 import de.wwu.maml.dsl.maml.ProcessStartEvent;
 import de.wwu.maml.dsl.maml.UseCase;
 import de.wwu.maml.dsl.mamldata.DataType;
-import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
 import de.wwu.maml.dsl.mamlgui.Attribute;
 import de.wwu.maml.editor.service.MamlHelper;
-import de.wwu.maml.inference.error.MamlValidationError;
 
 /**
  * Main component for inferring data models from .maml models 
@@ -104,7 +98,8 @@ public class ModelInferrer {
 		// ------------------------------------------------------------------
 		// Merge individual process elements within a use case
 		// ------------------------------------------------------------------
-//		inferenceMergeHelper.mergeProcessElements(useCase.getProcessFlowElements(), inferenceDataTypeHelper);
+		// merging necessary?? (rename to validation instead?)
+		inferenceMergeHelper.mergeProcessElements(useCase.getProcessFlowElements(), inferenceDataTypeHelper.getTypeGraph());
 		
 		// Track the last time of inference for eventual throttling
 		setLastInference(new Date());
@@ -112,7 +107,7 @@ public class ModelInferrer {
 		
 		// TODO remove unused data types from UseCase dataType list
 		if(!readOnly){
-			inferenceDataTypeHelper.createDataStructureInUseCase(useCase);
+			inferenceMergeHelper.createDataStructureInUseCase(useCase, inferenceDataTypeHelper.getTypeGraph());
 		}
 		
 		// Output Helper
@@ -153,47 +148,7 @@ public class ModelInferrer {
 //	public DataType getDataTypeForAttributeName(DataType sourceType, String attributeName){
 //		return inferenceDataTypeHelper.getDataTypeForAttributeName(sourceType, attributeName);
 //	}
-	
 
 	// TODO validate model (no dangling, ...)
 	// TODO build data model and validate data types
-	
-//	ArrayList<MamlHypergraphNode<DataType>> sourceTypes = new ArrayList<MamlHypergraphNode<DataType>>();
-//	ArrayList<MamlHypergraphTargetNode<DataType>> targetTypes = new ArrayList<MamlHypergraphTargetNode<DataType>>();
-//
-//	ArrayList<HypergraphAccessNode> accessTypes = new ArrayList<HypergraphAccessNode>();
-//	ArrayList<HypergraphCardinalityNode> cardinalityTypes = new ArrayList<HypergraphCardinalityNode>();
-//	
-//	ArrayList<MamlHypergraphNode<String>> attributes = new ArrayList<MamlHypergraphNode<String>>();
-	
-//	ArrayList<MamlValidationError> errorList = new ArrayList<MamlValidationError>();
-//
-//	@SuppressWarnings("rawtypes")
-//	public void buildDataModelGraph(UseCase useCase) {
-//		graph = new MamlHypergraph<MamlHypergraphNode, String>();
-//		
-//		// Three sources:
-//		// 1) Setup graph
-//		// Data types
-//		for (DataTypeLiteral literal : DynamicTypeLiteral.getTypes().values()) {
-//			// As source
-//			sourceTypes.add(new MamlHypergraphNode<DataType>(literal));
-//			// As target
-//			targetTypes.add(new MamlHypergraphTargetNode<DataType>(literal));
-//		}
-//
-//		// Accessibility
-//		accessTypes.add(HypergraphAccessNode.getReadAccessNode());
-//		accessTypes.add(HypergraphAccessNode.getWriteAccessNode());
-//
-//		// Cardinality
-//		cardinalityTypes.add(HypergraphCardinalityNode.getCardinalityOneNode());
-//		cardinalityTypes.add(HypergraphCardinalityNode.getCardinalityManyNode()); // TODO
-																					// others
-//		//// Process element connections -> edges
-//		for (ProcessFlowElement pfe : processFlowElements) {
-//			// Get attributes (recursive)
-//			addAttributesRecursive(pfe);
-//		}
-//	}
 }

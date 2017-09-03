@@ -6,15 +6,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.ecore.EObject;
-
 import de.wwu.maml.dsl.maml.DataSource;
 import de.wwu.maml.dsl.maml.Event;
-import de.wwu.maml.dsl.maml.MamlPackage;
 import de.wwu.maml.dsl.maml.ParameterConnector;
 import de.wwu.maml.dsl.maml.ParameterSource;
 import de.wwu.maml.dsl.maml.ProcessConnector;
@@ -24,19 +20,11 @@ import de.wwu.maml.dsl.maml.Transform;
 import de.wwu.maml.dsl.maml.UseCase;
 import de.wwu.maml.dsl.mamldata.CustomType;
 import de.wwu.maml.dsl.mamldata.DataType;
-import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
-//import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
-import de.wwu.maml.dsl.mamldata.Enum;
 import de.wwu.maml.dsl.mamldata.MamldataFactory;
-import de.wwu.maml.dsl.mamldata.Multiplicity;
-import de.wwu.maml.dsl.mamldata.Property;
-import de.wwu.maml.dsl.mamldata.impl.CustomTypeImpl;
 import de.wwu.maml.dsl.mamlgui.AccessType;
 import de.wwu.maml.dsl.mamlgui.Attribute;
 import de.wwu.maml.dsl.mamlgui.ComputationOperator;
-import de.wwu.maml.dsl.mamlgui.GUIElement;
 import de.wwu.maml.editor.service.MamlHelper;
-import edu.uci.ics.jung.graph.event.GraphEvent.Vertex;
 
 public class ModelInferenceDataTypeHelper {
 	
@@ -46,7 +34,6 @@ public class ModelInferenceDataTypeHelper {
 	private static final String[] primitiveTypes = { "Boolean", "String", "Currency", "Date", "DateTime", "Email", "File", "Float", 
 			"Image", "Integer", "Location", "PhoneNumber", "String", "Time", "Url"};
 	
-//	protected Map<ParameterSource, DataType> elementTypes = new HashMap<ParameterSource, DataType>();
 	protected Map<String, DataType> dataTypeNames = new HashMap<String, DataType>();
 	
 	protected MamlHypergraph<MamlHypergraphNode<?>, String> typeGraph;
@@ -61,7 +48,6 @@ public class ModelInferenceDataTypeHelper {
 	
 	ArrayList<MamlHypergraphNode<ParameterSource>> sourceModelElements = new ArrayList<MamlHypergraphNode<ParameterSource>>();
 	ArrayList<MamlHypergraphTargetNode<ParameterSource>> targetModelElements = new ArrayList<MamlHypergraphTargetNode<ParameterSource>>();
-//	protected ArrayList<TypeStructureNode> typeGraph = new ArrayList<TypeStructureNode>(); // TODO join with dataTypeNames?
 	
 	private static ModelInferenceDataTypeHelper instance = null;
 	
@@ -76,15 +62,6 @@ public class ModelInferenceDataTypeHelper {
 
 		return instance;
 	}
-	
-	/**
-	 * Retrieve data type for given ProcessFlowElement
-	 * @param obj
-	 * @return
-	 */
-//	public DataType getType(ParameterSource obj) {
-//		return elementTypes.get(obj);
-//	}
 	
 	public DataType getDataTypeInstance(String dataTypeName){
 		if(dataTypeName == null) return null;
@@ -145,6 +122,8 @@ public class ModelInferenceDataTypeHelper {
 	 * @param type
 	 */
 	protected void setDataTypeInModel(ProcessFlowElement element, DataType type){
+		if(type == null) return;
+		
 		// Check containment in use case data type list exists
 		if(!((UseCase) element.eContainer()).getDataTypes().contains(type)){
 			((UseCase) element.eContainer()).getDataTypes().add(type);
@@ -183,10 +162,7 @@ public class ModelInferenceDataTypeHelper {
 		// Process current item
 		lastOccurredType = inferSingleItem(currentElement, lastOccurredType);
 		processed.add(currentElement);
-		
-//		// Process attributes of current item
-//		inferAttributes(currentElement);
-		
+	
 		// Process subsequent connected items
 		if(currentElement.getNextElements() != null && currentElement.getNextElements().size() > 0){
 			// Control flow elements: may have >1 outgoing connections!
@@ -221,36 +197,35 @@ public class ModelInferenceDataTypeHelper {
 			}
 			// In case no value is given, it must be the last known type
 			setDataTypeInModel(processing, lastOccurredType);
-//			elementTypes.put(processing, DynamicTypeLiteral.from(lastOccuredTypeName));
 			
 		} else if(processing instanceof Transform){ 
 			// Special case for Transform elements because type changes, MUST BE HANDLED BEFORE upcoming ProcessElement superclass type
 			
 			// Check existing types for valid attributes
-			DataType targetType = null; //tmp
+//			DataType targetType = null; //tmp
 //			DataType targetType = ModelInferenceTextInputHelper.getTypeForTransform(((Transform) processing).getDescription(), lastOccurredType, typeGraph);
 //TODO check textinputhelper
-			if(targetType != null){
-//				elementTypes.put(processing, targetType);
-				lastOccurredType = targetType;
-				setDataTypeInModel(processing, targetType);
-			} else {
+//			if(targetType != null){
+////				elementTypes.put(processing, targetType);
+//				lastOccurredType = targetType;
+//				setDataTypeInModel(processing, targetType);
+//			} else {
 				// Else inference failed -> no type information possible
 				lastOccurredType = null;
-			} 
+//			} 
 			
 		} else if(processing instanceof ProcessElement){
 			// TODO In future check if anonymous type was explicitly set 
-			DataType explicitType = null;
-			if(explicitType != null && !MamlHelper.getDataTypeName(explicitType).equals(ANONYMOUS_TYPE_UI)){
-				// Custom type
-				lastOccurredType = explicitType;
-			} else if(explicitType != null && MamlHelper.getDataTypeName(explicitType).equals(ANONYMOUS_TYPE_UI)){
-				// Build a new and unique custom type name
-				lastOccurredType = getDataTypeInstance(ANONYMOUS_PREFIX + processing.toString());
-			} 
+//			DataType explicitType = null;
+//			if(explicitType != null && !MamlHelper.getDataTypeName(explicitType).equals(ANONYMOUS_TYPE_UI)){
+//				// Custom type
+//				lastOccurredType = explicitType;
+//			} else if(explicitType != null && MamlHelper.getDataTypeName(explicitType).equals(ANONYMOUS_TYPE_UI)){
+//				// Build a new and unique custom type name
+//				lastOccurredType = getDataTypeInstance(ANONYMOUS_PREFIX + processing.toString());
+//			} 
+			
 			// In case no value is given, it must be the last known type
-//			elementTypes.put(processing, DynamicTypeLiteral.from(lastOccuredTypeName));
 			setDataTypeInModel(processing, lastOccurredType);
 		}
 		
@@ -416,7 +391,6 @@ public class ModelInferenceDataTypeHelper {
 				nodes.add(getModelElementTargetNode(target));
 				
 				// Add edge to graph
-//				 System.out.println("Edge " + conn.toString() + ": " + nodes.toString());
 				try {
 					typeGraph.addEdge(connector.toString(), nodes);
 				} catch(Exception e){
@@ -426,9 +400,6 @@ public class ModelInferenceDataTypeHelper {
 
 				
 				if(source instanceof Attribute){
-//					// Keep track of source data types (only for non-PE as they are already tracked)
-//					elementTypes.put(source, DynamicTypeLiteral.from(((Attribute) source).getType().toString()));
-//				
 					// Process attached attributes if current source is not a primitive type
 					if(((Attribute) source).getType() != null && !isPrimitive(((Attribute) source).getType())){
 						inferAttributes(target);
@@ -439,76 +410,6 @@ public class ModelInferenceDataTypeHelper {
 				inferTransitiveAttributes(transitiveSource, connector.getTargetElement());
 			}
 		}
-	}
-	
-	
-	// TODO replace by hypergraph query
-//	public DataType getDataTypeForAttributeName(DataType sourceType, String attributeName){
-//		Optional<TypeStructureNode> node = this.typeGraph.stream().filter(elem -> elem.getAttributeName().equals(attributeName))
-//				.filter(elem -> ((elem.getSource() instanceof ProcessFlowElement) && ((ProcessFlowElement) elem.getSource()).getDataType().equals(sourceType)) 
-//				|| ((elem.getSource() instanceof GUIElement) && DynamicTypeLiteral.from(((GUIElement) elem.getSource()).getType().toString()).equals(sourceType)))
-//				.findFirst();
-//		
-//		return node.isPresent() ? node.get().getType() : null;
-//	}
-	
-	
-	public void createDataStructureInUseCase(UseCase useCase){
-		return;
-	}
-//		// Transform type structure to items
-//		
-//		// First create all raw types
-//		ArrayList<CustomType> typesToAdd = new ArrayList<CustomType>();
-//		for(DataTypeLiteral type : DynamicTypeLiteral.getCustomDataTypes()){
-//			CustomType dt = MamldataFactory.eINSTANCE.createCustomType();
-//			dt.setName(type.getIdentifier());
-//			typesToAdd.add(dt);
-//		}
-//		
-//		for(DataTypeLiteral type : DynamicTypeLiteral.getAnonymousDataTypes()){
-//			CustomType dt = MamldataFactory.eINSTANCE.createCustomType();
-//			dt.setName(type.getIdentifier());
-//			typesToAdd.add(dt);
-//		}
-//		
-//		// Now add all attributes
-//		for(CustomType type : typesToAdd){
-//			// TODO
-////			filterGraphBySourceDataType(DynamicTypeLiteral.from(type.getName()))
-////				.forEach(node -> convertNodeToProperty(node, type, typesToAdd));
-//		}
-//		
-//		// Reset use case datatypes (except explicitly modeled enums)
-//		Collection<DataType> typesToRemove = useCase.getDataTypes().stream().filter(elem -> !(elem instanceof Enum)).collect(Collectors.toList());
-//		//useCase.getDataTypes().removeAll(typesToRemove);
-//				
-//		// Add all types
-//		useCase.getDataTypes().addAll(typesToAdd);
-//	}
-	
-//	private Collection<TypeStructureNode> filterGraphBySourceDataType(DataTypeLiteral sourceType){
-//		// Get matching source elements
-//		Collection<ParameterSource> sources = elementTypes.entrySet().stream().filter(entry -> entry.getValue() != null && entry.getValue().equals(sourceType)).map(entry -> entry.getKey()).collect(Collectors.toList());
-//		// Filter
-//		return typeGraph.stream().filter(t -> sources.contains(t.source)).collect(Collectors.toList());
-//	}
-	
-	private void convertNodeToProperty(TypeStructureNode node, CustomType targetType, ArrayList<CustomType> allTypes){
-		CustomType ct = allTypes.stream().filter(dt -> dt.getName().equals(MamlHelper.getDataTypeName(node.getType()))).collect(Collectors.toList()).get(0);
-		
-		Property prop = MamldataFactory.eINSTANCE.createProperty();
-		prop.setName(node.getAttributeName());
-		
-		if(node.getMultiplicity().equals(Multiplicity.MANY)){
-			de.wwu.maml.dsl.mamldata.Collection collection = MamldataFactory.eINSTANCE.createCollection();
-			collection.setType(ct);
-			prop.setType(collection);
-		} else {
-			prop.setType(ct);	
-		}
-		
-		targetType.getAttributes().add(prop);
 	}
 	
 	public static Collection<String> getPrimitiveDataTypesAsString(){
@@ -548,4 +449,7 @@ public class ModelInferenceDataTypeHelper {
 				.collect(Collectors.toList());
 	}
 	
+	public MamlHypergraph<MamlHypergraphNode<?>, String> getTypeGraph(){
+		return typeGraph;
+	}
 }
