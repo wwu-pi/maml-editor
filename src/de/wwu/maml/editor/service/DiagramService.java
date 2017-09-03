@@ -133,7 +133,7 @@ public class DiagramService {
 		return "error";
 	}
 	
-	// Label representation for Parameter Connectors
+	// Label representation for Process Connectors
 	public String getProcessConnectorLabelText(EObject obj){
 		if(obj != null && obj instanceof ProcessConnector){
 			ProcessConnector connector = (ProcessConnector) obj;
@@ -149,7 +149,7 @@ public class DiagramService {
 		return "error";
 	}
 	
-	// Label representation for Parameter Connectors
+	// Label representation for data sources
 	public String getDataSourceLabelText(EObject obj){
 		if(obj == null || !(obj instanceof DataSource)){
 			return "error";
@@ -157,15 +157,15 @@ public class DiagramService {
 		
 		String labelText = "\"";
 		
-		if(((DataSource) obj).getTypeName() != null ){
-			// Use type given by user
-			labelText += ((DataSource) obj).getTypeName();
-		} else {
+//		if(((DataSource) obj).getTypeName() != null ){
+//			// Use type given by user
+//			labelText += ((DataSource) obj).getTypeName();
+//		} else {
 			// Try to retrieve inferred type from incoming elements
 			ModelInferenceService service = new ModelInferenceService();
 			String result = service.getDataTypeRepresentation(obj);
 			if(result != null && result != "??") labelText += result;
-		}
+//		}
 		
 		labelText += "\"";
 		labelText = labelText.equals("\"\"") ? "<no type>" : labelText;

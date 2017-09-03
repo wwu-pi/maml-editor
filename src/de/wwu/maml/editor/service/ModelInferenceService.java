@@ -40,9 +40,9 @@ public class ModelInferenceService {
 	 */
 	public EObject updateAllDataTypes(EObject obj){
 		if(obj instanceof UseCase){
-			return updateAllDataTypes(obj);
+//			return updateAllDataTypes(obj);
 		} else if(obj.eContainer() instanceof UseCase){
-			return updateAllDataTypes((UseCase) obj.eContainer());
+//			return updateAllDataTypes((UseCase) obj.eContainer());
 		}
 		return null;
 	}
@@ -197,9 +197,25 @@ public class ModelInferenceService {
 
 	public DataType getDataType(EObject obj, String input){
 		try {
-			updateAllDataTypes(obj);
+			//updateAllDataTypes(obj);
 			ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
 			return inferrer.getType(input);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public DataType setDataType(EObject obj, String input){
+		try {
+			updateAllDataTypes(obj);
+			DataType type = getDataType(obj, input);
+			
+			if(!((UseCase) obj.eContainer()).getDataTypes().contains(type)){
+				((UseCase) obj.eContainer()).getDataTypes().add(type);
+			}
+			return type;
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 			return null;
