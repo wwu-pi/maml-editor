@@ -99,7 +99,8 @@ public class ModelInferenceService {
 	 * @param obj
 	 */
 	public void startInferenceProcess(EObject obj){
-		getDataTypeRepresentation(obj);
+		// Automatically starts initial inference
+		ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
 	}
 	
 	private String[] getDataTypeList(EObject object){
@@ -170,7 +171,7 @@ public class ModelInferenceService {
 		Object[] attributeList = getAttributeList(((ParameterConnector) connector.get()).getSourceElement(), attribute);
 		if(attributeList.length == 0) return (attribute.getDescription()); // Skip, nothing to select
 		
-		dialog.setElements(attributeList, elem -> ((TypeStructureNode) elem).getAttributeName() + " (" + ((TypeStructureNode) elem).getType().getName() + ")");
+		dialog.setElements(attributeList, elem -> ((TypeStructureNode) elem).getAttributeName() + " (" + MamlHelper.getDataTypeName(((TypeStructureNode) elem).getType()) + ")");
 		dialog.setTitle("Select from known attribute names");
 		
 		// user pressed cancel

@@ -106,14 +106,14 @@ public class ModelInferenceMergeHelper {
 				ArrayList<MamlHypergraphNode> nodes = new ArrayList<MamlHypergraphNode>();
 				
 				// data types
-				if(inferenceDataTypeHelper.getType(conn.getSourceElement()) == null){
+				if(MamlHelper.getDataType(conn.getSourceElement()) == null){
 					System.out.println("ERROR unknown type");
 					continue;
 				}
-				nodes.add(getDataTypeNode(inferenceDataTypeHelper.getType(conn.getSourceElement())));
+				nodes.add(getDataTypeNode(MamlHelper.getDataType(conn.getSourceElement())));
 				nodes.add(getDataTypeTargetNode((DataType) MamlHelper.getDataType(conn.getTargetElement())));
 				// attribute
-				nodes.add(getAttributeNode(MamlHelper.getDataTypeName(inferenceDataTypeHelper.getType(conn.getSourceElement())) + "." + ((Attribute) conn.getTargetElement()).getDescription()));
+				nodes.add(getAttributeNode(MamlHelper.getDataTypeName(MamlHelper.getDataType(conn.getSourceElement())) + "." + ((Attribute) conn.getTargetElement()).getDescription()));
 				// access type
 				if(conn.getAccessType().equals(AccessType.WRITE)){
 					nodes.add(HypergraphAccessNode.getWriteAccessNode());

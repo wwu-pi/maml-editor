@@ -3,18 +3,18 @@ package de.wwu.maml.inference;
 import java.util.ArrayList;
 
 import de.wwu.maml.dsl.maml.ParameterSource;
-import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
+import de.wwu.maml.dsl.mamldata.DataType;
 import de.wwu.maml.dsl.mamldata.Multiplicity;
 
 public class TypeStructureNode {
 
 	protected String attributeName;
-	protected DataTypeLiteral type;
+	protected DataType type;
 	protected Multiplicity multiplicity;
 	protected ParameterSource source;
 	protected ArrayList<TypeStructureNode> children = new ArrayList<TypeStructureNode>();
 	
-	public TypeStructureNode(String attributeName, DataTypeLiteral type, Multiplicity multiplicity, ParameterSource source) {
+	public TypeStructureNode(String attributeName, DataType type, Multiplicity multiplicity, ParameterSource source) {
 		this.attributeName = attributeName;
 		this.type = type;
 		this.multiplicity = multiplicity;
@@ -29,11 +29,11 @@ public class TypeStructureNode {
 		this.attributeName = attributeName;
 	}
 
-	public DataTypeLiteral getType() {
+	public DataType getType() {
 		return type;
 	}
 
-	public void setType(DataTypeLiteral type) {
+	public void setType(DataType type) {
 		this.type = type;
 	}
 

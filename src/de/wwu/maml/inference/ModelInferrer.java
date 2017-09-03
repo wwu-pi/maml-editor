@@ -115,8 +115,7 @@ public class ModelInferrer {
 	 * @return
 	 */
 	public DataType getType(ProcessFlowElement obj) {
-		// Pass to data type helper
-		DataType type = inferenceDataTypeHelper.getType(obj);
+		DataType type = MamlHelper.getDataType(obj);
 		return type;
 	}
 	

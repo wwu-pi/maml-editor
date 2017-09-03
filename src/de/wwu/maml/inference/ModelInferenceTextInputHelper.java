@@ -6,10 +6,11 @@ import java.util.regex.Pattern;
 
 import de.wwu.maml.dsl.maml.ParameterSource;
 import de.wwu.maml.dsl.mamldata.DataType;
+import de.wwu.maml.editor.service.MamlHelper;
 
 public class ModelInferenceTextInputHelper {
 
-	public static DataType getTypeForTransform(String description, DataType inputType, ArrayList<TypeStructureNode> typeGraph, Map<ParameterSource, DataType> elementTypes){
+	public static DataType getTypeForTransform(String description, DataType inputType, ArrayList<TypeStructureNode> typeGraph){ // , Map<ParameterSource, DataType> elementTypes
 		// Is there input to infer something from?
 		if(description == null || description == "" || inputType == null) return null;
 		
@@ -25,7 +26,7 @@ public class ModelInferenceTextInputHelper {
 				// Get first type node in existing graph that matches type and attribute 
 				boolean found = false;
 				for(TypeStructureNode node : typeGraph){
-					if(elementTypes.get(node.getSource()) != null && elementTypes.get(node.getSource()).equals(currentType) 
+					if(MamlHelper.getDataType(node.getSource()) != null && MamlHelper.getDataType(node.getSource()).equals(currentType) 
 							&& node.getAttributeName() != null && node.getAttributeName().equalsIgnoreCase(part)){
 						currentType = node.getType();
 						found = true;

@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import de.wwu.maml.dsl.maml.DataSource;
 import de.wwu.maml.dsl.maml.Event;
+import de.wwu.maml.dsl.maml.MamlPackage;
 import de.wwu.maml.dsl.maml.ParameterConnector;
 import de.wwu.maml.dsl.maml.ParameterSource;
 import de.wwu.maml.dsl.maml.ProcessConnector;
@@ -37,7 +38,10 @@ import edu.uci.ics.jung.graph.event.GraphEvent.Vertex;
 
 public class ModelInferenceDataTypeHelper {
 	
-	protected Map<ParameterSource, DataType> elementTypes = new HashMap<ParameterSource, DataType>();
+	public static final String ANONYMOUS_PREFIX = "__ANONYMOUS__";
+	private static final String ANONYMOUS_TYPE_UI = "X";
+	
+//	protected Map<ParameterSource, DataType> elementTypes = new HashMap<ParameterSource, DataType>();
 	protected Map<String, DataType> dataTypeNames = new HashMap<String, DataType>();
 	protected ArrayList<TypeStructureNode> typeGraph = new ArrayList<TypeStructureNode>(); // TODO join with dataTypeNames?
 
@@ -46,8 +50,76 @@ public class ModelInferenceDataTypeHelper {
 	 * @param obj
 	 * @return
 	 */
-	public DataType getType(ParameterSource obj) {
-		return elementTypes.get(obj);
+//	public DataType getType(ParameterSource obj) {
+//		return elementTypes.get(obj);
+//	}
+	
+	public DataType getDataTypeInstance(String dataTypeName){
+		if(!dataTypeNames.containsKey(dataTypeName)){
+			if(dataTypeName.equalsIgnoreCase("Boolean")){
+				dataTypeNames.put("Boolean", MamldataFactory.eINSTANCE.createBoolean());
+			} else if(dataTypeName.equalsIgnoreCase("Currency")){
+				dataTypeNames.put("Currency", MamldataFactory.eINSTANCE.createCurrency());
+			} else if(dataTypeName.equalsIgnoreCase("Date")){
+				dataTypeNames.put("Date", MamldataFactory.eINSTANCE.createDate());
+			} else if(dataTypeName.equalsIgnoreCase("DateTime")){
+				dataTypeNames.put("DateTime", MamldataFactory.eINSTANCE.createDateTime());
+			} else if(dataTypeName.equalsIgnoreCase("Email")){
+				dataTypeNames.put("Email", MamldataFactory.eINSTANCE.createEmail());
+			} else if(dataTypeName.equalsIgnoreCase("File")){
+				dataTypeNames.put("File", MamldataFactory.eINSTANCE.createFile());
+			} else if(dataTypeName.equalsIgnoreCase("Float")){
+				dataTypeNames.put("Float", MamldataFactory.eINSTANCE.createFloat());
+			} else if(dataTypeName.equalsIgnoreCase("Image")){
+				dataTypeNames.put("Image", MamldataFactory.eINSTANCE.createImage());
+			} else if(dataTypeName.equalsIgnoreCase("Integer")){
+				dataTypeNames.put("Integer", MamldataFactory.eINSTANCE.createInteger());
+			} else if(dataTypeName.equalsIgnoreCase("Location")){
+				dataTypeNames.put("Location", MamldataFactory.eINSTANCE.createLocation());
+			} else if(dataTypeName.equalsIgnoreCase("PhoneNumber")){
+				dataTypeNames.put("PhoneNumber", MamldataFactory.eINSTANCE.createPhoneNumber());
+			} else if(dataTypeName.equalsIgnoreCase("String")){
+				dataTypeNames.put("String", MamldataFactory.eINSTANCE.createString());
+			} else if(dataTypeName.equalsIgnoreCase("Time")){
+				dataTypeNames.put("Time", MamldataFactory.eINSTANCE.createTime());
+			} else if(dataTypeName.equalsIgnoreCase("Url")){
+				dataTypeNames.put("Url", MamldataFactory.eINSTANCE.createUrl());
+			} else {
+				CustomType newType = MamldataFactory.eINSTANCE.createCustomType();
+				newType.setName(dataTypeName);
+				dataTypeNames.put(dataTypeName, newType);
+			}
+			// TODO Enum ? Collection?
+		}
+		
+		return dataTypeNames.get(dataTypeName);
+	}
+	
+	public boolean isPrimitive(DataType type){
+		String[] primitiveTypes = { "Boolean", "String", "Currency", "Date", "DateTime", "Email", "File", "Float", 
+									"Image", "Integer", "Location", "PhoneNumber", "String", "Time", "Url"};
+		
+		// Explicitly compare using strings to avoid different object instances
+		String typeName = MamlHelper.getDataTypeName(type);
+		for(String s : primitiveTypes){
+			if(typeName.equals(s)) return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Set the respective data type to the model element.
+	 * Also checks if the Use Case containment reference exists
+	 * @param source
+	 * @param type
+	 */
+	protected void setDataTypeInModel(ProcessFlowElement element, DataType type){
+		element.setDataType(type);
+		
+		// Check containment
+		if(!((UseCase) element.eContainer()).getDataTypes().contains(type)){
+			((UseCase) element.eContainer()).getDataTypes().add(type);
+		}
 	}
 	
 	/**
@@ -118,17 +190,19 @@ public class ModelInferenceDataTypeHelper {
 				lastOccuredTypeName = typeName;
 			}
 			// In case no value is given, it must be the last known type
-			elementTypes.put(processing, DynamicTypeLiteral.from(lastOccuredTypeName));
+			setDataTypeInModel(processing, getDataTypeInstance(lastOccuredTypeName));
+//			elementTypes.put(processing, DynamicTypeLiteral.from(lastOccuredTypeName));
 			
 		} else if(processing instanceof Transform){ 
-			// Special case for Transform elements because type changes, MUST BE BEFORE upcoming ProcessElement superclass type
+			// Special case for Transform elements because type changes, MUST BE HANDLED BEFORE upcoming ProcessElement superclass type
 			
 			// Check existing types for valid attributes
-			DataType targetType = ModelInferenceTextInputHelper.getTypeForTransform(((Transform) processing).getDescription(), lastOccurredType, typeGraph, elementTypes);
+			DataType targetType = ModelInferenceTextInputHelper.getTypeForTransform(((Transform) processing).getDescription(), lastOccurredType, typeGraph);
 
 			if(targetType != null){
-				elementTypes.put(processing, targetType);
+//				elementTypes.put(processing, targetType);
 				lastOccuredTypeName = MamlHelper.getDataTypeName(targetType);
+				setDataTypeInModel(processing, targetType);
 			} else {
 				// Else inference failed -> no type information possible
 				lastOccuredTypeName = null;
@@ -137,20 +211,22 @@ public class ModelInferenceDataTypeHelper {
 		} else if(processing instanceof ProcessElement){
 			// If a type is explicitly set (anonymous or not) then use it, else use previous known type
 			String typeName = ((ProcessElement) processing).getDataType() != null && (processing.getDataType() instanceof CustomType) ? ((CustomType) ((ProcessElement) processing).getDataType()).getName() : null;
-			if(typeName != null && !typeName.equals("X")){
+			if(typeName != null && !typeName.equals(ANONYMOUS_TYPE_UI)){
+				// Custom type
 				lastOccuredTypeName = typeName;
-			} else if(typeName != null && typeName.equals("X")){
+			} else if(typeName != null && typeName.equals(ANONYMOUS_TYPE_UI)){
 				// Build a new and unique custom type name
-				lastOccuredTypeName = DynamicTypeLiteral.ANONYMOUS_PREFIX + processing.toString();
+				lastOccuredTypeName = ANONYMOUS_PREFIX + processing.toString();
 			} 
 			// In case no value is given, it must be the last known type
-			elementTypes.put(processing, DynamicTypeLiteral.from(lastOccuredTypeName));
+//			elementTypes.put(processing, DynamicTypeLiteral.from(lastOccuredTypeName));
+			setDataTypeInModel(processing, getDataTypeInstance(lastOccuredTypeName));
 		}
 		// TODO Webservice erzeugt ggf. neuen Typ?
 		//TODO enum
-		// Do nothing for events and control flows as they have no proper type
+		// Deliberately ignore events and control flows as they have no proper type
 		
-		return DynamicTypeLiteral.from(lastOccuredTypeName);
+		return getDataTypeInstance(lastOccuredTypeName);
 	}
 	
 	/**
@@ -186,16 +262,15 @@ public class ModelInferenceDataTypeHelper {
 				if(!DynamicTypeLiteral.isAllowedTypeName(target.getType().toString())) continue;
 				
 				// Process current connection
-				DataTypeLiteral targetType = DynamicTypeLiteral.from(target.getType().toString());
-				TypeStructureNode node = new TypeStructureNode(target.getDescription(), targetType, target.getMultiplicity(), source);
-				if(source instanceof Attribute){
-					// Keep track of source data types (only for non-PE as they are already tracked)
-					elementTypes.put(source, DynamicTypeLiteral.from(((Attribute) source).getType().toString()));
-				}
+				TypeStructureNode node = new TypeStructureNode(target.getDescription(), target.getType(), target.getMultiplicity(), source);
+//				if(source instanceof Attribute){
+//					// Keep track of source data types (only for non-PE as they are already tracked)
+//					elementTypes.put(source, DynamicTypeLiteral.from(((Attribute) source).getType().toString()));
+//				}
 				typeGraph.add(node);
 				
 				// Process attached attributes if current source is not a primitive type
-				if(targetType != null && !targetType.isPrimitive()){
+				if(((Attribute) source).getType() != null && !isPrimitive(((Attribute) source).getType())){
 					inferAttributes(target);
 				}
 			} else if(connector.getTargetElement() instanceof ComputationOperator){
@@ -209,7 +284,7 @@ public class ModelInferenceDataTypeHelper {
 	 * Remove all known data type mappings and reset attribute graph structure.
 	 */
 	public void clearDataModel(){
-		this.elementTypes.clear();
+		this.dataTypeNames.clear();
 		this.typeGraph.clear();
 	}
 	
@@ -294,8 +369,9 @@ public class ModelInferenceDataTypeHelper {
 		
 		// Now add all attributes
 		for(CustomType type : typesToAdd){
-			filterGraphBySourceDataType(DynamicTypeLiteral.from(type.getName()))
-				.forEach(node -> convertNodeToProperty(node, type, typesToAdd));
+			// TODO
+//			filterGraphBySourceDataType(DynamicTypeLiteral.from(type.getName()))
+//				.forEach(node -> convertNodeToProperty(node, type, typesToAdd));
 		}
 		
 		// Reset use case datatypes (except explicitly modeled enums)
@@ -306,15 +382,15 @@ public class ModelInferenceDataTypeHelper {
 		useCase.getDataTypes().addAll(typesToAdd);
 	}
 	
-	private Collection<TypeStructureNode> filterGraphBySourceDataType(DataTypeLiteral sourceType){
-		// Get matching source elements
-		Collection<ParameterSource> sources = elementTypes.entrySet().stream().filter(entry -> entry.getValue() != null && entry.getValue().equals(sourceType)).map(entry -> entry.getKey()).collect(Collectors.toList());
-		// Filter
-		return typeGraph.stream().filter(t -> sources.contains(t.source)).collect(Collectors.toList());
-	}
+//	private Collection<TypeStructureNode> filterGraphBySourceDataType(DataTypeLiteral sourceType){
+//		// Get matching source elements
+//		Collection<ParameterSource> sources = elementTypes.entrySet().stream().filter(entry -> entry.getValue() != null && entry.getValue().equals(sourceType)).map(entry -> entry.getKey()).collect(Collectors.toList());
+//		// Filter
+//		return typeGraph.stream().filter(t -> sources.contains(t.source)).collect(Collectors.toList());
+//	}
 	
 	private void convertNodeToProperty(TypeStructureNode node, CustomType targetType, ArrayList<CustomType> allTypes){
-		CustomType ct = allTypes.stream().filter(dt -> dt.getName().equals(node.getType().getIdentifier())).collect(Collectors.toList()).get(0);
+		CustomType ct = allTypes.stream().filter(dt -> dt.getName().equals(MamlHelper.getDataTypeName(node.getType()))).collect(Collectors.toList()).get(0);
 		
 		Property prop = MamldataFactory.eINSTANCE.createProperty();
 		prop.setName(node.getAttributeName());
