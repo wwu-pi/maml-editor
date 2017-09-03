@@ -493,7 +493,7 @@
             </style>
           </borderedNodeMappings>
           <borderedNodeMappings name="AttributeType" deletionDescription="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='deleteAttribute']" labelDirectEdit="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='directEditAttributeDataType']" semanticCandidatesExpression="aql:self" doubleClickDescription="//@ownedViewpoints[name='mamlEditor']/@ownedRepresentations[name='Process%20editor']/@additionalLayers[name='AttributeLayer']/@toolSections.0/@ownedTools[name='setAttributeDataType']" domainClass="mamlgui.Attribute">
-            <style xsi:type="style:SquareDescription" showIcon="false" labelExpression="service:getDataTypeName()" sizeComputationExpression="-1" labelPosition="node" resizeKind="EAST_WEST" width="7" height="3">
+            <style xsi:type="style:SquareDescription" showIcon="false" labelExpression="service:getDataTypeRepresentation()" sizeComputationExpression="-1" labelPosition="node" resizeKind="EAST_WEST" width="7" height="3">
               <borderColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
               <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
               <color xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='orange']"/>
@@ -804,7 +804,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttributeDataType" inputLabelExpression="service:getDataTypeName()">
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditAttributeDataType" inputLabelExpression="service:getDataTypeRepresentation()">
             <mask mask="{0}"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="service:getDataType(0)">

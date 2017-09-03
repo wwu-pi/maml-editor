@@ -7,6 +7,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import org.eclipse.emf.ecore.EObject;
+
+import de.wwu.maml.dsl.maml.ParameterSource;
+import de.wwu.maml.dsl.maml.ProcessFlowElement;
+import de.wwu.maml.dsl.mamldata.DataType;
+import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
+import de.wwu.maml.dsl.mamlgui.GUIElement;
+import de.wwu.maml.inference.DynamicTypeLiteral;
+
 public class MamlHelper {
 
 	public static String toFirstUpper(String input){
@@ -101,5 +110,36 @@ public class MamlHelper {
 	public static <T> Predicate<T> distinctByKey(Function<? super T,Object> keyExtractor) {
 	    Map<Object,Boolean> seen = new ConcurrentHashMap<>();
 	    return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+	}
+	
+	/**
+	 * Retrieve data type depending on the subtype of the parameter source.
+	 * @param source
+	 * @return
+	 */
+	public static DataType getDataType(ParameterSource source){
+		if(source instanceof ProcessFlowElement) {
+			return ((ProcessFlowElement) source).getDataType();
+		} else if(source instanceof GUIElement) {
+			return ((GUIElement) source).getType();
+		}
+		return null;
+	}
+	
+	/**
+	 * Retrieve data type name depending on the subtype of the data type.
+	 * @param source
+	 * @return
+	 */
+	public static String getDataTypeName(DataType type){
+		if(type == null) return "";
+		
+		if(type instanceof DataTypeLiteral){
+			return ((DataTypeLiteral) type).getName();
+		}
+		// TODO
+		//ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
+		//return inferrer.getDataTypeFromParameterSource(source)
+		return type.getClass().getSimpleName();
 	}
 }

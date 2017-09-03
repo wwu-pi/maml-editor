@@ -74,18 +74,24 @@ public class ModelInferenceService {
 	 * @return
 	 */
 	public String getDataTypeRepresentation(EObject obj){
-		if(!(obj.eContainer() instanceof UseCase)) return "error";
+		if(!(obj instanceof ParameterSource)) return null;
 		
-		ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
-	
-		if(obj instanceof ProcessFlowElement){
-			DataTypeLiteral type = inferrer.getType((ProcessFlowElement) obj);
-			return type != null ? type.getName() : "??";
-		} else if(obj instanceof Attribute){
-			DataTypeLiteral type = DynamicTypeLiteral.from(((Attribute) obj).getType().toString());
-			return type != null ? type.getName() : "??";
-		} 
-		return "??";
+		DataType type = MamlHelper.getDataType((ParameterSource) obj);
+		return type != null ? MamlHelper.getDataTypeName(type) : "??";
+		
+//		if(!(obj.eContainer() instanceof UseCase)) return "error";
+//		
+//		ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
+//	
+//		if(obj instanceof ProcessFlowElement){
+//			DataType type = inferrer.getType((ProcessFlowElement) obj);
+//			return type != null ? MamlHelper.getDataTypeName(type) : "??";
+//		} else if(obj instanceof Attribute){
+//			// TODO remove
+//			DataTypeLiteral type = DynamicTypeLiteral.from(((Attribute) obj).getType().toString());
+//			return type != null ? type.getName() : "??";
+//		} 
+//		return "??";
 	}
     
 	/** 
@@ -197,21 +203,5 @@ public class ModelInferenceService {
 			e.printStackTrace();
 			return null;
 		}
-	}
-	
-	public String getDataTypeName(EObject obj){
-		DataType type = null;
-		if(obj instanceof GUIElement) {
-			type = ((GUIElement) obj).getType();
-		}
-		
-		if(type == null) return null;
-		if(type instanceof DataTypeLiteral){
-			return ((DataTypeLiteral) type).getName();
-		}
-		// TODO
-		//ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) obj.eContainer());
-		//return inferrer.getDataTypeFromParameterSource(source)
-		return type.getClass().getSimpleName();
 	}
 }

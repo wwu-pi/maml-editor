@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.ecore.EObject;
+
 import de.wwu.maml.dsl.maml.DataSource;
 import de.wwu.maml.dsl.maml.Event;
 import de.wwu.maml.dsl.maml.ParameterConnector;
@@ -21,6 +23,7 @@ import de.wwu.maml.dsl.maml.UseCase;
 import de.wwu.maml.dsl.mamldata.CustomType;
 import de.wwu.maml.dsl.mamldata.DataType;
 import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
+//import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
 import de.wwu.maml.dsl.mamldata.Enum;
 import de.wwu.maml.dsl.mamldata.MamldataFactory;
 import de.wwu.maml.dsl.mamldata.Multiplicity;
@@ -29,19 +32,21 @@ import de.wwu.maml.dsl.mamldata.impl.CustomTypeImpl;
 import de.wwu.maml.dsl.mamlgui.Attribute;
 import de.wwu.maml.dsl.mamlgui.ComputationOperator;
 import de.wwu.maml.dsl.mamlgui.GUIElement;
+import de.wwu.maml.editor.service.MamlHelper;
 import edu.uci.ics.jung.graph.event.GraphEvent.Vertex;
 
 public class ModelInferenceDataTypeHelper {
 	
-	protected Map<ParameterSource, DataTypeLiteral> elementTypes = new HashMap<ParameterSource, DataTypeLiteral>(); // TODO bidirectional map?
-	protected ArrayList<TypeStructureNode> typeGraph = new ArrayList<TypeStructureNode>();
+	protected Map<ParameterSource, DataType> elementTypes = new HashMap<ParameterSource, DataType>();
+	protected Map<String, DataType> dataTypeNames = new HashMap<String, DataType>();
+	protected ArrayList<TypeStructureNode> typeGraph = new ArrayList<TypeStructureNode>(); // TODO join with dataTypeNames?
 
 	/**
 	 * Retrieve data type for given ProcessFlowElement
 	 * @param obj
 	 * @return
 	 */
-	public DataTypeLiteral getType(ParameterSource obj) {
+	public DataType getType(ParameterSource obj) {
 		return elementTypes.get(obj);
 	}
 	
@@ -52,7 +57,7 @@ public class ModelInferenceDataTypeHelper {
 	 */
 	public Set<ProcessFlowElement> inferProcessFlowChain(ProcessFlowElement startElement) {
 		Set<ProcessFlowElement> processed = new HashSet<ProcessFlowElement>();
-		DataTypeLiteral lastOccurredType = null;
+		DataType lastOccurredType = null;
 		
 		// Recursively iterate through chain (control flow elements may have multiple followers)
 		inferProcessFlowChainRecursive(startElement, lastOccurredType, processed);
@@ -66,7 +71,7 @@ public class ModelInferenceDataTypeHelper {
 	 * @param lastOccurredType
 	 * @param processed
 	 */
-	public void inferProcessFlowChainRecursive(ProcessFlowElement currentElement, DataTypeLiteral lastOccurredType, Set<ProcessFlowElement> processed) {
+	public void inferProcessFlowChainRecursive(ProcessFlowElement currentElement, DataType lastOccurredType, Set<ProcessFlowElement> processed) {
 		// Skip if currentElement was already processed
 		if(currentElement == null || processed.contains(currentElement)){
 			return;
@@ -103,8 +108,8 @@ public class ModelInferenceDataTypeHelper {
 	 * @param lastOccurredType
 	 * @return
 	 */
-	public DataTypeLiteral inferSingleItem(ProcessFlowElement processing, DataTypeLiteral lastOccurredType){
-		String lastOccuredTypeName = lastOccurredType != null ? lastOccurredType.getIdentifier() : "";
+	public DataType inferSingleItem(ProcessFlowElement processing, DataType lastOccurredType){
+		String lastOccuredTypeName = MamlHelper.getDataTypeName(lastOccurredType);
 		
 		if(processing instanceof DataSource){
 			// Data Sources provide a type themselves (possibly a new one)
@@ -119,11 +124,11 @@ public class ModelInferenceDataTypeHelper {
 			// Special case for Transform elements because type changes, MUST BE BEFORE upcoming ProcessElement superclass type
 			
 			// Check existing types for valid attributes
-			DataTypeLiteral targetType = ModelInferenceTextInputHelper.getTypeForTransform(((Transform) processing).getDescription(), lastOccurredType, typeGraph, elementTypes);
+			DataType targetType = ModelInferenceTextInputHelper.getTypeForTransform(((Transform) processing).getDescription(), lastOccurredType, typeGraph, elementTypes);
 
 			if(targetType != null){
 				elementTypes.put(processing, targetType);
-				lastOccuredTypeName = targetType.getIdentifier();
+				lastOccuredTypeName = MamlHelper.getDataTypeName(targetType);
 			} else {
 				// Else inference failed -> no type information possible
 				lastOccuredTypeName = null;
@@ -220,14 +225,7 @@ public class ModelInferenceDataTypeHelper {
 		.collect(Collectors.toList());
 	}
 	
-	public DataType getDataTypeFromParameterSource(ParameterSource source){
-		if(source instanceof ProcessFlowElement) {
-			return ((ProcessFlowElement) source).getDataType();
-		} else if(source instanceof GUIElement) {
-			return DynamicTypeLiteral.from(((GUIElement) source).getType().toString());
-		}
-		return null;
-	}
+	
 	
 	public DataType getDataTypeForAttributeName(DataType sourceType, String attributeName){
 		Optional<TypeStructureNode> node = this.typeGraph.stream().filter(elem -> elem.getAttributeName().equals(attributeName))

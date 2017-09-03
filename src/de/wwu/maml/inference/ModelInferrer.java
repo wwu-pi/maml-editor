@@ -114,9 +114,9 @@ public class ModelInferrer {
 	 * @param obj
 	 * @return
 	 */
-	public DataTypeLiteral getType(ProcessFlowElement obj) {
+	public DataType getType(ProcessFlowElement obj) {
 		// Pass to data type helper
-		DataTypeLiteral type = inferenceDataTypeHelper.getType(obj);
+		DataType type = inferenceDataTypeHelper.getType(obj);
 		return type;
 	}
 	
@@ -133,7 +133,7 @@ public class ModelInferrer {
 	}
 	
 	public DataType getDataTypeFromParameterSource(ParameterSource source){
-		return inferenceDataTypeHelper.getDataTypeFromParameterSource(source);
+		return MamlHelper.getDataType(source);
 	}
 	
 	public DataType getDataTypeForAttributeName(DataType sourceType, String attributeName){

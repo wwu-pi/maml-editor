@@ -5,15 +5,15 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import de.wwu.maml.dsl.maml.ParameterSource;
-import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
+import de.wwu.maml.dsl.mamldata.DataType;
 
 public class ModelInferenceTextInputHelper {
 
-	public static DataTypeLiteral getTypeForTransform(String description, DataTypeLiteral inputType, ArrayList<TypeStructureNode> typeGraph, Map<ParameterSource, DataTypeLiteral> elementTypes){
+	public static DataType getTypeForTransform(String description, DataType inputType, ArrayList<TypeStructureNode> typeGraph, Map<ParameterSource, DataType> elementTypes){
 		// Is there input to infer something from?
 		if(description == null || description == "" || inputType == null) return null;
 		
-		DataTypeLiteral currentType = null;
+		DataType currentType = null;
 		
 		// Parse input
 		String[] parts = description.split(Pattern.quote("."));
