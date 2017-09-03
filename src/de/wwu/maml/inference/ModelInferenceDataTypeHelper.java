@@ -30,6 +30,7 @@ import de.wwu.maml.dsl.mamldata.MamldataFactory;
 import de.wwu.maml.dsl.mamldata.Multiplicity;
 import de.wwu.maml.dsl.mamldata.Property;
 import de.wwu.maml.dsl.mamldata.impl.CustomTypeImpl;
+import de.wwu.maml.dsl.mamlgui.AccessType;
 import de.wwu.maml.dsl.mamlgui.Attribute;
 import de.wwu.maml.dsl.mamlgui.ComputationOperator;
 import de.wwu.maml.dsl.mamlgui.GUIElement;
@@ -43,7 +44,20 @@ public class ModelInferenceDataTypeHelper {
 	
 //	protected Map<ParameterSource, DataType> elementTypes = new HashMap<ParameterSource, DataType>();
 	protected Map<String, DataType> dataTypeNames = new HashMap<String, DataType>();
-	protected ArrayList<TypeStructureNode> typeGraph = new ArrayList<TypeStructureNode>(); // TODO join with dataTypeNames?
+	
+	protected MamlHypergraph<MamlHypergraphNode<?>, String> typeGraph;
+	
+	ArrayList<MamlHypergraphNode<DataType>> sourceTypes = new ArrayList<MamlHypergraphNode<DataType>>();
+	ArrayList<MamlHypergraphTargetNode<DataType>> targetTypes = new ArrayList<MamlHypergraphTargetNode<DataType>>();
+
+	ArrayList<HypergraphAccessNode> accessTypes = new ArrayList<HypergraphAccessNode>();
+	ArrayList<HypergraphCardinalityNode> cardinalityTypes = new ArrayList<HypergraphCardinalityNode>();
+	
+	ArrayList<MamlHypergraphNode<String>> attributes = new ArrayList<MamlHypergraphNode<String>>();
+	
+	ArrayList<MamlHypergraphNode<ParameterSource>> sourceModelElements = new ArrayList<MamlHypergraphNode<ParameterSource>>();
+	ArrayList<MamlHypergraphTargetNode<ParameterSource>> targetModelElements = new ArrayList<MamlHypergraphTargetNode<ParameterSource>>();
+//	protected ArrayList<TypeStructureNode> typeGraph = new ArrayList<TypeStructureNode>(); // TODO join with dataTypeNames?
 
 	/**
 	 * Retrieve data type for given ProcessFlowElement
@@ -198,7 +212,8 @@ public class ModelInferenceDataTypeHelper {
 			// Special case for Transform elements because type changes, MUST BE HANDLED BEFORE upcoming ProcessElement superclass type
 			
 			// Check existing types for valid attributes
-			DataType targetType = ModelInferenceTextInputHelper.getTypeForTransform(((Transform) processing).getDescription(), lastOccurredType, typeGraph);
+			DataType targetType = null; //tmp
+//			DataType targetType = ModelInferenceTextInputHelper.getTypeForTransform(((Transform) processing).getDescription(), lastOccurredType, typeGraph);
 //TODO check textinputhelper
 			if(targetType != null){
 //				elementTypes.put(processing, targetType);
@@ -230,94 +245,214 @@ public class ModelInferenceDataTypeHelper {
 		return lastOccurredType;
 	}
 	
-//	/**
-//	 * Infer additional data types from the graph of linked attributes.
-//	 * 
-//	 * @param source
-//	 */
-//	public void inferAttributes(ParameterSource source){
-//		// Pass to real inference method that can handle transitive attributes without 
-//		// direct connection such as (ProcessFlowElement)->(Sum)->(Attribute).  
-//		inferTransitiveAttributes(source, source);
-//	}
-//	
-//	/**
-//	 * Main method to infer attribute types. In addition to the ParameterSource to which the
-//	 * detected attributes should be related a second parameter specifies the current position 
-//	 * from which to find new attributes from.
-//	 * This is especially relevant for computed attributes that have no element in the type
-//	 * structure but potentially connect to further attributes.
-//	 * 
-//	 * @param source
-//	 * @param transitiveSource
-//	 */
-//	public void inferTransitiveAttributes(ParameterSource source, ParameterSource transitiveSource){
-//		// Process all connected attributes
-//		for(ParameterConnector connector : transitiveSource.getParameters()){
-//			// Check that target is a concrete Attribute
-//			if(connector.getTargetElement() instanceof Attribute){
-//			
-//				Attribute target = (Attribute) connector.getTargetElement();
-//				
-//				// Check that target has a non-anonymous type
-//				if(!DynamicTypeLiteral.isAllowedTypeName(target.getType().toString())) continue;
-//				
-//				// Process current connection
-//				TypeStructureNode node = new TypeStructureNode(target.getDescription(), target.getType(), target.getMultiplicity(), source);
-////				if(source instanceof Attribute){
-////					// Keep track of source data types (only for non-PE as they are already tracked)
-////					elementTypes.put(source, DynamicTypeLiteral.from(((Attribute) source).getType().toString()));
-////				}
-//				typeGraph.add(node);
-//				
-//				// Process attached attributes if current source is not a primitive type
-//				if(((Attribute) source).getType() != null && !isPrimitive(((Attribute) source).getType())){
-//					inferAttributes(target);
-//				}
-//			} else if(connector.getTargetElement() instanceof ComputationOperator){
-//				// Infer attribute for Operator but relate to original source in type structure 
-//				inferTransitiveAttributes(transitiveSource, connector.getTargetElement());
-//			}
-//		}
-//	}
-	
 	/**
 	 * Remove all known data type mappings and reset attribute graph structure.
 	 */
 	public void clearDataModel(){
 		this.dataTypeNames.clear();
-		this.typeGraph.clear();
+		this.typeGraph = new MamlHypergraph<MamlHypergraphNode<?>, String>();
 	}
 	
-	// TODO replace by hypergraph query
 	/**
-	 * Retrieve all attributes for a specific data type
+	 * Build up type list using data types already contained in the use case. 
+	 * @param useCase
 	 */
-	public Collection<TypeStructureNode> getAttributesForType(DataType type, TypeStructureNode skipNode){
-		// Either ProcessFlowElement -> compare type with target type
-		// Or GUIElement -> get type from String and compare
-		return this.typeGraph.stream().filter(elem -> !elem.equals(skipNode))
-				.filter(elem -> ((elem.getSource() instanceof ProcessFlowElement) && ((ProcessFlowElement) elem.getSource()).getDataType().equals(type)) 
-				|| ((elem.getSource() instanceof GUIElement) && DynamicTypeLiteral.from(((GUIElement) elem.getSource()).getType().toString()).equals(type)))
-		.collect(Collectors.toList());
-	}
-	
-	
-	// TODO replace by hypergraph query
-	public DataType getDataTypeForAttributeName(DataType sourceType, String attributeName){
-		Optional<TypeStructureNode> node = this.typeGraph.stream().filter(elem -> elem.getAttributeName().equals(attributeName))
-				.filter(elem -> ((elem.getSource() instanceof ProcessFlowElement) && ((ProcessFlowElement) elem.getSource()).getDataType().equals(sourceType)) 
-				|| ((elem.getSource() instanceof GUIElement) && DynamicTypeLiteral.from(((GUIElement) elem.getSource()).getType().toString()).equals(sourceType)))
-				.findFirst();
-		
-		return node.isPresent() ? node.get().getType() : null;
-	}
-	
 	public void loadDataTypes(UseCase useCase){
 		for(DataType type : useCase.getDataTypes()){
 			dataTypeNames.put(MamlHelper.getDataTypeName(type), type);
 		}
 	}
+	
+	public MamlHypergraphNode<DataType> getDataTypeNode(DataType type){
+		if(type == null) {
+			return null;
+		}
+		
+		for(MamlHypergraphNode<DataType> node : sourceTypes){
+			if(node.value.equals(type)){
+				return node;
+			}
+		}
+		
+		// Not found -> add new
+		MamlHypergraphNode<DataType> newNode = new MamlHypergraphNode<DataType>(type);
+		sourceTypes.add(newNode);
+		return newNode;
+	}
+	
+	public MamlHypergraphTargetNode<DataType> getDataTypeTargetNode(DataType type){
+		if(type == null) {
+			return null;
+		}
+		
+		for(MamlHypergraphTargetNode<DataType> node : targetTypes){
+			if(node.value.equals(type)){
+				return node;
+			}
+		}
+		
+		// Not found -> add new
+		MamlHypergraphTargetNode<DataType> newNode = new MamlHypergraphTargetNode<DataType>(type);
+		targetTypes.add(newNode);
+		return newNode;
+	}
+	
+	public MamlHypergraphNode<String> getAttributeNode(String qualifiedName){
+		for(MamlHypergraphNode<String> node : attributes){
+			if(node.value.equals(qualifiedName)){
+				return node;
+			}
+		}
+		
+		// Not found -> add new
+		MamlHypergraphNode<String> newNode = new MamlHypergraphNode<String>(qualifiedName);
+		attributes.add(newNode);
+		return newNode;
+	}
+	
+	public MamlHypergraphNode<ParameterSource> getModelElementNode(ParameterSource modelElement){
+		if(modelElement == null) {
+			return null;
+		}
+		
+		for(MamlHypergraphNode<ParameterSource> node : sourceModelElements){
+			if(node.value.equals(modelElement)){
+				return node;
+			}
+		}
+		
+		// Not found -> add new
+		MamlHypergraphNode<ParameterSource> newNode = new MamlHypergraphNode<ParameterSource>(modelElement);
+		sourceModelElements.add(newNode);
+		return newNode;
+	}
+	
+	public MamlHypergraphTargetNode<ParameterSource> getModelElementTargetNode(ParameterSource modelElement){
+		if(modelElement == null) {
+			return null;
+		}
+		
+		for(MamlHypergraphTargetNode<ParameterSource> node : targetModelElements){
+			if(node.value.equals(modelElement)){
+				return node;
+			}
+		}
+		
+		// Not found -> add new
+		MamlHypergraphTargetNode<ParameterSource> newNode = new MamlHypergraphTargetNode<ParameterSource>(modelElement);
+		targetModelElements.add(newNode);
+		return newNode;
+	}
+	
+	/**
+	 * Infer additional data types from the graph of linked attributes.
+	 * 
+	 * @param source
+	 */
+	public void inferAttributes(ParameterSource source){
+		// Pass to real inference method that can handle transitive attributes without 
+		// direct connection such as (ProcessFlowElement)->(Sum)->(Attribute).  
+		inferTransitiveAttributes(source, source);
+	}
+	
+	/**
+	 * Main method to infer attribute types. In addition to the ParameterSource to which the
+	 * detected attributes should be related a second parameter specifies the current position 
+	 * from which to find new attributes from.
+	 * This is especially relevant for computed attributes that have no element in the type
+	 * structure but potentially connect to further attributes.
+	 * 
+	 * @param source
+	 * @param transitiveSource
+	 */
+	public void inferTransitiveAttributes(ParameterSource source, ParameterSource transitiveSource){
+		// Process all connected attributes
+		for(ParameterConnector connector : transitiveSource.getParameters()){
+			// Check that target is a concrete Attribute
+			if(connector.getTargetElement() instanceof Attribute){
+			
+				Attribute target = (Attribute) connector.getTargetElement();
+				
+				// Check that target has a non-anonymous type
+				if(!DynamicTypeLiteral.isAllowedTypeName(target.getType().toString())) continue;
+				
+				// Process current connection -----------------------
+				ArrayList<MamlHypergraphNode<?>> nodes = new ArrayList<MamlHypergraphNode<?>>();
+				
+				// data types
+				if(MamlHelper.getDataType(source) == null){
+					System.out.println("ERROR unknown type for " + source.toString());
+					continue;
+				}
+				nodes.add(getDataTypeNode(MamlHelper.getDataType(source)));
+				nodes.add(getDataTypeTargetNode((DataType) MamlHelper.getDataType(target)));
+				// attribute
+				nodes.add(getAttributeNode(MamlHelper.getDataTypeName(MamlHelper.getDataType(source)) + "." + target.getDescription()));
+				// access type
+				if(connector.getAccessType().equals(AccessType.WRITE)){
+					nodes.add(HypergraphAccessNode.getWriteAccessNode());
+				} else {
+					nodes.add(HypergraphAccessNode.getReadAccessNode());
+				}
+				// cardinality
+				nodes.add(HypergraphCardinalityNode.getCardinalityNode(target));
+				// elements
+				nodes.add(getModelElementNode(source));
+				nodes.add(getModelElementTargetNode(target));
+				
+				// Add edge to graph
+//				 System.out.println("Edge " + conn.toString() + ": " + nodes.toString());
+				try {
+					typeGraph.addEdge(connector.toString(), nodes);
+				} catch(Exception e){
+					// TODO maybe add connector to edge set in order to allow "multi-edge" scenario
+					System.out.println("Multiple connections between the same elements detected. Ignored > 1.");
+				}
+
+				
+				if(source instanceof Attribute){
+//					// Keep track of source data types (only for non-PE as they are already tracked)
+//					elementTypes.put(source, DynamicTypeLiteral.from(((Attribute) source).getType().toString()));
+//				
+					// Process attached attributes if current source is not a primitive type
+					if(((Attribute) source).getType() != null && !isPrimitive(((Attribute) source).getType())){
+						inferAttributes(target);
+					}
+				}
+			} else if(connector.getTargetElement() instanceof ComputationOperator){
+				// Infer attribute for Operator but relate to original source in type structure 
+				inferTransitiveAttributes(transitiveSource, connector.getTargetElement());
+			}
+		}
+	}
+	
+	
+	// TODO replace by hypergraph query
+//	/**
+//	 * Retrieve all attributes for a specific data type
+//	 */
+//	public Collection<Attribute> getAttributesForType(DataType type){
+//		return new ArrayList<Attribute>(); // TODO
+//	}
+//		// Either ProcessFlowElement -> compare type with target type
+//		// Or GUIElement -> get type from String and compare
+//		return this.typeGraph.stream().filter(elem -> !elem.equals(skipNode))
+//				.filter(elem -> ((elem.getSource() instanceof ProcessFlowElement) && ((ProcessFlowElement) elem.getSource()).getDataType().equals(type)) 
+//				|| ((elem.getSource() instanceof GUIElement) && DynamicTypeLiteral.from(((GUIElement) elem.getSource()).getType().toString()).equals(type)))
+//		.collect(Collectors.toList());
+//	}
+//	
+//	
+//	// TODO replace by hypergraph query
+//	public DataType getDataTypeForAttributeName(DataType sourceType, String attributeName){
+//		Optional<TypeStructureNode> node = this.typeGraph.stream().filter(elem -> elem.getAttributeName().equals(attributeName))
+//				.filter(elem -> ((elem.getSource() instanceof ProcessFlowElement) && ((ProcessFlowElement) elem.getSource()).getDataType().equals(sourceType)) 
+//				|| ((elem.getSource() instanceof GUIElement) && DynamicTypeLiteral.from(((GUIElement) elem.getSource()).getType().toString()).equals(sourceType)))
+//				.findFirst();
+//		
+//		return node.isPresent() ? node.get().getType() : null;
+//	}
+	
 	
 	public void createDataStructureInUseCase(UseCase useCase){
 		return;

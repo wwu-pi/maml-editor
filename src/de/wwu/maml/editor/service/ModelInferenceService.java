@@ -22,6 +22,7 @@ import de.wwu.maml.dsl.maml.ParameterConnector;
 import de.wwu.maml.dsl.maml.ParameterSource;
 import de.wwu.maml.dsl.maml.ProcessFlowElement;
 import de.wwu.maml.dsl.maml.UseCase;
+import de.wwu.maml.dsl.mamldata.CustomType;
 import de.wwu.maml.dsl.mamldata.DataType;
 import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
 import de.wwu.maml.dsl.mamlgui.Attribute;
@@ -143,12 +144,18 @@ public class ModelInferenceService {
 		ModelInferrer inferrer = ModelInferrerManager.getInstance().getModelInferrer((UseCase) source.eContainer());
 		DataType type = inferrer.getDataTypeFromParameterSource(source);
 		
-		TypeStructureNode skipNode = new TypeStructureNode(skipMe.getDescription(), DynamicTypeLiteral.from(skipMe.getType().toString()), skipMe.getMultiplicity(), source);
-		Collection<TypeStructureNode> nodes = inferrer.getAttributesForType(type, skipNode);
+		if(type instanceof CustomType) {
+			return ((CustomType) type).getAttributes().stream().filter(MamlHelper.distinctByKey(elem -> elem.getName())).toArray();
+		}
 		
-		System.out.println(nodes);
-		
-		return nodes.stream().filter(MamlHelper.distinctByKey(elem -> ((TypeStructureNode) elem).getAttributeName())).toArray();
+		return new Object[] {};
+////		TypeStructureNode skipNode = new TypeStructureNode(skipMe.getDescription(), DynamicTypeLiteral.from(skipMe.getType().toString()), skipMe.getMultiplicity(), source);
+//		Collection<Attribute> nodes = inferrer.getAttributesForType(type);
+//		nodes.remove(skipMe);
+//		
+//		System.out.println(nodes);
+//		
+//		return nodes.stream().filter(MamlHelper.distinctByKey(elem -> ((TypeStructureNode) elem).getAttributeName())).toArray();
 	}
 	
 	public String openAttributeSelectionWizard(EObject object){

@@ -62,7 +62,7 @@ public class ModelInferenceMergeHelper {
 		//// Process element connections -> edges
 		for (ProcessFlowElement pfe : processFlowElements) {
 			// Get attributes (recursive)
-			addAttributesRecursive(pfe);
+//			addAttributesRecursive(pfe);
 		}
 
 		// 2) Validate
@@ -97,98 +97,98 @@ public class ModelInferenceMergeHelper {
 		}
 	}
 
-	protected void addAttributesRecursive(ParameterSource source){
-		// TODO add bidirectional relationship
-		for(ParameterConnector conn : source.getParameters()){
-			if(conn.getTargetElement() instanceof Attribute) {
-				
-				@SuppressWarnings("rawtypes")
-				ArrayList<MamlHypergraphNode> nodes = new ArrayList<MamlHypergraphNode>();
-				
-				// data types
-				if(MamlHelper.getDataType(conn.getSourceElement()) == null){
-					System.out.println("ERROR unknown type");
-					continue;
-				}
-				nodes.add(getDataTypeNode(MamlHelper.getDataType(conn.getSourceElement())));
-				nodes.add(getDataTypeTargetNode((DataType) MamlHelper.getDataType(conn.getTargetElement())));
-				// attribute
-				nodes.add(getAttributeNode(MamlHelper.getDataTypeName(MamlHelper.getDataType(conn.getSourceElement())) + "." + ((Attribute) conn.getTargetElement()).getDescription()));
-				// access type
-				if(conn.getAccessType().equals(AccessType.WRITE)){
-					nodes.add(HypergraphAccessNode.getWriteAccessNode());
-				} else {
-					nodes.add(HypergraphAccessNode.getReadAccessNode());
-				}
-				// cardinality
-				if(((Attribute) conn.getTargetElement()).getMultiplicity().equals(Multiplicity.ONE)){
-					nodes.add(HypergraphCardinalityNode.getCardinalityOneNode());
-				} else { // TODO others
-					nodes.add(HypergraphCardinalityNode.getCardinalityManyNode());
-				}
-				// elements
-				nodes.add(new MamlHypergraphNode<ParameterSource>(source)); //TODO maybe duplicates
-				nodes.add(new MamlHypergraphTargetNode<ParameterSource>((Attribute) conn.getTargetElement())); //TODO maybe duplicates
-				
-				// Add edge to graph
-				// System.out.println("Edge " + conn.toString() + ": " + nodes.toString());
-				try {
-					graph.addEdge(conn.toString(), nodes);
-				} catch(Exception e){
-					// TODO maybe add connector to edge set in order to allow "multi-edge" scenario
-					System.out.println("Multiple connections between the same elements detected. Ignored > 1.");
-				}
-			}
-			
-			// Recursive call
-			addAttributesRecursive(conn.getTargetElement());
-		}
-	}
-	
-	public MamlHypergraphNode<DataType> getDataTypeNode(DataType type){
-		if(type == null) {
-			return null;
-		}
-		
-		for(MamlHypergraphNode<DataType> node : sourceTypes){
-			if(node.value.equals(type)){
-				return node;
-			}
-		}
-		
-		// Not found -> add new
-		MamlHypergraphNode<DataType> newNode = new MamlHypergraphNode<DataType>(type);
-		sourceTypes.add(newNode);
-		return newNode;
-	}
-	
-	public MamlHypergraphTargetNode<DataType> getDataTypeTargetNode(DataType type){
-		if(type == null) {
-			return null;
-		}
-		
-		for(MamlHypergraphTargetNode<DataType> node : targetTypes){
-			if(node.value.equals(type)){
-				return node;
-			}
-		}
-		
-		// Not found -> add new
-		MamlHypergraphTargetNode<DataType> newNode = new MamlHypergraphTargetNode<DataType>(type);
-		targetTypes.add(newNode);
-		return newNode;
-	}
-	
-	public MamlHypergraphNode<String> getAttributeNode(String qualifiedName){
-		for(MamlHypergraphNode<String> node : attributes){
-			if(node.value.equals(qualifiedName)){
-				return node;
-			}
-		}
-		
-		// Not found -> add new
-		MamlHypergraphNode<String> newNode = new MamlHypergraphNode<String>(qualifiedName);
-		attributes.add(newNode);
-		return newNode;
-	}
+//	protected void addAttributesRecursive(ParameterSource source){
+//		// TODO add bidirectional relationship
+//		for(ParameterConnector conn : source.getParameters()){
+//			if(conn.getTargetElement() instanceof Attribute) {
+//				
+//				@SuppressWarnings("rawtypes")
+//				ArrayList<MamlHypergraphNode> nodes = new ArrayList<MamlHypergraphNode>();
+//				
+//				// data types
+//				if(MamlHelper.getDataType(conn.getSourceElement()) == null){
+//					System.out.println("ERROR unknown type");
+//					continue;
+//				}
+//				nodes.add(getDataTypeNode(MamlHelper.getDataType(conn.getSourceElement())));
+//				nodes.add(getDataTypeTargetNode((DataType) MamlHelper.getDataType(conn.getTargetElement())));
+//				// attribute
+//				nodes.add(getAttributeNode(MamlHelper.getDataTypeName(MamlHelper.getDataType(conn.getSourceElement())) + "." + ((Attribute) conn.getTargetElement()).getDescription()));
+//				// access type
+//				if(conn.getAccessType().equals(AccessType.WRITE)){
+//					nodes.add(HypergraphAccessNode.getWriteAccessNode());
+//				} else {
+//					nodes.add(HypergraphAccessNode.getReadAccessNode());
+//				}
+//				// cardinality
+//				if(((Attribute) conn.getTargetElement()).getMultiplicity().equals(Multiplicity.ONE)){
+//					nodes.add(HypergraphCardinalityNode.getCardinalityOneNode());
+//				} else { // TODO others
+//					nodes.add(HypergraphCardinalityNode.getCardinalityManyNode());
+//				}
+//				// elements
+//				nodes.add(new MamlHypergraphNode<ParameterSource>(source)); //TODO maybe duplicates
+//				nodes.add(new MamlHypergraphTargetNode<ParameterSource>((Attribute) conn.getTargetElement())); //TODO maybe duplicates
+//				
+//				// Add edge to graph
+//				// System.out.println("Edge " + conn.toString() + ": " + nodes.toString());
+//				try {
+//					graph.addEdge(conn.toString(), nodes);
+//				} catch(Exception e){
+//					// TODO maybe add connector to edge set in order to allow "multi-edge" scenario
+//					System.out.println("Multiple connections between the same elements detected. Ignored > 1.");
+//				}
+//			}
+//			
+//			// Recursive call
+//			addAttributesRecursive(conn.getTargetElement());
+//		}
+//	}
+//	
+//	public MamlHypergraphNode<DataType> getDataTypeNode(DataType type){
+//		if(type == null) {
+//			return null;
+//		}
+//		
+//		for(MamlHypergraphNode<DataType> node : sourceTypes){
+//			if(node.value.equals(type)){
+//				return node;
+//			}
+//		}
+//		
+//		// Not found -> add new
+//		MamlHypergraphNode<DataType> newNode = new MamlHypergraphNode<DataType>(type);
+//		sourceTypes.add(newNode);
+//		return newNode;
+//	}
+//	
+//	public MamlHypergraphTargetNode<DataType> getDataTypeTargetNode(DataType type){
+//		if(type == null) {
+//			return null;
+//		}
+//		
+//		for(MamlHypergraphTargetNode<DataType> node : targetTypes){
+//			if(node.value.equals(type)){
+//				return node;
+//			}
+//		}
+//		
+//		// Not found -> add new
+//		MamlHypergraphTargetNode<DataType> newNode = new MamlHypergraphTargetNode<DataType>(type);
+//		targetTypes.add(newNode);
+//		return newNode;
+//	}
+//	
+//	public MamlHypergraphNode<String> getAttributeNode(String qualifiedName){
+//		for(MamlHypergraphNode<String> node : attributes){
+//			if(node.value.equals(qualifiedName)){
+//				return node;
+//			}
+//		}
+//		
+//		// Not found -> add new
+//		MamlHypergraphNode<String> newNode = new MamlHypergraphNode<String>(qualifiedName);
+//		attributes.add(newNode);
+//		return newNode;
+//	}
 }

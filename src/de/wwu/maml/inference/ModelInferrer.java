@@ -56,7 +56,7 @@ public class ModelInferrer {
 //		DynamicTypeLiteral.setReadOnly(readOnly);
 		
 		// ------------------------------------------------------------------
-		// Select main process (using start event) and infer for following elements (and attributes)
+		// Select main process (using start event) and infer for following elements
 		// ------------------------------------------------------------------
 		Optional<ProcessStartEvent> start = toProcess.stream()
 				.filter(elem -> elem instanceof ProcessStartEvent)
@@ -77,26 +77,29 @@ public class ModelInferrer {
 			inferenceDataTypeHelper.inferProcessFlowChain(elem);
 		}
 		
-//		// ------------------------------------------------------------------
-//		// Infer attributes
-//		// ------------------------------------------------------------------
-//		// Attributes attached to process flow elements have already been inferred
-//
-//		// Process remaining dangling attributes
-//		Set<Attribute> connectedAttributes = useCase.eContents().stream()
-//				.filter(elem -> (elem instanceof ParameterConnector) && ((ParameterConnector) elem).getTargetElement() instanceof Attribute)
-//				.map(elem -> (Attribute) ((ParameterConnector) elem).getTargetElement())
-//				.collect(Collectors.toSet());
-//		
-//		Set<Attribute> danglingAttributes = useCase.eContents().stream()
-//				.filter(elem -> (elem instanceof Attribute))
-//				.map(elem -> (Attribute) elem)
-//				.collect(Collectors.toSet());
-//		danglingAttributes.removeAll(connectedAttributes);
-//		
-//		for(ParameterSource elem : danglingAttributes){
-//			inferenceDataTypeHelper.inferAttributes(elem);
-//		}
+		// ------------------------------------------------------------------
+		// Infer type relations
+		// ------------------------------------------------------------------
+		// Attributes attached to process flow elements
+		for(ProcessFlowElement elem : useCase.getProcessFlowElements()){
+			inferenceDataTypeHelper.inferAttributes(elem);
+		}
+		
+		// Process remaining dangling attributes
+		Set<Attribute> connectedAttributes = useCase.eContents().stream()
+				.filter(elem -> (elem instanceof ParameterConnector) && ((ParameterConnector) elem).getTargetElement() instanceof Attribute)
+				.map(elem -> (Attribute) ((ParameterConnector) elem).getTargetElement())
+				.collect(Collectors.toSet());
+		
+		Set<Attribute> danglingAttributes = useCase.eContents().stream()
+				.filter(elem -> (elem instanceof Attribute))
+				.map(elem -> (Attribute) elem)
+				.collect(Collectors.toSet());
+		danglingAttributes.removeAll(connectedAttributes);
+		
+		for(ParameterSource elem : danglingAttributes){
+			inferenceDataTypeHelper.inferAttributes(elem);
+		}
 				
 		// ------------------------------------------------------------------
 		// Merge individual process elements within a use case
@@ -127,6 +130,11 @@ public class ModelInferrer {
 		return type;
 	}
 	
+	public DataType getType(String typeName){
+		DataType type =  inferenceDataTypeHelper.getDataTypeInstance(MamlHelper.getAllowedDataTypeName(typeName));
+		return type;
+	}
+	
 	public Date getLastInference() {
 		return lastInference;
 	}
@@ -135,28 +143,22 @@ public class ModelInferrer {
 		this.lastInference = lastInference;
 	}
 	
-	public Collection<TypeStructureNode> getAttributesForType(DataType type, TypeStructureNode skipNode){
-		return inferenceDataTypeHelper.getAttributesForType(type, skipNode);
-	}
+//	public Collection<Attribute> getAttributesForType(DataType type){
+//		return inferenceDataTypeHelper.getAttributesForType(type);
+//	}
 	
 	public DataType getDataTypeFromParameterSource(ParameterSource source){
 		return MamlHelper.getDataType(source);
 	}
 	
-	public DataType getDataTypeForAttributeName(DataType sourceType, String attributeName){
-		return inferenceDataTypeHelper.getDataTypeForAttributeName(sourceType, attributeName);
-	}
+//	public DataType getDataTypeForAttributeName(DataType sourceType, String attributeName){
+//		return inferenceDataTypeHelper.getDataTypeForAttributeName(sourceType, attributeName);
+//	}
 	
-	public DataType getType(String typeName){
-		DataType type =  inferenceDataTypeHelper.getDataTypeInstance(MamlHelper.getAllowedDataTypeName(typeName)); //DynamicTypeLiteral.from(MamlHelper.getAllowedDataTypeName(typeName));
-		return type;
-	}
+
 	// TODO validate model (no dangling, ...)
 	// TODO build data model and validate data types
 	
-	@SuppressWarnings("rawtypes")
-	MamlHypergraph<MamlHypergraphNode, String> graph = new MamlHypergraph<MamlHypergraphNode, String>();
-
 //	ArrayList<MamlHypergraphNode<DataType>> sourceTypes = new ArrayList<MamlHypergraphNode<DataType>>();
 //	ArrayList<MamlHypergraphTargetNode<DataType>> targetTypes = new ArrayList<MamlHypergraphTargetNode<DataType>>();
 //
