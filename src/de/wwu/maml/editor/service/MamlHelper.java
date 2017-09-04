@@ -1,9 +1,19 @@
 package de.wwu.maml.editor.service;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import de.wwu.maml.dsl.maml.ParameterSource;
+import de.wwu.maml.dsl.maml.ProcessFlowElement;
+import de.wwu.maml.dsl.mamldata.CustomType;
+import de.wwu.maml.dsl.mamldata.DataType;
+import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
+import de.wwu.maml.dsl.mamldata.PrimitiveType;
+import de.wwu.maml.dsl.mamlgui.GUIElement;
 
 public class MamlHelper {
 
@@ -31,6 +41,11 @@ public class MamlHelper {
 		}
 	}
 	
+	public static String camelCaseToSpacedString(String text){
+		List<String> words = Arrays.asList(text.split("(?<=[a-z])(?=[A-Z])"));
+		return String.join(" ", words.stream().map(word -> toFirstLower(word)).toArray(String[]::new));
+	}
+	
 	/**
 	 * Allowed attribute names consist of an initial lowercase alphabetic character followed 
 	 * by arbitrary alphanumeric characters as well as '-' and '_' 
@@ -39,6 +54,15 @@ public class MamlHelper {
 	 * @return
 	 */
 	public static String getAllowedAttributeName(String text){
+		// Replace umlauts
+		text = text.replaceAll("Ä", "Ae");
+		text = text.replaceAll("Ö", "Oe");
+		text = text.replaceAll("Ü", "Ue");
+		text = text.replaceAll("ä", "ae");
+		text = text.replaceAll("ö", "oe");
+		text = text.replaceAll("ü", "ue");
+		text = text.replaceAll("ß", "ss");
+		
 		// Only alphabetic characters in front
 		if(!text.matches("[a-zA-Z].*")){
 			return text.length() == 1 ? "" : getAllowedAttributeName(text.substring(1));
@@ -85,5 +109,35 @@ public class MamlHelper {
 	public static <T> Predicate<T> distinctByKey(Function<? super T,Object> keyExtractor) {
 	    Map<Object,Boolean> seen = new ConcurrentHashMap<>();
 	    return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+	}
+	
+	/**
+	 * Retrieve data type depending on the subtype of the parameter source.
+	 * @param source
+	 * @return
+	 */
+	public static DataType getDataType(ParameterSource source){
+		if(source instanceof ProcessFlowElement) {
+			return ((ProcessFlowElement) source).getDataType();
+		} else if(source instanceof GUIElement) {
+			return ((GUIElement) source).getType();
+		}
+		return null;
+	}
+	
+	/**
+	 * Retrieve data type name depending on the subtype of the data type.
+	 * @param source
+	 * @return
+	 */
+	public static String getDataTypeName(DataType type){
+		if(type == null) return "";
+		
+		if(type instanceof PrimitiveType){
+			return ((PrimitiveType) type).getClass().getSimpleName().replace("Impl", "");
+		} else if (type instanceof CustomType){
+			return ((CustomType) type).getName();
+		}
+		return type.getClass().getSimpleName();
 	}
 }

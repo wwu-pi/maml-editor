@@ -90,8 +90,8 @@ public class DiagramService {
 				labelText += connector.getDescription();
 			} else if(connector.getTargetElement() != null && connector.getTargetElement().getDescription() != null){
 				// Alternative default representation
-				if(connector.getTargetElement() instanceof Attribute){ // TODO split from camelcase to words
-					labelText += MamlHelper.toFirstUpper(connector.getTargetElement().getDescription());
+				if(connector.getTargetElement() instanceof Attribute){
+					labelText += MamlHelper.toFirstUpper(MamlHelper.camelCaseToSpacedString(connector.getTargetElement().getDescription()));
 				}
 				// Computed attributes or Labels without default
 			}
@@ -133,7 +133,7 @@ public class DiagramService {
 		return "error";
 	}
 	
-	// Label representation for Parameter Connectors
+	// Label representation for Process Connectors
 	public String getProcessConnectorLabelText(EObject obj){
 		if(obj != null && obj instanceof ProcessConnector){
 			ProcessConnector connector = (ProcessConnector) obj;
@@ -149,7 +149,7 @@ public class DiagramService {
 		return "error";
 	}
 	
-	// Label representation for Parameter Connectors
+	// Label representation for data sources
 	public String getDataSourceLabelText(EObject obj){
 		if(obj == null || !(obj instanceof DataSource)){
 			return "error";
@@ -157,15 +157,15 @@ public class DiagramService {
 		
 		String labelText = "\"";
 		
-		if(((DataSource) obj).getTypeName() != null ){
-			// Use type given by user
-			labelText += ((DataSource) obj).getTypeName();
-		} else {
+//		if(((DataSource) obj).getTypeName() != null ){
+//			// Use type given by user
+//			labelText += ((DataSource) obj).getTypeName();
+//		} else {
 			// Try to retrieve inferred type from incoming elements
 			ModelInferenceService service = new ModelInferenceService();
 			String result = service.getDataTypeRepresentation(obj);
 			if(result != null && result != "??") labelText += result;
-		}
+//		}
 		
 		labelText += "\"";
 		labelText = labelText.equals("\"\"") ? "<no type>" : labelText;
@@ -255,7 +255,10 @@ public class DiagramService {
 			// Events hav max 1 outgoing edge
 			return ((Event) preSource).getNextElements().size() < maxConnections;
 		} else if (preSource instanceof ControlFlowElement){
-			// Control flow elements can have multiple outgoing edges
+			// Control flow elements can have multiple outgoing edges if they have at most one incoming edge
+			if(((ControlFlowElement) preSource).getPreviousElements().size() > 1 && ((ControlFlowElement) preSource).getNextElements().size() > 0){
+				return false;
+			}
 			return true;
 		} else if (preSource instanceof ProcessElement){
 			// Process elements can have max 1 outgoing edge
@@ -289,7 +292,10 @@ public class DiagramService {
 			// Other events have no incoming edge
 			return false;
 		} else if (preTarget instanceof ControlFlowElement){
-			// Control flow elements can have multiple incoming edges
+			// Control flow elements can have multiple incoming edges if they have at most one outgoing edge
+			if(((ControlFlowElement) preTarget).getNextElements().size() > 1 && ((ControlFlowElement) preSource).getPreviousElements().size() > 0){
+				return false;
+			}
 			return true;
 		} else if (preTarget instanceof ProcessElement){
 			// Process elements may not link on themselves
@@ -420,10 +426,6 @@ public class DiagramService {
 	
 	public String getAttributeNameForInput(EObject obj, String input){
 		return MamlHelper.getAllowedAttributeName(input);
-	}
-	
-	public String getDataTypeNameForInput(EObject obj, String input){
-		return MamlHelper.getAllowedDataTypeName(input);
 	}
 	
 	public EObject recalculateAttributeOrder(EObject obj){

@@ -2,191 +2,104 @@ package de.wwu.maml.inference;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 
 import de.wwu.maml.inference.error.CardinalityValidationError;
 import de.wwu.maml.inference.error.MamlValidationError;
 import de.wwu.maml.inference.error.TypeValidationError;
-import de.wwu.maml.dsl.maml.ParameterConnector;
 import de.wwu.maml.dsl.maml.ParameterSource;
 import de.wwu.maml.dsl.maml.ProcessFlowElement;
-import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
+import de.wwu.maml.dsl.maml.UseCase;
+import de.wwu.maml.dsl.mamldata.CustomType;
+import de.wwu.maml.dsl.mamldata.DataType;
+import de.wwu.maml.dsl.mamldata.MamldataFactory;
 import de.wwu.maml.dsl.mamldata.Multiplicity;
-import de.wwu.maml.dsl.mamlgui.AccessType;
-import de.wwu.maml.dsl.mamlgui.Attribute;
+import de.wwu.maml.dsl.mamldata.Property;
 
 public class ModelInferenceMergeHelper {
 
 	ModelInferenceDataTypeHelper inferenceDataTypeHelper;
 
-	@SuppressWarnings("rawtypes")
-	MamlHypergraph<MamlHypergraphNode, String> graph = new MamlHypergraph<MamlHypergraphNode, String>();
-
-	ArrayList<MamlHypergraphNode<DataTypeLiteral>> sourceTypes = new ArrayList<MamlHypergraphNode<DataTypeLiteral>>();
-	ArrayList<MamlHypergraphTargetNode<DataTypeLiteral>> targetTypes = new ArrayList<MamlHypergraphTargetNode<DataTypeLiteral>>();
-
-	ArrayList<HypergraphAccessNode> accessTypes = new ArrayList<HypergraphAccessNode>();
-	ArrayList<HypergraphCardinalityNode> cardinalityTypes = new ArrayList<HypergraphCardinalityNode>();
-	
-	ArrayList<MamlHypergraphNode<String>> attributes = new ArrayList<MamlHypergraphNode<String>>();
-	
 	ArrayList<MamlValidationError> errorList = new ArrayList<MamlValidationError>();
 
-	@SuppressWarnings("rawtypes")
 	public void mergeProcessElements(EList<ProcessFlowElement> processFlowElements,
-			ModelInferenceDataTypeHelper inferenceDataTypeHelper) {
-		this.inferenceDataTypeHelper = inferenceDataTypeHelper;
+			MamlHypergraph<MamlHypergraphNode<?>, String> typeGraph) {
+		this.inferenceDataTypeHelper = ModelInferenceDataTypeHelper.getInstance();
 
-		graph = new MamlHypergraph<MamlHypergraphNode, String>();
+		Collection<MamlHypergraphNode<DataType>> dataTypeNodes = inferenceDataTypeHelper.getAllDataTypes().stream().map(elem -> inferenceDataTypeHelper.getDataTypeNode(elem)).collect(Collectors.toList());
+		Collection<MamlHypergraphNode<?>> attributes = typeGraph.getVertices().stream().filter(node -> node.getValue() instanceof String).collect(Collectors.toList()); // TODO better attribute retrieval
 		
-		// 1) Setup graph
-		// Data types
-		for (DataTypeLiteral literal : DynamicTypeLiteral.getTypes().values()) {
-			// As source
-			sourceTypes.add(new MamlHypergraphNode<DataTypeLiteral>(literal));
-			// As target
-			targetTypes.add(new MamlHypergraphTargetNode<DataTypeLiteral>(literal));
-		}
-
-		// Accessibility
-		accessTypes.add(HypergraphAccessNode.getReadAccessNode());
-		accessTypes.add(HypergraphAccessNode.getWriteAccessNode());
-
-		// Cardinality
-		cardinalityTypes.add(HypergraphCardinalityNode.getCardinalityOneNode());
-		cardinalityTypes.add(HypergraphCardinalityNode.getCardinalityManyNode()); // TODO
-																					// others
-		//// Process element connections -> edges
-		for (ProcessFlowElement pfe : processFlowElements) {
-			// Get attributes (recursive)
-			addAttributesRecursive(pfe);
-		}
-
-		// 2) Validate
+		// 1) Validate graph
 		// TODO validate bidirectional relationship
-		for(MamlHypergraphNode<DataTypeLiteral> dataTypeNode : sourceTypes){
-			for(MamlHypergraphNode<String> attribute :attributes) { // TODO all combinations not nice for performance
-				Collection<MamlHypergraphNode> edgeContent = graph.findEdgeSetFlatContent(dataTypeNode, attribute);
+		for(MamlHypergraphNode<DataType> dataTypeNode : dataTypeNodes){
+			for(MamlHypergraphNode<?> attribute : attributes) { // TODO all combinations not nice for performance
+				Collection<MamlHypergraphNode<?>> edgeContent = typeGraph.findEdgeSetFlatContent(dataTypeNode, attribute);
 				
 				Object[] cardinalities = edgeContent.stream().filter(node -> node instanceof HypergraphCardinalityNode).toArray();
 				if(cardinalities.length > 1) {
 					//System.out.println("ERROR: Cardinality error!");
 					for(Object elem : edgeContent.stream().filter(node -> node instanceof MamlHypergraphTargetNode<?> && node.getValue() instanceof ParameterSource).toArray()) {
-						errorList.add(new CardinalityValidationError((ParameterSource) ((MamlHypergraphTargetNode) elem).getValue(), cardinalities));
+						errorList.add(new CardinalityValidationError((ParameterSource) ((MamlHypergraphTargetNode<?>) elem).getValue(), cardinalities));
 					}
 				}
 				
-				Object[] types = edgeContent.stream().filter(node -> node instanceof MamlHypergraphTargetNode<?> && node.getValue() instanceof DataTypeLiteral).toArray();
+				Object[] types = edgeContent.stream().filter(node -> node instanceof MamlHypergraphTargetNode<?> && node.getValue() instanceof DataType).toArray();
 				if(types.length > 1) {
 					//System.out.println("ERROR: Type error!");
 					for(Object elem : edgeContent.stream().filter(node -> node instanceof MamlHypergraphTargetNode<?> && node.getValue() instanceof ParameterSource).toArray()) {
-						errorList.add(new TypeValidationError((ParameterSource) ((MamlHypergraphTargetNode) elem).getValue(), types));
+						errorList.add(new TypeValidationError((ParameterSource) ((MamlHypergraphTargetNode<?>) elem).getValue(), types));
 					}
 				}
 			}
 		}
 
-		// 3) Infer/deduplicate
+		// 2) Infer/deduplicate
 		if(errorList.size() > 0){
 			for(MamlValidationError error : errorList) System.out.println(error.getErrorText() + "/ " + error.getElement().toString());
 		} else {
 			//TODO
 		}
+		
+		// TODO use error list
 	}
-
-	protected void addAttributesRecursive(ParameterSource source){
-		// TODO add bidirectional relationship
-		for(ParameterConnector conn : source.getParameters()){
-			if(conn.getTargetElement() instanceof Attribute) {
-				
-				@SuppressWarnings("rawtypes")
-				ArrayList<MamlHypergraphNode> nodes = new ArrayList<MamlHypergraphNode>();
-				
-				// data types
-				if(inferenceDataTypeHelper.getType(conn.getSourceElement()) == null){
-					System.out.println("ERROR unknown type");
-					continue;
-				}
-				nodes.add(getDataTypeNode(inferenceDataTypeHelper.getType(conn.getSourceElement())));
-				nodes.add(getDataTypeTargetNode((DataTypeLiteral) inferenceDataTypeHelper.getDataTypeFromParameterSource(conn.getTargetElement())));
-				// attribute
-				nodes.add(getAttributeNode(inferenceDataTypeHelper.getType(conn.getSourceElement()).getIdentifier() + "." + ((Attribute) conn.getTargetElement()).getDescription()));
-				// access type
-				if(conn.getAccessType().equals(AccessType.WRITE)){
-					nodes.add(HypergraphAccessNode.getWriteAccessNode());
-				} else {
-					nodes.add(HypergraphAccessNode.getReadAccessNode());
-				}
-				// cardinality
-				if(((Attribute) conn.getTargetElement()).getMultiplicity().equals(Multiplicity.ONE)){
-					nodes.add(HypergraphCardinalityNode.getCardinalityOneNode());
-				} else { // TODO others
-					nodes.add(HypergraphCardinalityNode.getCardinalityManyNode());
-				}
-				// elements
-				nodes.add(new MamlHypergraphNode<ParameterSource>(source)); //TODO maybe duplicates
-				nodes.add(new MamlHypergraphTargetNode<ParameterSource>((Attribute) conn.getTargetElement())); //TODO maybe duplicates
-				
-				// Add edge to graph
-				// System.out.println("Edge " + conn.toString() + ": " + nodes.toString());
-				try {
-					graph.addEdge(conn.toString(), nodes);
-				} catch(Exception e){
-					// TODO maybe add connector to edge set in order to allow "multi-edge" scenario
-					System.out.println("Multiple connections between the same elements detected. Ignored > 1.");
-				}
-			}
+	
+	public void createDataStructureInUseCase(UseCase useCase, MamlHypergraph<MamlHypergraphNode<?>, String> typeGraph){
+		// Get relations for each data type within the use case
+		Collection<DataType> dataTypes = useCase.getDataTypes();
+		
+		for(CustomType type : dataTypes.stream().filter(elem -> elem instanceof CustomType).map(elem -> (CustomType) elem).collect(Collectors.toList())){
+			// Relation edge
+			Collection<Collection<MamlHypergraphNode<?>>> edges = typeGraph.getIncidentEdgeContents(inferenceDataTypeHelper.getDataTypeNode(type));
 			
-			// Recursive call
-			addAttributesRecursive(conn.getTargetElement());
+			if(edges == null) continue;
+			
+			for(Collection<MamlHypergraphNode<?>> edge : edges){
+				// Check for duplicates
+				if(type.getAttributes().stream().anyMatch(elem -> elem.getName().equals(typeGraph.getEdgeAttributeName(edge)))) continue;
+				
+				// Convert relation to property and add to use case
+				Property prop = convertEdgeToProperty(type, edge, typeGraph);
+				type.getAttributes().add(prop);
+			}
 		}
 	}
 	
-	public MamlHypergraphNode<DataTypeLiteral> getDataTypeNode(DataTypeLiteral type){
-		if(type == null) {
-			return null;
+	private Property convertEdgeToProperty(CustomType type, Collection<MamlHypergraphNode<?>> edge, MamlHypergraph<MamlHypergraphNode<?>, String> typeGraph){
+		
+		Property prop = MamldataFactory.eINSTANCE.createProperty();
+		System.out.println("lala" + typeGraph.getEdgeAttributeName(edge));
+		prop.setName(typeGraph.getEdgeAttributeName(edge));
+		
+		if(typeGraph.getEdgeCardinality(edge).equals(Multiplicity.MANY) || typeGraph.getEdgeCardinality(edge).equals(Multiplicity.ZEROMANY)){
+			de.wwu.maml.dsl.mamldata.Collection collection = MamldataFactory.eINSTANCE.createCollection();
+			collection.setType(typeGraph.getEdgeTargetDataType(edge));
+			prop.setType(collection);
+		} else {
+			prop.setType(typeGraph.getEdgeTargetDataType(edge));	
 		}
 		
-		for(MamlHypergraphNode<DataTypeLiteral> node : sourceTypes){
-			if(node.value.getIdentifier().equals(type.getIdentifier())){
-				return node;
-			}
-		}
-		
-		// Not found -> add new
-		MamlHypergraphNode<DataTypeLiteral> newNode = new MamlHypergraphNode<DataTypeLiteral>(type);
-		sourceTypes.add(newNode);
-		return newNode;
-	}
-	
-	public MamlHypergraphTargetNode<DataTypeLiteral> getDataTypeTargetNode(DataTypeLiteral type){
-		if(type == null) {
-			return null;
-		}
-		
-		for(MamlHypergraphTargetNode<DataTypeLiteral> node : targetTypes){
-			if(node.value.getIdentifier().equals(type.getIdentifier())){
-				return node;
-			}
-		}
-		
-		// Not found -> add new
-		MamlHypergraphTargetNode<DataTypeLiteral> newNode = new MamlHypergraphTargetNode<DataTypeLiteral>(type);
-		targetTypes.add(newNode);
-		return newNode;
-	}
-	
-	public MamlHypergraphNode<String> getAttributeNode(String qualifiedName){
-		for(MamlHypergraphNode<String> node : attributes){
-			if(node.value.equals(qualifiedName)){
-				return node;
-			}
-		}
-		
-		// Not found -> add new
-		MamlHypergraphNode<String> newNode = new MamlHypergraphNode<String>(qualifiedName);
-		attributes.add(newNode);
-		return newNode;
+		return prop;
 	}
 }

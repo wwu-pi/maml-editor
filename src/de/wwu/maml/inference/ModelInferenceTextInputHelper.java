@@ -1,19 +1,15 @@
 package de.wwu.maml.inference;
 
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.regex.Pattern;
-
-import de.wwu.maml.dsl.maml.ParameterSource;
-import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
+import de.wwu.maml.dsl.mamldata.DataType;
 
 public class ModelInferenceTextInputHelper {
 
-	public static DataTypeLiteral getTypeForTransform(String description, DataTypeLiteral inputType, ArrayList<TypeStructureNode> typeGraph, Map<ParameterSource, DataTypeLiteral> elementTypes){
+	public static DataType getTypeForTransform(String description, DataType inputType, MamlHypergraph<MamlHypergraphNode<?>, String> typeGraph){ // , Map<ParameterSource, DataType> elementTypes
 		// Is there input to infer something from?
 		if(description == null || description == "" || inputType == null) return null;
 		
-		DataTypeLiteral currentType = null;
+		DataType currentType = null;
 		
 		// Parse input
 		String[] parts = description.split(Pattern.quote("."));
@@ -23,17 +19,16 @@ public class ModelInferenceTextInputHelper {
 				currentType = inputType;
 			} else {
 				// Get first type node in existing graph that matches type and attribute 
-				boolean found = false;
-				for(TypeStructureNode node : typeGraph){
-					if(elementTypes.get(node.getSource()) != null && elementTypes.get(node.getSource()).equals(currentType) 
-							&& node.getAttributeName() != null && node.getAttributeName().equalsIgnoreCase(part)){
-						currentType = node.getType();
-						found = true;
-						break;
-					}
-				}
+				DataType typeMatch = typeGraph.getIncidentEdgeContents(ModelInferenceDataTypeHelper.getInstance().getDataTypeNode(currentType)).stream()
+					.filter(edge -> typeGraph.getEdgeAttributeName(edge).equalsIgnoreCase(part))
+					.map(edge -> typeGraph.getEdgeTargetDataType(edge))
+					.findFirst().orElse(null);
 				
-				if(!found) {
+				System.out.println("ModelInferenceTextInputHelper:"+ typeMatch);
+				
+				if(typeMatch != null){
+					currentType = typeMatch;
+				} else  {
 					// Nothing found in this step -> inference error
 					return null;
 				}
@@ -42,5 +37,9 @@ public class ModelInferenceTextInputHelper {
 		}
 		
 		return currentType;
+	}
+	
+	public static boolean isAllowedTypeName(String typeName){
+		return typeName != null && !typeName.equals("") && !typeName.startsWith("_") && !typeName.equals(ModelInferenceDataTypeHelper.ANONYMOUS_TYPE_UI);
 	}
 }

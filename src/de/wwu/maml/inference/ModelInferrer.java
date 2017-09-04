@@ -1,6 +1,5 @@
 package de.wwu.maml.inference;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
@@ -13,8 +12,8 @@ import de.wwu.maml.dsl.maml.ProcessFlowElement;
 import de.wwu.maml.dsl.maml.ProcessStartEvent;
 import de.wwu.maml.dsl.maml.UseCase;
 import de.wwu.maml.dsl.mamldata.DataType;
-import de.wwu.maml.dsl.mamldata.DataTypeLiteral;
 import de.wwu.maml.dsl.mamlgui.Attribute;
+import de.wwu.maml.editor.service.MamlHelper;
 
 /**
  * Main component for inferring data models from .maml models 
@@ -27,7 +26,7 @@ public class ModelInferrer {
 	private Date lastInference = null;
 	
 	// Manages data types
-	protected ModelInferenceDataTypeHelper inferenceDataTypeHelper = new ModelInferenceDataTypeHelper(); 
+	protected ModelInferenceDataTypeHelper inferenceDataTypeHelper = ModelInferenceDataTypeHelper.getInstance(); 
 	protected ModelInferenceMergeHelper inferenceMergeHelper = new ModelInferenceMergeHelper();
 	
 	/**
@@ -40,14 +39,18 @@ public class ModelInferrer {
 		Set<ProcessFlowElement> toProcess = new HashSet<ProcessFlowElement>(useCase.getProcessFlowElements());
 		
 		// ------------------------------------------------------------------
-		// Reset type list and attribute structure
+		// Prepare data types
 		// ------------------------------------------------------------------
+		
+		// Reset type list and synchronize with use case
 		inferenceDataTypeHelper.clearDataModel();
+		inferenceDataTypeHelper.loadDataTypes(useCase);
+		// TODO detect and remove unused data types in useCase.dataTypes
 		
-		DynamicTypeLiteral.setReadOnly(readOnly);
+//		DynamicTypeLiteral.setReadOnly(readOnly);
 		
 		// ------------------------------------------------------------------
-		// Select main process (using start event) and infer for following elements (and attributes)
+		// Select main process (using start event) and infer for following elements
 		// ------------------------------------------------------------------
 		Optional<ProcessStartEvent> start = toProcess.stream()
 				.filter(elem -> elem instanceof ProcessStartEvent)
@@ -69,10 +72,13 @@ public class ModelInferrer {
 		}
 		
 		// ------------------------------------------------------------------
-		// Infer attributes
+		// Infer type relations
 		// ------------------------------------------------------------------
-		// Attributes attached to process flow elements have already been inferred
-
+		// Attributes attached to process flow elements
+		for(ProcessFlowElement elem : useCase.getProcessFlowElements()){
+			inferenceDataTypeHelper.inferAttributes(elem);
+		}
+		
 		// Process remaining dangling attributes
 		Set<Attribute> connectedAttributes = useCase.eContents().stream()
 				.filter(elem -> (elem instanceof ParameterConnector) && ((ParameterConnector) elem).getTargetElement() instanceof Attribute)
@@ -92,7 +98,8 @@ public class ModelInferrer {
 		// ------------------------------------------------------------------
 		// Merge individual process elements within a use case
 		// ------------------------------------------------------------------
-		inferenceMergeHelper.mergeProcessElements(useCase.getProcessFlowElements(), inferenceDataTypeHelper);
+		// merging necessary?? (rename to validation instead?)
+		inferenceMergeHelper.mergeProcessElements(useCase.getProcessFlowElements(), inferenceDataTypeHelper.getTypeGraph());
 		
 		// Track the last time of inference for eventual throttling
 		setLastInference(new Date());
@@ -100,12 +107,11 @@ public class ModelInferrer {
 		
 		// TODO remove unused data types from UseCase dataType list
 		if(!readOnly){
-			inferenceDataTypeHelper.createDataStructureInUseCase(useCase);
+			inferenceMergeHelper.createDataStructureInUseCase(useCase, inferenceDataTypeHelper.getTypeGraph());
 		}
 		
 		// Output Helper
-		System.out.println("Custom data types:" + DynamicTypeLiteral.getCustomDataTypesAsString().toString());
-		System.out.println("Anonymous data types:" + DynamicTypeLiteral.getAnonymousDataTypesAsString().toString());
+		System.out.println("Custom data types:" + inferenceDataTypeHelper.getCustomDataTypesAsString().toString());
 	}
 
 	/**
@@ -113,9 +119,13 @@ public class ModelInferrer {
 	 * @param obj
 	 * @return
 	 */
-	public DataTypeLiteral getType(ProcessFlowElement obj) {
-		// Pass to data type helper
-		DataTypeLiteral type = inferenceDataTypeHelper.getType(obj);
+	public DataType getType(ProcessFlowElement obj) {
+		DataType type = MamlHelper.getDataType(obj);
+		return type;
+	}
+	
+	public DataType getType(String typeName){
+		DataType type =  inferenceDataTypeHelper.getDataTypeInstance(MamlHelper.getAllowedDataTypeName(typeName));
 		return type;
 	}
 	
@@ -127,18 +137,18 @@ public class ModelInferrer {
 		this.lastInference = lastInference;
 	}
 	
-	public Collection<TypeStructureNode> getAttributesForType(DataType type, TypeStructureNode skipNode){
-		return inferenceDataTypeHelper.getAttributesForType(type, skipNode);
-	}
+//	public Collection<Attribute> getAttributesForType(DataType type){
+//		return inferenceDataTypeHelper.getAttributesForType(type);
+//	}
 	
 	public DataType getDataTypeFromParameterSource(ParameterSource source){
-		return inferenceDataTypeHelper.getDataTypeFromParameterSource(source);
+		return MamlHelper.getDataType(source);
 	}
 	
-	public DataType getDataTypeForAttributeName(DataType sourceType, String attributeName){
-		return inferenceDataTypeHelper.getDataTypeForAttributeName(sourceType, attributeName);
-	}
-	
+//	public DataType getDataTypeForAttributeName(DataType sourceType, String attributeName){
+//		return inferenceDataTypeHelper.getDataTypeForAttributeName(sourceType, attributeName);
+//	}
+
 	// TODO validate model (no dangling, ...)
 	// TODO build data model and validate data types
 }

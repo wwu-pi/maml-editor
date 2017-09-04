@@ -8,7 +8,6 @@ import java.util.HashMap;
 
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
-import de.wwu.maml.inference.DynamicTypeLiteral;
 import de.wwu.maml.inference.ModelInferrer;
 import de.wwu.maml.dsl.maml.MamlPackage;
 import de.wwu.maml.dsl.maml.UseCase;
@@ -33,7 +32,6 @@ public class Main {
 		}
 		UseCase data = (UseCase) resource.getContents().get(0);
 
-		DynamicTypeLiteral.setDataTypeContainer(data);
 		// Start via ModelInferrer (bypassing the Sirius ModelInferenceService layer)
 		ModelInferrer inferrer = new ModelInferrer();
 		inferrer.startInferenceProcess(data, false);

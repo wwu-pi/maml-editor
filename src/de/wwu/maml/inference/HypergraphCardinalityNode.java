@@ -1,53 +1,68 @@
 package de.wwu.maml.inference;
 
 import de.wwu.maml.dsl.mamldata.Multiplicity;
+import de.wwu.maml.dsl.mamlgui.Attribute;
 
 public class HypergraphCardinalityNode extends MamlHypergraphNode<Multiplicity> {
 
 	protected static HypergraphCardinalityNode one = null;
-	protected static HypergraphCardinalityNode oneOpt = null;
+	protected static HypergraphCardinalityNode zeroOne = null;
 	protected static HypergraphCardinalityNode many = null;
-	protected static HypergraphCardinalityNode manyOpt = null;
-	protected static HypergraphCardinalityNode id = null;
-	protected static HypergraphCardinalityNode uniqueOne = null;
-	protected static HypergraphCardinalityNode uniqueMany = null;
+	protected static HypergraphCardinalityNode zeroMany = null;
+//	protected static HypergraphCardinalityNode id = null;
+//	protected static HypergraphCardinalityNode uniqueOne = null;
+//	protected static HypergraphCardinalityNode uniqueMany = null;
 
-	Multiplicity cardinality;
-
-	private HypergraphCardinalityNode() {
+	private HypergraphCardinalityNode(Multiplicity value) {
 		// Internal Constructor
-		super(null);
+		super(value);
 	}
-
-	public static HypergraphCardinalityNode createHyperGraphCardinalityNode(Multiplicity cardinality) {
-		if (cardinality.equals(Multiplicity.ONE)) {
-			return getCardinalityOneNode();
-		} else if (cardinality.equals(Multiplicity.MANY)) {
-			return getCardinalityManyNode();
+	
+	public static HypergraphCardinalityNode getCardinalityNode(Attribute attribute){
+		switch(attribute.getMultiplicity()){
+			case ONE: 
+				return getCardinalityOneNode();
+			case MANY: 
+				return getCardinalityManyNode();
+			case ZEROONE: 
+				return getCardinalityZeroOneNode();
+			case ZEROMANY: 
+				return getCardinalityZeroManyNode();
 		}
-		return null;
-		// TODO others
+		return getCardinalityOneNode();
 	}
 
 	protected static HypergraphCardinalityNode getCardinalityOneNode() {
 		if (one == null) {
-			one = new HypergraphCardinalityNode();
-			one.setValue(Multiplicity.ONE);
+			one = new HypergraphCardinalityNode(Multiplicity.ONE);
 		}
 		return one;
 	}
 
 	protected static HypergraphCardinalityNode getCardinalityManyNode() {
 		if (many == null) {
-			many = new HypergraphCardinalityNode();
-			many.setValue(Multiplicity.MANY);
+			many = new HypergraphCardinalityNode(Multiplicity.MANY);
 		}
 		return many;
 	}
+	
+	protected static HypergraphCardinalityNode getCardinalityZeroOneNode() {
+		if (zeroOne == null) {
+			zeroOne = new HypergraphCardinalityNode(Multiplicity.ZEROONE);
+		}
+		return zeroOne;
+	}
 
+	protected static HypergraphCardinalityNode getCardinalityZeroManyNode() {
+		if (zeroMany == null) {
+			zeroMany = new HypergraphCardinalityNode(Multiplicity.ZEROMANY);
+		}
+		return zeroMany;
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		return (o instanceof HypergraphCardinalityNode)
-				&& ((HypergraphCardinalityNode) o).cardinality.equals(cardinality);
+				&& ((HypergraphCardinalityNode) o).value.equals(value);
 	}
 }
