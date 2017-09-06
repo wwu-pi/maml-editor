@@ -96,7 +96,12 @@ public class MamlHypergraph<V, E> extends SetHypergraph<V, E> {
 	}
 	
 	protected Collection<Collection<V>> getIncidentEdgeContents(V v){
-		return this.getIncidentEdges(v).stream().map(elem -> this.getEdge(elem)).collect(Collectors.toList());
+		Collection<E> test = this.getIncidentEdges(v);
+		try {
+			return this.getIncidentEdges(v).stream().map(elem -> this.getEdge(elem)).collect(Collectors.toList());
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 	// Convenience access methods

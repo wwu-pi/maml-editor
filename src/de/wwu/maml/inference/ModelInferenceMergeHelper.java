@@ -89,7 +89,6 @@ public class ModelInferenceMergeHelper {
 	private Property convertEdgeToProperty(CustomType type, Collection<MamlHypergraphNode<?>> edge, MamlHypergraph<MamlHypergraphNode<?>, String> typeGraph){
 		
 		Property prop = MamldataFactory.eINSTANCE.createProperty();
-		System.out.println("lala" + typeGraph.getEdgeAttributeName(edge));
 		prop.setName(typeGraph.getEdgeAttributeName(edge));
 		
 		if(typeGraph.getEdgeCardinality(edge).equals(Multiplicity.MANY) || typeGraph.getEdgeCardinality(edge).equals(Multiplicity.ZEROMANY)){

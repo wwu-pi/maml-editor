@@ -365,7 +365,7 @@ public class ModelInferenceDataTypeHelper {
 				Attribute target = (Attribute) connector.getTargetElement();
 				
 				// Check that target has a non-anonymous type
-				if(!ModelInferenceTextInputHelper.isAllowedTypeName(target.getType().toString())) continue;
+				if(target == null || target.getType() == null || !ModelInferenceTextInputHelper.isAllowedTypeName(target.getType().toString())) continue;
 				
 				// Process current connection -----------------------
 				ArrayList<MamlHypergraphNode<?>> nodes = new ArrayList<MamlHypergraphNode<?>>();

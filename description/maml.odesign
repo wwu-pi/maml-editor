@@ -327,7 +327,7 @@
               </firstModelOperations>
             </initialOperation>
           </ownedTools>
-          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditDataSource" inputLabelExpression="aql:self.typeName">
+          <ownedTools xsi:type="tool_1:DirectEditLabel" name="directEditDataSource" inputLabelExpression="service:getDataTypeRepresentation()">
             <mask mask="{0}"/>
             <initialOperation>
               <firstModelOperations xsi:type="tool:SetValue" featureName="dataType" valueExpression="service:setDataType(0)">
@@ -619,7 +619,7 @@
               <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:container">
                 <subModelOperations xsi:type="tool:CreateInstance" typeName="mamlgui.Label" referenceName="attributes">
                   <subModelOperations xsi:type="tool:SetValue" featureName="description" valueExpression="aql:'&lt;no text>'"/>
-                  <subModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="String"/>
+                  <subModelOperations xsi:type="tool:SetValue" featureName="type" valueExpression="aql:self.setDataType('String')"/>
                 </subModelOperations>
               </firstModelOperations>
             </initialOperation>
