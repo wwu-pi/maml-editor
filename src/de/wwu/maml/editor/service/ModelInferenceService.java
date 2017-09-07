@@ -222,4 +222,6 @@ public class ModelInferenceService {
 			return null;
 		}
 	}
+	
+	// TODO replace existing attribute types when enum with equivalent name is created later on 
 }
